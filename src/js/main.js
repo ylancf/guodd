@@ -40,7 +40,7 @@ function main() {
      logd(obj.test());*/
 
 
-
+    updateConfig("commItems",null);
 
 
 }

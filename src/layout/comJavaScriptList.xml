@@ -47,10 +47,14 @@
                           android:textSize="14sp"
                           android:text="时间:,时长:,次数:"
                           android:maxLines="1"/>
-                <TextView android:tag="id_number"
-                          android:visibility="gone"
-                          android:text=""/>
 
+            <!--                以下为不显示的信息-->
+            <LinearLayout android:tag="comm_addInfo_layout"
+                          android:visibility="gone">
+                <TextView  android:tag="comm_prompt" />
+                <TextView android:tag="comm_addInfo"/>
+                <TextView android:tag="id_number" />
+            </LinearLayout>
 
 
 

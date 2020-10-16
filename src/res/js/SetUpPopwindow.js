@@ -14,11 +14,11 @@ let PopSetUp=function (){
     var set_layout = ui.findViewByTag('setUp_layout');
     var set_title = ui.findViewByTag('setUp_title');
     var start_time = ui.findViewByTag('setUp_start_time');
-
     var run_time = ui.findViewByTag('setUp_run_time');
     var run_number = ui.findViewByTag('setUp_run_number');
+    var set_prompt=ui.findViewByTag("setUp_prompt");
+    var set_addInfo=ui.findViewByTag("setUp_addInfo_ed");
     var cancel = ui.findViewByTag('setUp_cancel');
-
     var confirm = ui.findViewByTag('setUp_confirm');
     var mCallback = null;
     this.eventList=new Object();
@@ -32,6 +32,15 @@ let PopSetUp=function (){
         start_time.setText(setList[0].split(":",2)[1]); //显示开始时间
         run_time.setText(setList[1].split(":",2)[1]);  //显示运行时长
         run_number.setText(setList[2].split(":",2)[1]);//显示运行次数
+        let prompt= _view.findViewWithTag("comm_prompt").getText(); //附加信息的提示
+        logd("是否显示"+prompt)
+        if(prompt!=""){ //判断是否显示附加信息
+            set_prompt.setText(prompt);
+            set_addInfo.setText(_view.findViewWithTag("comm_addInfo").getText());
+            ui.findViewByTag("setUp_addInfo_layout").setVisibility(0); //显示附加信息
+
+        }
+
         pw.showAtLocation(activity.getWindow().getDecorView(), Gravity.CENTER, 0, 0); //在父级layout的中心显示 偏差 0 0
         Attributes(0.6);
         mCallback = callback;
@@ -62,7 +71,15 @@ let PopSetUp=function (){
         let hereThis=_os;
         setEditTextType("setUp_start_time",[1,4]);
         setEditTextType("setUp_run_time",[2,4]);
-        setEditTextType("setUp_run_number",[2,5]);
+
+        let infoView=ui.findViewByTag("setUp_addInfo_layout");
+        if(infoView.visibility==8){ //判断附加信息是否有添加
+            setEditTextType("setUp_run_number",[2,5]);
+        }else{
+            setEditTextType("setUp_run_number",[2,4]);
+            setEditTextType("setUp_addInfo_ed",[1,5]);
+        }
+
 
 
         var params = root_view.getLayoutParams(); //获取layout_personal.xml的根目录
@@ -95,8 +112,10 @@ let PopSetUp=function (){
             let _date=start_time.getText();
             let r_time = run_time.getText();
             let r_number = run_number.getText();
-
-            mCallback(true, _date.toString().trim(), r_time.toString().trim(),r_number.toString().trim());
+            let _prompt=set_prompt.getText();
+            let _addInfo=set_addInfo.getText();
+            mCallback(true, _date.toString().trim(), r_time.toString().trim(),r_number.toString().trim(),
+                _prompt,_addInfo);
             mCallback = null;
             pw.dismiss();
         });
@@ -139,6 +158,7 @@ let PopSetUp=function (){
                 //if (mCallback != null) mCallback(false, null, null);
                 mCallback = null;
                 hereThis.eventList.hide();
+                infoView.setVisibility(8); //隐藏附加信息
                 Attributes(1.0); //把之前设置的透明度设置回来,不然会很暗
             }
         });

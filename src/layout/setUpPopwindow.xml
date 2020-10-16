@@ -29,7 +29,7 @@
                 <TextView android:text=""
                           android:tag="setUp_title"
                           android:textColor="#000000"
-                           android:maxLines="1"
+                          android:maxLines="1"
                           android:ellipsize="end"
                           android:textSize="16dp"/>
 
@@ -38,19 +38,21 @@
                               android:orientation="horizontal">
                     <TextView android:text="开始时间:"
                               android:layout_width="0"
+                              android:textColor="#C040FF"
                               android:layout_height="wrap_content"
                               android:layout_weight="1"/>
                     <EditText android:layout_weight="2"
                               android:layout_height="wrap_content"
                               android:layout_width="0"
                               android:tag="setUp_start_time"
-                              android:hint="不填为立即开始"/>
+                              android:hint="例:15:06 不填为立即开始"/>
 
                 </LinearLayout>
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="wrap_content"
                               android:orientation="horizontal">
                     <TextView android:text="运行时长:"
+                              android:textColor="#C040FF"
                               android:layout_width="0"
                               android:layout_height="wrap_content"
                               android:layout_weight="1"/>
@@ -65,6 +67,7 @@
                               android:layout_height="wrap_content"
                               android:orientation="horizontal">
                     <TextView android:text="运行次数:"
+                              android:textColor="#C040FF"
                               android:layout_width="0"
                               android:layout_height="wrap_content"
                               android:layout_weight="1"/>
@@ -75,6 +78,42 @@
                               android:hint="与时长二选一"/>
                 </LinearLayout>
 
+
+                <LinearLayout android:layout_width="match_parent"
+                              android:layout_height="wrap_content"
+                              android:orientation="vertical"
+                              android:tag="setUp_addInfo_layout"
+                              android:visibility="gone">
+
+                    <LinearLayout android:layout_width="match_parent"
+                                  android:layout_height="wrap_content"
+                                  android:orientation="horizontal">
+                        <TextView android:layout_height="wrap_content"
+                                  android:layout_width="wrap_content"
+                                  android:textColor="#FF2020"
+                                  android:text="需附加:"/>
+                        <TextView android:layout_height="wrap_content"
+                                  android:layout_width="match_parent"
+                                  android:tag="setUp_prompt"/>
+                    </LinearLayout>
+
+
+                    <LinearLayout android:layout_width="match_parent"
+                                  android:layout_height="wrap_content"
+                                  android:orientation="horizontal">
+                        <TextView android:text="附加信息:"
+                                  android:textColor="#C040FF"
+                                  android:layout_width="0"
+                                  android:layout_height="wrap_content"
+                                  android:layout_weight="1"/>
+                        <EditText android:layout_weight="2"
+                                  android:layout_height="wrap_content"
+                                  android:layout_width="0"
+                                  android:tag="setUp_addInfo_ed"
+                                  android:hint="例:年龄|25|项目|马拉松"/>
+                    </LinearLayout>
+
+                </LinearLayout>
 
             </LinearLayout>
 
