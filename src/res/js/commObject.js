@@ -3,8 +3,6 @@
 let comm_items;
 let popSetUp
 
-
-
 function commObject() {
 
     comm_items = initCommConfig('commItems');//本地保存的列表
@@ -13,8 +11,6 @@ function commObject() {
         ui.saveConfig('commItems', JSON.stringify(comm_items));//保存参数
     });
     initCommListView();
-
-
 }
 
 function initCommConfig(name) {

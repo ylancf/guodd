@@ -3,17 +3,54 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xsi:noNamespaceSchemaLocation="layout.xsd"
         android:layout_height="match_parent"
-        android:tag="intr"
-        android:layout_width="match_parent"
->
-    <LinearLayout
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            android:orientation="vertical"
-    >
-        <TextView
-                android:layout_width="match_parent"
+        android:tag="forget_root"
+        android:layout_width="match_parent">
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="vertical">
+
+
+        <LinearLayout
                 android:layout_height="match_parent"
-                android:text="忘记密码了?联系管理员"/>
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="忘记密码了?联系管理员"/>
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:orientation="horizontal">
+                <TextView android:layout_height="wrap_content"
+                          android:layout_width="wrap_content"
+                          android:text="输入你的账号"/>
+                <EditText android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:hint="账号"/>
+            </LinearLayout>
+            <TextView android:layout_height="wrap_content"
+                      android:layout_width="match_parent"
+                      android:text="您的问题是:"/>
+            <EditText android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:hint="您的回答"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+            <TextView android:layout_height="wrap_content"
+                      android:layout_width="match_parent"
+                      android:text="输入您的新密码"/>
+            <EditText android:layout_width="match_parent"
+                      android:layout_height="wrap_content"/>
+        </LinearLayout>
+
     </LinearLayout>
+
 </LinearLayout>

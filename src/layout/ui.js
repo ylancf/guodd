@@ -78,11 +78,7 @@ function main() {
 
         ui.layout("公共脚本", "intr.xml");
         ui.layout("我的信息", "myselfInfo.xml");
-
-        // let viewpager = activity.findViewById(getResourceID('vp', 'id')); //获得viewpager(包裹各标签)
-        // viewpager.currentItem=1;
-        //导入JsListView模块
-
+        //导入模块
         execScript(2, readResString('js/mianObject.js'));
         execScript(2, readResString('js/commObject.js'));
     } else {
