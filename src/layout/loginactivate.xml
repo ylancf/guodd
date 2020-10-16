@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              xsi:noNamespaceSchemaLocation="layout.xsd"
+              android:layout_height="match_parent"
+              android:layout_width="match_parent">
+
+    <LinearLayout android:layout_height="match_parent"
+                  android:layout_width="match_parent"
+                  android:orientation="vertical"
+                  android:tag="login_ac">
+
+
+        <ImageView android:layout_width="70dp"
+                   android:layout_gravity="center"
+                   android:layout_marginTop="120dp"
+                   android:layout_height="70dp"
+                   android:src="drawable/uuu"/>
+
+
+        <LinearLayout android:layout_height="250dp"
+                      android:layout_width="match_parent"
+                      android:orientation="vertical"
+                      android:background="#FAFAFA"
+                      android:gravity="center"
+                      android:tag="login_edt_layout"
+                      android:layout_gravity="center"
+                      android:paddingLeft="10dp"
+                      android:paddingRight="10dp"
+                      android:paddingTop="10dp">
+
+            <EditText android:tag="userName"
+                      android:hint="用户名"
+                      android:paddingLeft="10dp"
+                      android:paddingTop="5dp"
+                      android:paddingRight="10dp"
+                      android:paddingBottom="5dp"
+                      android:layout_marginTop="5dp"
+                      android:layout_marginBottom="5dp"
+                      android:textSize="15dp"
+                      android:layout_height="wrap_content"
+                      android:layout_width="match_parent"/>
+
+
+            <EditText android:tag="password"
+                      android:hint="密  码"
+                      android:paddingLeft="10dp"
+                      android:paddingTop="5dp"
+                      android:paddingRight="10dp"
+                      android:paddingBottom="5dp"
+                      android:layout_marginTop="5dp"
+                      android:layout_marginBottom="5dp"
+                      android:textSize="15dp"
+                      android:layout_height="wrap_content"
+                      android:layout_width="match_parent"/>
+            <TextView android:layout_height="1"
+                      android:layout_weight="match_parent"
+                      android:paddingBottom="1dp"/>
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="20dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="20dp"
+                android:gravity="bottom"
+                android:tag="foot_view"
+                android:orientation="horizontal">
+
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                <TextView android:layout_height="wrap_content"
+                          android:layout_width="wrap_content"
+                          android:text="忘记密码"
+                          android:tag="forgetMM"
+                          android:clickable="true"
+                          android:textColor="#1196bb"
+                          android:gravity="left"
+                          android:textSize="17dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:orientation="vertical">
+                <TextView android:layout_height="wrap_content"
+                          android:layout_width="wrap_content"
+                          android:text="现在注册"
+                          android:clickable="true"
+                          android:tag="registerAccount"
+                          android:textColor="#1196bb"
+                          android:textSize="17dp"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <!--    用户操作页面-->
+
+    <LinearLayout android:layout_height="match_parent"
+                  android:layout_width="match_parent"
+                  android:orientation="vertical"
+                  android:tag="user_word">
+
+<!--        <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textColor="#ff3399"-->
+<!--                android:textSize="18dp"-->
+<!--                android:paddingLeft="20dp"-->
+<!--                android:paddingTop="5dp"-->
+<!--                android:paddingBottom="5dp"-->
+<!--                android:text="选择任务"/>-->
+
+            <LinearLayout
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+
+                    android:tag="main_view">
+
+
+            </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

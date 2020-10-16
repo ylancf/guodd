@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<LinearLayout
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xsi:noNamespaceSchemaLocation="layout.xsd"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+>
+    <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:tag="register_layout"
+            android:orientation="vertical">
+        <TextView />
+        <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:tag="re_name_layout"
+                android:orientation="horizontal">
+            <TextView android:layout_height="wrap_content"
+                      android:layout_width="0"
+                      android:tag="re_name"
+                      android:textSize="16dp"
+                      android:textColor="#454545"
+                      android:padding="5dp"
+                      android:text="昵   称:"/>
+             <EditText android:layout_width="match_parent"
+                       android:background="null"
+                       android:textColor="#AB82FF"
+                       android:tag="re_name_ed"
+                       android:layout_height="wrap_content"
+                       />
+
+        </LinearLayout>
+        <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:tag="re_account_layout"
+                android:orientation="horizontal">
+            <TextView android:layout_height="wrap_content"
+                      android:layout_width="0"
+                     android:tag="re_account"
+                      android:textSize="16dp"
+                      android:padding="5dp"
+                      android:textColor="#454545"
+                      android:text="账   号:"/>
+            <EditText android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:background="null"
+                      android:hint="纯数字"
+                      android:textColor="#AB82FF"
+                      android:tag="re_account_ed"/>
+
+        </LinearLayout>
+        <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:tag="re_password_layout"
+                android:orientation="horizontal">
+            <TextView android:layout_height="wrap_content"
+                      android:layout_width="0"
+                      android:tag="re_password"
+                      android:textSize="16dp"
+                      android:padding="5dp"
+                      android:textColor="#454545"
+                      android:text="密   码:"/>
+            <EditText android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:background="null"
+                      android:textColor="#AB82FF"
+                      android:tag="re_password_ed"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:tag="re_confirm_layout"
+                android:orientation="horizontal">
+            <TextView android:layout_height="wrap_content"
+                      android:layout_width="0"
+                      android:tag="re_confirm"
+                      android:textSize="16dp"
+                      android:padding="5dp"
+                      android:textColor="#454545"
+                      android:text="确认密码:"/>
+            <EditText android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:background="null"
+                      android:textColor="#AB82FF"
+                      android:tag="re_confirm_ed"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:tag="re_question_layout"
+                android:orientation="horizontal">
+            <TextView android:layout_height="wrap_content"
+                      android:layout_width="0"
+                      android:tag="re_question"
+                      android:textSize="16dp"
+                      android:padding="5dp"
+                      android:textColor="#454545"
+                      android:text="设置问题:"/>
+            <EditText android:layout_width="match_parent"
+                      android:hint="用于找回账号密码"
+                      android:layout_height="wrap_content"
+                      android:background="null"
+                      android:textColor="#AB82FF"
+                      android:tag="re_question_ed"/>
+        </LinearLayout>
+        <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:tag="re_answer_layout"
+                android:orientation="horizontal">
+            <TextView android:layout_height="wrap_content"
+                      android:layout_width="0"
+                      android:textSize="16dp"
+                      android:padding="5dp"
+                      android:textColor="#454545"
+                     android:tag="re_answer"
+                      android:text="问题答案:"/>
+            <EditText android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:background="null"
+                      android:textColor="#AB82FF"
+                      android:tag="re_answer_ed"/>
+        </LinearLayout>
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="注册账号"/>
+    </LinearLayout>
+    <LinearLayout android:layout_height="match_parent"
+                  android:layout_weight="match_parent">
+    </LinearLayout>
+</LinearLayout>

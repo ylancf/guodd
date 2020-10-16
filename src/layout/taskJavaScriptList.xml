@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CardView xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns:android="http://schemas.android.com/apk/res/android"
+          xsi:noNamespaceSchemaLocation="layout.xsd"
+          android:layout_width="match_parent"
+          android:layout_height="70dp"
+          android:layout_marginLeft="10dp"
+          android:layout_marginTop="5dp"
+          android:layout_marginRight="10dp"
+          android:layout_marginBottom="5dp"
+          android:cardCornerRadius="5dp"
+          android:cardElevation="1dp">
+
+    <LinearLayout
+            android:tag="card"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            android:paddingRight="26dp"
+            android:background="@drawable/abc_action_bar_item_background_material"
+            android:gravity="center_vertical">
+
+        <View android:tag="color"
+              android:layout_width="10dp"
+              android:layout_height="match_parent"/>
+
+        <LinearLayout android:orientation="vertical"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:paddingLeft="10dp"
+                      android:paddingTop="5dp"
+                      android:paddingRight="10dp"
+                      android:paddingBottom="5dp"
+                      android:layout_weight="1">
+
+            <TextView android:tag="title"
+                      android:textColor="#222222"
+                      android:textSize="16sp"
+                      android:maxLines="1"/>
+
+            <LinearLayout  android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:orientation="horizontal">
+                <TextView
+                        android:layout_width="wrap_parent"
+                        android:textColor="#999999"
+                        android:textSize="14sp"
+                        android:maxLines="1"
+                        android:text="截止时间:"
+                />
+                <TextView android:tag="summary"
+                          android:textColor="#999999"
+                          android:textSize="14sp"
+                          android:maxLines="1"/>
+                <TextView android:tag="id_number"
+                          android:visibility="gone"
+                          android:text=""/>
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <CheckBox android:tag="done"
+              android:layout_width="wrap_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="4dp"
+              android:layout_marginRight="6dp"
+              android:clickable="false"
+              android:layout_gravity="right|center_vertical"/>
+
+</CardView>

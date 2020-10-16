@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              xsi:noNamespaceSchemaLocation="layout.xsd"
+              android:tag="setUp_root"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center">
+
+    <CardView android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:tag="setUp_layout"
+              android:clickable="true"
+              android:cardCornerRadius="10dp"
+              android:cardBackgroundColor="#FFFFFF"
+              android:layout_gravity="center">
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="vertical">
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:paddingLeft="10dp"
+                          android:paddingRight="10dp"
+                          android:paddingTop="10dp"
+                          android:orientation="vertical">
+
+                <TextView android:text=""
+                          android:tag="setUp_title"
+                          android:textColor="#000000"
+                           android:maxLines="1"
+                          android:ellipsize="end"
+                          android:textSize="16dp"/>
+
+                <LinearLayout android:layout_width="match_parent"
+                              android:layout_height="wrap_content"
+                              android:orientation="horizontal">
+                    <TextView android:text="开始时间:"
+                              android:layout_width="0"
+                              android:layout_height="wrap_content"
+                              android:layout_weight="1"/>
+                    <EditText android:layout_weight="2"
+                              android:layout_height="wrap_content"
+                              android:layout_width="0"
+                              android:tag="setUp_start_time"
+                              android:hint="不填为立即开始"/>
+
+                </LinearLayout>
+                <LinearLayout android:layout_width="match_parent"
+                              android:layout_height="wrap_content"
+                              android:orientation="horizontal">
+                    <TextView android:text="运行时长:"
+                              android:layout_width="0"
+                              android:layout_height="wrap_content"
+                              android:layout_weight="1"/>
+                    <EditText android:layout_weight="2"
+                              android:layout_height="wrap_content"
+                              android:layout_width="0"
+                              android:tag="setUp_run_time"
+                              android:hint="(分钟)不填一直运行"/>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent"
+                              android:layout_height="wrap_content"
+                              android:orientation="horizontal">
+                    <TextView android:text="运行次数:"
+                              android:layout_width="0"
+                              android:layout_height="wrap_content"
+                              android:layout_weight="1"/>
+                    <EditText android:layout_weight="2"
+                              android:layout_height="wrap_content"
+                              android:layout_width="0"
+                              android:tag="setUp_run_number"
+                              android:hint="与时长二选一"/>
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <TextView android:layout_width="match_parent"
+                      android:layout_height="1dp"
+                      android:background="#55aaaaaa"/>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="40dp"
+                          android:orientation="horizontal">
+
+                <TextView android:text="取消"
+                          android:tag="setUp_cancel"
+                          android:layout_width="wrap_parent"
+                          android:layout_height="match_parent"
+                          android:gravity="center"
+                          android:textColor="#667788"
+                          android:background="@drawable/notification_action_background"
+                          android:padding="0dp"/>
+
+                <TextView android:layout_width="1dp"
+                          android:layout_height="match_parent"
+                          android:background="#55aaaaaa"/>
+
+                <TextView android:text="确认"
+                          android:tag="setUp_confirm"
+                          android:layout_width="wrap_parent"
+                          android:layout_height="match_parent"
+                          android:gravity="center"
+                          android:textColor="#007AFF"
+                          android:background="@drawable/notification_action_background"
+                          android:padding="0dp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </CardView>
+</LinearLayout>

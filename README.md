@@ -1,0 +1,7 @@
+- libs/jarlibs文件夹用于存放三方引用jar包，会被合并到插件中
+- libs/solibs 存放so封装的文件，会被编译到插件的 lib 文件夹中
+- libs/resources 存放资源的文件，会被编译到插件的 resources 文件夹中
+- libs/jslibs 存放JS类库文件，不会编译到插件中，仅用来进行测试和调用
+- main.js 文件仅用于测试用，不会编译到插件中
+- 如果手动更改类名，请在main.js中同时进行更改
+- 插件也可以使用Android Studio开发，其可以对代码进行混淆。

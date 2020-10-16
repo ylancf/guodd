@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--公共脚本的root布局-->
+<LinearLayout
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xsi:noNamespaceSchemaLocation="layout.xsd"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:tag="comm_layout"
+        android:layout_width="match_parent">
+    <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_parent"
+            android:textColor="#FF2D2D"
+            android:textSize="14sp"
+            android:paddingLeft="10dp"
+            android:maxLines="1"
+            android:text="长按项目可设置"/>
+
+</LinearLayout>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<LinearLayout
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xsi:noNamespaceSchemaLocation="layout.xsd"
+        android:layout_height="match_parent"
+        android:tag="other"
+        android:layout_width="match_parent">
+
+
+
+    <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+    >
+                <LinearLayout android:layout_height="250dp"
+                              android:layout_width="match_parent"
+                              android:orientation="vertical"
+                              android:background="#FAFAFA"
+                              android:gravity="center"
+                              android:visibility="gone"
+                              android:tag="user_info_layout"
+                              android:layout_gravity="center"
+                              android:paddingLeft="10dp"
+                              android:paddingRight="10dp"
+                              android:paddingTop="10dp">
+
+                        <TextView android:layout_width="match_parent"
+                                  android:layout_height="wrap_content"
+                                  android:textSize="17dp"
+                                  android:gravity="center"
+                                  android:text="欢迎光临"/>
+                       <TextView android:layout_width="match_parent"
+                                 android:layout_height="wrap_content"
+                                 android:textSize="17dp"
+                                 android:gravity="center"
+                                 android:text="东方一条龙"/>
+                       <TextView android:layout_width="match_parent"
+                                 android:layout_height="wrap_content"
+                                 android:textSize="17dp"
+                                 android:gravity="center"
+                                 android:text="预计收益:120.6"/>
+                      <TextView android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="17dp"
+                                android:gravity="center"
+                                 android:text="已获收益:100.6"/>
+                </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
