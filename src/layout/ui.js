@@ -1,45 +1,41 @@
-importClass(android.support.v4.graphics.drawable.DrawableCompat);
-importClass(android.graphics.Bitmap);
-importClass(android.graphics.PorterDuff);
-importClass(android.graphics.BitmapFactory);
-importClass(android.graphics.drawable.ColorDrawable);
-importClass(android.graphics.Paint);
-importClass(android.os.Build);
-importClass(android.widget.ListView);
-importClass(android.widget.LinearLayout);
 importClass(android.view.View);
+importClass(android.os.Build);
 importClass(android.view.Gravity);
-importClass(android.view.ViewGroup);
-importClass(android.view.WindowManager);
-importClass(android.view.inputmethod.EditorInfo);
-importClass(android.widget.TextView);
-importClass(android.widget.PopupWindow);
-importClass(android.widget.RelativeLayout);
+importClass(android.graphics.Bitmap);
+importClass(android.graphics.Paint);
 importClass(android.graphics.Color);
+importClass(android.view.ViewGroup);
+importClass(android.widget.ListView);
+importClass(android.widget.TextView);
 importClass(android.graphics.Typeface);
+importClass(android.transition.Slide);
+importClass(android.view.WindowManager);
+importClass(android.widget.PopupWindow);
+importClass(android.widget.LinearLayout);
+importClass(android.graphics.PorterDuff);
+importClass(android.transition.Visibility);
+importClass(android.widget.RelativeLayout);
+importClass(android.animation.ValueAnimator);
+importClass(android.graphics.BitmapFactory);
+importClass(android.animation.StateListAnimator);
+importClass(android.view.inputmethod.EditorInfo);
 importClass(android.graphics.drawable.BitmapDrawable);
+importClass(android.graphics.drawable.ColorDrawable);
 importClass(android.graphics.drawable.StateListDrawable);
 importClass(android.graphics.drawable.GradientDrawable);
-importClass(android.transition.Slide);
-importClass(android.transition.Visibility);
-importClass(android.animation.ValueAnimator);
-importClass(android.animation.StateListAnimator);
 importClass(android.view.animation.OvershootInterpolator);
 importClass(android.view.animation.AnticipateInterpolator);
-
+importClass(android.support.v4.graphics.drawable.DrawableCompat);
 
 var activity = ui.getActivity(); //获取当前的Activity
 var resources = context.getResources(); //获取资源文件
 
 execScript(2, readResString('js/PopActivity.js'));
-//导入dialogs模块
-execScript(2, readResString('js/dialogs.js'));
-//导入JsListView模块
-execScript(2, readResString('js/JsListView.js'));
-//导入SetUpPopwindow模块
-execScript(2, readResString('js/SetUpPopwindow.js'));
-var myPopActivity;//注册界面
+execScript(2, readResString('js/dialogs.js'));//导入dialogs模块
+execScript(2, readResString('js/JsListView.js'));//导入JsListView模块
+execScript(2, readResString('js/SetUpPopwindow.js'));//导入SetUpPopwindow模块
 
+var myPopActivity;//注册界面
 var scale = resources.getDisplayMetrics().density; //获得手机屏幕的相对密度 或者说比例
 //获取顶级视图 DecorView内部又分为两部分，一部分是ActionBar，另一部分是ContentParent，即activity在setContentView对应的布局。
 var decorView = activity.getWindow().getDecorView();
@@ -50,12 +46,30 @@ activity.getWindow().setStatusBarColor(Color.TRANSPARENT);//状态栏颜色 设�
 activity.getWindow().setNavigationBarColor(0x999999);//导航栏颜色
 SystemUiVisibility(false);//设置暗色系状态栏
 
+var the_label,js_start_BT,head_bar;
 
 function main() {
-    ui.layout("任务界面", "loginactivate.xml");
 
+    ui.layout("任务界面", "loginactivate.xml");
     var usData = readConfigString("userName");
     var pwData = readConfigString("password");
+    head_bar=activity.findViewById(getResourceID('header_layout', 'id'));//获取头部布局
+    the_label=activity.findViewById(getResourceID('tl', 'id')); //获取标签栏
+    js_start_BT=activity.findViewById(getResourceID('fb', 'id')); //获取按钮
+
+    //在我的信息处 不显示开始按钮
+    let viewpager=activity.findViewById(getResourceID('vp', 'id'));
+    viewpager.setOnPageChangeListener({
+        onPageSelected: function (index) {
+            let _view= activity.findViewById(getResourceID('tl', 'id')).getChildAt(0);
+            let js_start_BT=activity.findViewById(getResourceID('fb', 'id'));
+            if(_view.getChildAt(index).getChildAt(2).getText()=="我的信息"){
+                js_start_BT.setVisibility(4);
+            }else{
+                js_start_BT.setVisibility(0);
+            }
+        }
+    });
 
     //判断显示那种界面
     if (judge_availability(usData, pwData)) {//如果有效
@@ -63,8 +77,9 @@ function main() {
     } else {
         ui.findViewByTag('user_word').setVisibility(8);//隐藏操作界面
         main2(); //并执行一些渲染工作
-
     }
+
+    js_start_BT=the_label=head_bar=null; //把没用的释放掉
 }
 
 //检验账号密码
@@ -90,11 +105,7 @@ function register_account(name, userName, password, question, answer) {
     return true; //成功返回true;
 }
 
-
-
 function login_on() {
-
-    ui.findViewByTag('login_ac').setVisibility(8);//隐藏登录界面
 
     //展示操作界面
     ui.findViewByTag('login_ac').setVisibility(8);//隐藏登录界面
@@ -114,6 +125,8 @@ function login_on() {
     execScript(2, readResString('js/commObject.js'));
     execScript(2, readResString('js/myInfo.js'));
 
+
+
 }
 
 
@@ -121,9 +134,9 @@ function login_on() {
 function main2() {
 
 
-    activity.findViewById(getResourceID('header_layout', 'id')).setVisibility(8);//去掉头部布局  这些name可以通过节点获取
-    activity.findViewById(getResourceID('tl', 'id')).setVisibility(8);//去掉标签(多标签)
-    activity.findViewById(getResourceID('fb', 'id')).setVisibility(8);//去掉开始按钮
+    head_bar.setVisibility(8);//去掉头部布局  这些name可以通过节点获取
+    the_label.setVisibility(8);//去掉标签(多标签)
+    js_start_BT.setVisibility(4);//去掉开始按钮
 
     drawingEdit(); //一些输入框渲染
     //创建开始按钮
@@ -152,8 +165,8 @@ function main2() {
                 //保存所有的值
                 ui.saveAllConfig();
                 ui.findViewByTag('user_word').setVisibility(0);//显示操作界面
-                activity.findViewById(getResourceID('header_layout', 'id')).setVisibility(0);//显示bar栏
-                activity.findViewById(getResourceID('fb', 'id')).setVisibility(0);//恢复开始按钮
+                head_bar.setVisibility(0);//显示bar栏
+                js_start_BT.setVisibility(0);//恢复开始按钮
                 login_on(); //开始进入
             } else {
                 toast("账号或密码不正确!");
