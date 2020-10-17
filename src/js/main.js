@@ -39,9 +39,9 @@ function main() {
      let obj=new com.plugin.jPrlGSPKhr.PluginClz();
      logd(obj.test());*/
 
-
-    updateConfig("commItems",null);
-
+    var resources = context.getResources(); //获取资源文件
+  //  logd(updateConfig("loginState",false));
+    logd( resources.getDisplayMetrics().widthPixels);
 
 }
 

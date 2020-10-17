@@ -98,6 +98,7 @@ function initTaskListView(){
         itemView.setViewValue('done', item.done);
         itemView.setViewValue('id_number', item.id_number);
 
+
         //设置背景色
         itemView.color.setBackgroundColor(Color.parseColor(item.color));
         //改变水波纹颜色

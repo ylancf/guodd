@@ -5,6 +5,8 @@ importClass(android.graphics.BitmapFactory);
 importClass(android.graphics.drawable.ColorDrawable);
 importClass(android.graphics.Paint);
 importClass(android.os.Build);
+importClass(android.widget.ListView);
+importClass(android.widget.LinearLayout);
 importClass(android.view.View);
 importClass(android.view.Gravity);
 importClass(android.view.ViewGroup);
@@ -25,6 +27,10 @@ importClass(android.animation.StateListAnimator);
 importClass(android.view.animation.OvershootInterpolator);
 importClass(android.view.animation.AnticipateInterpolator);
 
+
+var activity = ui.getActivity(); //获取当前的Activity
+var resources = context.getResources(); //获取资源文件
+
 execScript(2, readResString('js/PopActivity.js'));
 //导入dialogs模块
 execScript(2, readResString('js/dialogs.js'));
@@ -33,9 +39,7 @@ execScript(2, readResString('js/JsListView.js'));
 //导入SetUpPopwindow模块
 execScript(2, readResString('js/SetUpPopwindow.js'));
 var myPopActivity;//注册界面
-let mainActivity;//主界面
-var activity = ui.getActivity(); //获取当前的Activity
-var resources = context.getResources(); //获取资源文件
+
 var scale = resources.getDisplayMetrics().density; //获得手机屏幕的相对密度 或者说比例
 //获取顶级视图 DecorView内部又分为两部分，一部分是ActionBar，另一部分是ContentParent，即activity在setContentView对应的布局。
 var decorView = activity.getWindow().getDecorView();
@@ -46,15 +50,6 @@ activity.getWindow().setStatusBarColor(Color.TRANSPARENT);//状态栏颜色 设�
 activity.getWindow().setNavigationBarColor(0x999999);//导航栏颜色
 SystemUiVisibility(false);//设置暗色系状态栏
 
-//根据手机的分辨率从 dp 的单位 转成为 px(像素)
-var dp2px = function (dp) {
-    return Math.floor(dp * scale + 0.5);
-};
-
-//根据手机的分辨率从 px(像素) 的单位 转成为 dp
-var px2dp = function (px) {
-    return Math.floor(px / scale + 0.5);
-};
 
 function main() {
     ui.layout("任务界面", "loginactivate.xml");
@@ -64,23 +59,7 @@ function main() {
 
     //判断显示那种界面
     if (judge_availability(usData, pwData)) {//如果有效
-        //展示操作界面
-        ui.findViewByTag('login_ac').setVisibility(8);//隐藏登录界面
-        activity.findViewById(getResourceID('tv_title', 'id')).setText("我的应用");//改掉名称
-        activity.findViewById(getResourceID('right_header_iv3', 'id')).setVisibility(8);//隐藏云控;
-        activity.findViewById(getResourceID('right_header_iv2', 'id')).setVisibility(8);//隐藏远程调试
-        //移动设置按钮的位置
-        let v2=activity.findViewById(getResourceID('right_header_iv', 'id')).getParent();
-        let v1=v2.getParent();
-        v1.removeView(v2);
-        v1.addView(v2);
-
-
-        ui.layout("公共脚本", "intr.xml");
-        ui.layout("我的信息", "myselfInfo.xml");
-        //导入模块
-        execScript(2, readResString('js/mianObject.js'));
-        execScript(2, readResString('js/commObject.js'));
+        login_on(); //开始进入
     } else {
         ui.findViewByTag('user_word').setVisibility(8);//隐藏操作界面
         main2(); //并执行一些渲染工作
@@ -93,10 +72,11 @@ function judge_availability(user, pw) {
     //连接数据库判断有效性
     if (user == "" || pw == "") {
         return false;
-
-    } else {
-        //  to do   连接数据库
+    } else if (readConfigBoolean("loginState")) {
+       //  to do   连接数据库
         return true;
+    }else {
+        return  false;
     }
 }
 
@@ -109,6 +89,34 @@ function register_account(name, userName, password, question, answer) {
 
     return true; //成功返回true;
 }
+
+
+
+function login_on() {
+
+    ui.findViewByTag('login_ac').setVisibility(8);//隐藏登录界面
+
+    //展示操作界面
+    ui.findViewByTag('login_ac').setVisibility(8);//隐藏登录界面
+    activity.findViewById(getResourceID('tv_title', 'id')).setText("我的应用");//改掉名称
+    activity.findViewById(getResourceID('right_header_iv3', 'id')).setVisibility(8);//隐藏云控;
+    activity.findViewById(getResourceID('right_header_iv2', 'id')).setVisibility(8);//隐藏远程调试
+    //移动设置按钮的位置
+    let v2 = activity.findViewById(getResourceID('right_header_iv', 'id')).getParent();
+    let v1 = v2.getParent();
+    v1.removeView(v2);
+    v1.addView(v2);
+
+    ui.layout("公共脚本", "intr.xml");
+    ui.layout("我的信息", "myselfInfo.xml");
+    //导入模块
+    execScript(2, readResString('js/mianObject.js'));
+    execScript(2, readResString('js/commObject.js'));
+    execScript(2, readResString('js/myInfo.js'));
+
+}
+
+
 
 function main2() {
 
@@ -127,7 +135,7 @@ function main2() {
         btn.setTextSize(17)
         //点击事件
         btn.onClick(function (view) {
-
+            updateConfig("loginState",true); //保存为登录状态
             var user_input = ui.findViewByTag("userName");
             var pw_input = ui.findViewByTag("password");
             let ut = user_input.getText();
@@ -143,15 +151,21 @@ function main2() {
             if (judge_availability(ut, pt)) {
                 //保存所有的值
                 ui.saveAllConfig();
-                log_on(); //开始进入
+                ui.findViewByTag('user_word').setVisibility(0);//显示操作界面
+                activity.findViewById(getResourceID('header_layout', 'id')).setVisibility(0);//显示bar栏
+                activity.findViewById(getResourceID('fb', 'id')).setVisibility(0);//恢复开始按钮
+                login_on(); //开始进入
             } else {
                 toast("账号或密码不正确!");
                 return;
             }
-
         });
-       CreateImageButtonNext(btn);//一半部分
+        CreateImageButtonNext(btn);//一半部分
     });
+
+
+    myForgetActivity = new PopActivity("forgetPW.xml");//忘记密码界面
+    myForgetActivity.setTitle('忘记密码'); //设置标题
 
     ui.setEvent(ui.forgetMM, "click", function (view) {
         logd("忘记密码界面");
@@ -184,7 +198,8 @@ function CreateImageButtonNext(btn, color1, color2) {
     let params = view.getLayoutParams(); //获取布局参数
 
     //params.width = ViewGroup.LayoutParams.WRAP_CONTENT;//控件宽度 包裹内容的宽度
-    params.width = view.getParent().getLayoutParams().width * 0.6;
+    let  hereW= view.getParent().getLayoutParams().width; //match_parent 为-1
+    params.width =(hereW==-1?resources.getDisplayMetrics().widthPixels: hereW)* 0.6;
     params.gravity = Gravity.CENTER;//layout_gravity; 这里使用java的设置方式
     view.setGravity(Gravity.CENTER); //这是相当于 gravity 与上面的不一样
     view.setLayoutParams(params);  //使新的布局参数生效
@@ -283,7 +298,7 @@ function re_drawing_layout() {
         for (let n of ed_list) {
             updateConfig(n, "");
         }
-        myPopActivity=null;
+        myPopActivity = null;
     });
 
     //排断两次密码是否一致
@@ -383,7 +398,7 @@ function drawingEdit() {
 function setEditTextType(tagName, _type) {
 
     var input = ui.findViewByTag(tagName);
-         logd(tagName);
+
     _type.forEach(function (value) {
         switch (value) {
             case 1:
@@ -407,22 +422,8 @@ function setEditTextType(tagName, _type) {
         }
     });
 
-
 }
 
-function log_on() {
-
-    ui.findViewByTag('login_ac').setVisibility(8);//隐藏登录界面
-    ui.findViewByTag('user_word').setVisibility(0);//隐藏操作界面
-
-    activity.findViewById(getResourceID('header_layout', 'id')).setVisibility(0);//去掉头部布局  这些name可以通过节点获取
-    activity.findViewById(getResourceID('tl', 'id')).setVisibility(0);//去掉标签(多标签)
-    activity.findViewById(getResourceID('fb', 'id')).setVisibility(0);//去掉开始按钮
-
-    ui.layout("使用说明", "intr.xml");
-    ui.layout("我的信息", "myselfInfo.xml");
-
-}
 
 
 //获取内置资源ID
@@ -609,29 +610,37 @@ function argb2str(a, r, g, b) {
     return '#' + a1 + r1 + g1 + b1;
 }
 
+//根据手机的分辨率从 dp 的单位 转成为 px(像素)
+var dp2px = function (dp) {
+    return Math.floor(dp * scale + 0.5);
+};
+
+//根据手机的分辨率从 px(像素) 的单位 转成为 dp
+var px2dp = function (px) {
+    return Math.floor(px / scale + 0.5);
+};
+
 
 //用于两个数组的包含 sqlArr 包含 localArr
 // 返回 合并的数组
-function  containArr(sqlArr,localArr){
+function containArr(sqlArr, localArr) {
 
     let newArr = [];
     if (localArr) {
         go_here:
             for (let o of sqlArr) {
-            let index = o.id_number;
-            for (let e of localArr ){
-                if (e.id_number == index)
-                {
-                    newArr[newArr.length] =e;
-                    continue go_here;
+                let index = o.id_number;
+                for (let e of localArr) {
+                    if (e.id_number == index) {
+                        newArr[newArr.length] = e;
+                        continue go_here;
+                    }
                 }
+                newArr[newArr.length] = o;
             }
-                newArr[newArr.length]=o;
-        }
     }
     return newArr;
 }
-
 
 
 main();

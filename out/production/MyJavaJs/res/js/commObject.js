@@ -8,17 +8,12 @@ function commObject() {
     comm_items = initCommConfig('commItems');//本地保存的列表
     popSetUp = new PopSetUp(); //不能循环new  会出错
     popSetUp.on("hide",function (){
-        logd("回调实现了");
         ui.saveConfig('commItems', JSON.stringify(comm_items));//保存参数
     });
     initCommListView();
-
-
 }
 
 function initCommConfig(name) {
-
-
 
     //从ui配置中读取指定数据
     let arr = JSON.parse(ui.getConfigJSON())[name];
@@ -37,28 +32,36 @@ function initCommConfig(name) {
             summary: "",
             color: "#f44336",
             done: false,
-            id_number: 1
+            prompt:"",
+            addInfo:"",
+            id_number:1
         },
         {
             title: "让老猫给ui增加若干Bug",
             summary: "",
             color: "#ff5722",
             done: false,
-            id_number: 2
+            prompt:"",
+            addInfo:"",
+            id_number:2
         },
         {
             title: "修复dialogs ui模式下无法连续弹出",
             summary: "",
             color: "#4caf50",
             done: false,
-            id_number: 3
+            prompt:"",
+            addInfo:"",
+            id_number:3
         },
         {
             title: "荒废的一天",
             summary: "",
             color: "#2196f3",
             done: true,
-            id_number: 4
+            prompt:"年级,班级",
+            addInfo:"",
+            id_number:4
         }
     ];
 }
@@ -79,7 +82,8 @@ function initCommListView() {
         itemView.setViewValue('summary', item.summary == "" ? "时间:,时长:,次数:" : item.summary);
         itemView.setViewValue('done', item.done);
         itemView.setViewValue('id_number', item.id_number);
-
+        itemView.setViewValue('comm_prompt',item.prompt?item.prompt:"");
+        itemView.setViewValue('comm_addInfo',item.addInfo?item.addInfo:"");
         //设置背景色
         itemView.color.setBackgroundColor(Color.parseColor(item.color));
         //改变水波纹颜色
@@ -102,10 +106,14 @@ function initCommListView() {
         //根布局长按事件
         itemView.view.setOnLongClickListener({
             onLongClick: function () {
-                popSetUp.show(itemView.view, function (result, _date, r_time, r_number) {
+                popSetUp.show(itemView.view, function (result, _date, r_time, r_number, _prompt,_addInfo) {
                     let str = "时间:" + _date + ",时长:" + r_time + ",次数:" + r_number
                     itemView.setViewValue('summary', str);
+                    itemView.setViewValue('prompt', _prompt);
+                    itemView.setViewValue('addInfo', _addInfo);
                     comm_items[position].summary = str; //更新数据
+                    comm_items[position].prompt = _prompt;
+                    comm_items[position].addInfo = _addInfo;
                 })
                 return false;
             }

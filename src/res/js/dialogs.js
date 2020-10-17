@@ -7,21 +7,15 @@
  * @LastEditTime: 2020-08-23 08:47:16
  * @Description: dialogs 有Bug
  */
-importClass(android.view.Gravity);
 importClass(android.view.ViewGroup);
-importClass(android.view.WindowManager);
-importClass(android.widget.TextView);
 importClass(android.widget.EditText);
-importClass(android.widget.ListView);
 importClass(android.widget.CheckBox);
 importClass(android.widget.ProgressBar);
-importClass(android.widget.LinearLayout);
 importClass(android.widget.ArrayAdapter);
 importClass(android.widget.SimpleAdapter);
 importClass(java.util.HashMap);
 importClass(java.util.ArrayList);
 importClass(java.util.concurrent.CountDownLatch);
-importClass(android.graphics.Color);
 importClass(android.app.AlertDialog);
 importClass(android.content.DialogInterface);
 

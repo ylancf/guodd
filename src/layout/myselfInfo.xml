@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!--我的信息布局-->
 <LinearLayout
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xsi:noNamespaceSchemaLocation="layout.xsd"
         android:layout_height="match_parent"
-        android:tag="other"
         android:layout_width="match_parent">
-
-
 
     <LinearLayout
             android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:orientation="vertical"
-    >
+            android:tag="myInfo_root_layout"
+            android:orientation="vertical">
+
+
                 <LinearLayout android:layout_height="250dp"
                               android:layout_width="match_parent"
                               android:orientation="vertical"
                               android:background="#FAFAFA"
                               android:gravity="center"
-                              android:visibility="gone"
                               android:tag="user_info_layout"
                               android:layout_gravity="center"
                               android:paddingLeft="10dp"
@@ -47,5 +46,18 @@
                                 android:gravity="center"
                                  android:text="已获收益:100.6"/>
                 </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:orientation="vertical"
+                      android:layout_marginBottom="15dp"
+                      android:gravity="bottom"
+                      android:tag="myInfo_bt_layout">
+
+        </LinearLayout>
+
+
     </LinearLayout>
+
+
 </LinearLayout>
