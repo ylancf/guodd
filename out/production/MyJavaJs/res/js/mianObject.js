@@ -4,7 +4,7 @@
 
 
 
-let items; //适配器源  以后用数据库内容初始化
+let taskItems; //适配器源  以后用数据库内容初始化
 //颜色
 let materialColors = ["#e91e63", "#ab47bc", "#5c6bc0", "#7e57c2", "#2196f3", "#00bcd4",
     "#26a69a", "#4caf50", "#8bc34a", "#ffeb3b", "#ffa726", "#78909c", "#8d6e63"];
@@ -13,7 +13,7 @@ let materialColors = ["#e91e63", "#ab47bc", "#5c6bc0", "#7e57c2", "#2196f3", "#0
 
 function mainObj() {
 
-    items = initConfig('todoItems');//本地保存的列表
+    taskItems = initConfig('todoItems');//本地保存的列表
     //初始化ListView
     initTaskListView();
 
@@ -31,28 +31,33 @@ function initConfig(name) {
             summary: "紧急",
             color: "#f44336",
             done: false,
-            id_number:1
+            id_number:1,
+            path:""  //脚本路径
+
         },
         {
             title: "让老猫给ui增加若干Bug",
             summary: "无限期",
             color: "#ff5722",
             done: false,
-            id_number:2
+            id_number:2,
+            path:""  //脚本路径
         },
         {
             title: "修复dialogs ui模式下无法连续弹出",
             summary: "2099年12月",
             color: "#4caf50",
             done: false,
-            id_number:3
+            id_number:3,
+            path:""  //脚本路径
         },
         {
             title: "荒废的一天",
             summary: "每天",
             color: "#2196f3",
             done: true,
-            id_number:4
+            id_number:4,
+            path:""  //脚本路径
         }
     ];
 }
@@ -71,7 +76,7 @@ function initTaskListView(){
      * 需要手动调用JsListView.notifyDataSetChanged()刷新列表
      * items: {Array} Js数组
      */
-    list.setDataSource(items);  //只是设置 并不显示  必须先给定资源
+    list.setDataSource(taskItems);  //只是设置 并不显示  必须先给定资源
 
     /**
      * 设置适配器布局内容
@@ -128,7 +133,7 @@ function initTaskListView(){
         itemView.view.setOnLongClickListener({
             onLongClick: function () {
                 confirm('确定要删除吗?', item.title).then(value => {
-                    if (value) items.splice(position, 1);
+                    if (value) taskItems.splice(position, 1);
                 });
                 return false;
             }
@@ -136,7 +141,7 @@ function initTaskListView(){
 
         //复选框改变选中
         ui.setEvent(itemView.done, 'checkedChange', (view, isChecked) => {
-            items[position].done = isChecked;//更新数组数据
+            taskItems[position].done = isChecked;//更新数组数据
             // //设置选中或取消
             // if (isChecked) {
             //     paint.flags |= Paint.STRIKE_THRU_TEXT_FLAG;
