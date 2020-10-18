@@ -18,7 +18,6 @@
  *      例如: importClass(java.io.File) 导入java的 File 类
  *  importPackage(包名) =导入java包名下的所有类
  *      例如: importPackage(java.util) 导入java.util下的类
- *
  */
 function main() {
 
@@ -38,14 +37,46 @@ function main() {
 
      let obj=new com.plugin.jPrlGSPKhr.PluginClz();
      logd(obj.test());*/
+    // var activity = ui.getActivity(); //获取当前的Activity
+    // var resources = context.getResources(); //获取资源文件
+    //  var view= activity.findViewById(getResourceID('template_save_btn', 'id'));
+    //
+    //  try {
+    //      logd(view);
+    //  }catch (e){
+    //
+    //  }
+  // var s= ui.getShareData("VarShareData");
+  // logd(s);
 
-    var resources = context.getResources(); //获取资源文件
-  //  logd(updateConfig("loginState",false));
-    logd( resources.getDisplayMetrics().widthPixels);
+    updateConfig("toTop",JSON.stringify([1,3,5,7,55]));
+    sleep(1000);
+    var s= JSON.parse(readConfigString("toTop"));
 
 }
 
 
+
+function  huotiao(view){
+
+    try {
+        for ( let i=0;i<view.getChildCount();i++){
+
+            logd(""+i+" "+view.getChildAt(i));
+            huotiao(view.getChildAt(i));
+
+        }
+    }catch (e){
+
+    }
+
+}
+
+//获取内置资源ID
+function getResourceID(name, type) {
+    //context.getResources().getIdentifier(name, type, context.getPackageName()');//废弃打包后无法获取内置资源
+    return context.getResources().getIdentifier(name, type, 'com.gibb.easyclick');
+}
 
 
 

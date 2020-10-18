@@ -1,6 +1,5 @@
 
-importClass(android.widget.ListView);
-importClass(android.widget.LinearLayout);
+
 
 execScript(2, readResString('js/object-observe-lite.min.js'));
 execScript(2, readResString('js/array-observe.min.js'));

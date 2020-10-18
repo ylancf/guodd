@@ -32,9 +32,10 @@ function initCommConfig(name) {
             summary: "",
             color: "#f44336",
             done: false,
-            prompt:"",
-            addInfo:"",
-            id_number:1
+            prompt:"",//附加信息的提示
+            addInfo:"",//附加信息
+            id_number:1, //唯一id 即数据库的id
+            path:""  //脚本路径
         },
         {
             title: "让老猫给ui增加若干Bug",
@@ -43,7 +44,8 @@ function initCommConfig(name) {
             done: false,
             prompt:"",
             addInfo:"",
-            id_number:2
+            id_number:2,
+            path:""  //脚本路径
         },
         {
             title: "修复dialogs ui模式下无法连续弹出",
@@ -52,7 +54,8 @@ function initCommConfig(name) {
             done: false,
             prompt:"",
             addInfo:"",
-            id_number:3
+            id_number:3,
+            path:""  //脚本路径
         },
         {
             title: "荒废的一天",
@@ -61,7 +64,8 @@ function initCommConfig(name) {
             done: true,
             prompt:"年级,班级",
             addInfo:"",
-            id_number:4
+            id_number:4,
+            path:""  //脚本路径
         }
     ];
 }
@@ -122,7 +126,8 @@ function initCommListView() {
         //复选框改变选中
         ui.setEvent(itemView.done, 'checkedChange', (view, isChecked) => {
             comm_items[position].done = isChecked;//更新数组数据
-
+            if(isChecked){
+                logd("我是实现了");};
             itemView.title.invalidate();
         });
     });

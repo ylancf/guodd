@@ -1,5 +1,6 @@
 importClass(android.view.View);
 importClass(android.os.Build);
+importClass(java.util.HashMap);
 importClass(android.view.Gravity);
 importClass(android.graphics.Bitmap);
 importClass(android.graphics.Paint);
@@ -57,12 +58,24 @@ function main() {
     the_label=activity.findViewById(getResourceID('tl', 'id')); //获取标签栏
     js_start_BT=activity.findViewById(getResourceID('fb', 'id')); //获取按钮
 
+    //启动脚本按钮
+    ui.setEvent(js_start_BT, "click", function (view) {
+       let page= activity.findViewById(getResourceID('vp', 'id')).getCurrentItem();
+
+        if (page==0) {
+            toast("开始任务界面的任务");
+            ui.putShareData("VarShareData",taskItems);
+        }else if(page==1){
+            toast("开始公共脚本");
+            ui.putShareData("VarShareData",comm_items);
+        }
+        ui.start();
+    });
     //在我的信息处 不显示开始按钮
     let viewpager=activity.findViewById(getResourceID('vp', 'id'));
     viewpager.setOnPageChangeListener({
         onPageSelected: function (index) {
-            let _view= activity.findViewById(getResourceID('tl', 'id')).getChildAt(0);
-            let js_start_BT=activity.findViewById(getResourceID('fb', 'id'));
+            let _view= the_label.getChildAt(0);
             if(_view.getChildAt(index).getChildAt(2).getText()=="我的信息"){
                 js_start_BT.setVisibility(4);
             }else{
@@ -79,11 +92,11 @@ function main() {
         main2(); //并执行一些渲染工作
     }
 
-    js_start_BT=the_label=head_bar=null; //把没用的释放掉
 }
 
 //检验账号密码
 function judge_availability(user, pw) {
+
     //连接数据库判断有效性
     if (user == "" || pw == "") {
         return false;
@@ -95,7 +108,7 @@ function judge_availability(user, pw) {
     }
 }
 
-//账号注册
+//账号注册   一共六个字段
 function register_account(name, userName, password, question, answer) {
 
     let imei = device.getIMEI();
@@ -124,8 +137,6 @@ function login_on() {
     execScript(2, readResString('js/mianObject.js'));
     execScript(2, readResString('js/commObject.js'));
     execScript(2, readResString('js/myInfo.js'));
-
-
 
 }
 
@@ -277,10 +288,9 @@ function re_drawing_layout() {
     var re_layout = ui.findViewByTag("register_layout");
     var params = re_layout.getLayoutParams();//获取 register_layout的参数
     params.width = w * 0.8;//宽度设置为80%
-    logd("要设置的参数" + params.width);
+
     re_layout.setLayoutParams(params);
     params = re_layout.getLayoutParams();
-    logd("实际参数" + params.width);
 
     var layoutList = ["re_name_layout", "re_account_layout", "re_password_layout", "re_confirm_layout", "re_question_layout", "re_answer_layout"]
     var ed_list = ["re_name_ed", "re_account_ed", "re_password_ed", "re_confirm_ed", "re_question_ed", "re_answer_ed"]; //注册界面中编辑框
@@ -634,24 +644,50 @@ var px2dp = function (px) {
 };
 
 
-//用于两个数组的包含 sqlArr 包含 localArr
+//公共脚本的匹配用于两个数组的包含 sqlArr 包含 localArr
 // 返回 合并的数组
 function containArr(sqlArr, localArr) {
 
+   let  toTopArr= JSON.parse(readConfigString("toTop"));  //要置顶的数组编号(按顺序)
+   let  toDelete=JSON.parse(readConfigString("toDelete")); //要删除的数组编号
     let newArr = [];
-    if (localArr) {
-        go_here:
-            for (let o of sqlArr) {
-                let index = o.id_number;
-                for (let e of localArr) {
-                    if (e.id_number == index) {
-                        newArr[newArr.length] = e;
-                        continue go_here;
-                    }
-                }
-                newArr[newArr.length] = o;
-            }
-    }
+    let tempArr=[]; //临时数组存放没有排序的置顶对象
+   if(localArr){
+       go_here:
+           for (let local of localArr) {
+               let index = local.id_number; //获取编号
+               for (let sql of sqlArr) {
+                   if (sql.id_number == index){
+                       if(toDelete.lastIndexOf(index)>-1){ //如果在删除列表 就不插入数组
+                           continue go_here;
+                       }
+
+                       local.prompt=sql.prompt; //修改本地对象的提示语
+                       local.path=sql.path;  //修改本地对象的脚本访问路径
+
+                       if(toTopArr.lastIndexOf(index)>-1){
+                           tempArr[index] =local//放在临时数组中没有排序
+                           continue go_here;
+                       }
+                       newArr.push(local);
+                       continue go_here;
+                   }else{
+                       newArr.push(sql);
+                   }
+               }
+           }
+
+           //将要置顶的对象排序
+         let _arr=[];
+          for (let i of toTopArr){
+              _arr.push(tempArr[i]);
+          }
+       newArr=_arr.concat(newArr);//数组合并
+
+   }else{
+       newArr=sqlArr; //直接是数据库返回的集合
+   }
+
     return newArr;
 }
 

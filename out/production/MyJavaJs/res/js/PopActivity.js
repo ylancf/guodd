@@ -4,8 +4,7 @@ importPackage(android.transition);
 importPackage(android.graphics.drawable);
 
 let PopActivity = (function () {
-    let activity = ui.getActivity();
-    let resources = context.getResources(); //获得资源
+
     //获取状态栏高度
     let statusBarHeight = resources.getDimensionPixelSize(resources.getIdentifier("status_bar_height", "dimen", "android"));
 

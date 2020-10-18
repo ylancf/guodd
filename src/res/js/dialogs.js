@@ -13,7 +13,6 @@ importClass(android.widget.CheckBox);
 importClass(android.widget.ProgressBar);
 importClass(android.widget.ArrayAdapter);
 importClass(android.widget.SimpleAdapter);
-importClass(java.util.HashMap);
 importClass(java.util.ArrayList);
 importClass(java.util.concurrent.CountDownLatch);
 importClass(android.app.AlertDialog);
