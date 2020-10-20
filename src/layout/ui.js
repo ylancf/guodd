@@ -160,10 +160,10 @@ function register_account(nickname, userName, password, question, answer) {
 
 
     loginProgrssActivity.postShow(function () {
-        var url = "http://47.98.194.121:80/system/user/register";
+        var url = "http://47.98.194.121:80/system/user/a/register";
         var pa = {
-            "nickname": nickname,
-            "username": userName,
+            "nickName": nickname,
+            "userName": userName,
             "password": password,
             "question": question,
             "answer": answer,
