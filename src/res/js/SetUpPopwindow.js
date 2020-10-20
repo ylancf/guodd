@@ -120,10 +120,8 @@ let PopSetUp=function (){
             pw.dismiss();
         });
 
-        let dp1 = dp2px(1);
-        let dp5 = dp2px(5);
-
-
+        // let dp1 = dp2px(1);
+        // let dp5 = dp2px(5);
         // //设置输入框的形状
         // var states = [[android.R.attr.state_focused], [-android.R.attr.state_focused]];
         // var user_sld = new StateListDrawable();

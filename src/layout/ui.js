@@ -28,6 +28,7 @@ importClass(android.view.animation.OvershootInterpolator);
 importClass(android.view.animation.AnticipateInterpolator);
 importClass(android.support.v4.graphics.drawable.DrawableCompat);
 
+
 var activity = ui.getActivity(); //获取当前的Activity
 var resources = context.getResources(); //获取资源文件
 
@@ -35,6 +36,7 @@ execScript(2, readResString('js/PopActivity.js'));
 execScript(2, readResString('js/dialogs.js'));//导入dialogs模块
 execScript(2, readResString('js/JsListView.js'));//导入JsListView模块
 execScript(2, readResString('js/SetUpPopwindow.js'));//导入SetUpPopwindow模块
+execScript(2, readResString("js/LoginProgress.js"))
 
 var myPopActivity;//注册界面
 var scale = resources.getDisplayMetrics().density; //获得手机屏幕的相对密度 或者说比例
@@ -46,46 +48,62 @@ decorView.getChildAt(0).getChildAt(1).setFitsSystemWindows(true);
 activity.getWindow().setStatusBarColor(Color.TRANSPARENT);//状态栏颜色 设置成透明
 activity.getWindow().setNavigationBarColor(0x999999);//导航栏颜色
 SystemUiVisibility(false);//设置暗色系状态栏
-
-var the_label,js_start_BT,head_bar;
+var loginProgrssActivity = new LoginProgrss();
+var the_label, js_start_BT, head_bar;
 
 function main() {
+
+
+    // let s = loadDex("defaultplugin.apk");
+    // if (!s) {
+    //     logd("调用失败");
+    //     toast("调用失败");
+    // } else {
+    //     logd("调用成功!");
+    //     toast("调用成功");
+    // }
+
+    // 泪目
+    // let applyPermission = new com.plugin.jPrlGSPKhr.ApplyPermission();
+    // //申请权限
+    // applyPermission.ExecPermission(context,ui.getActivity(),["android.permission.WAKE_LOCK","android.permission.DISABLE_KEYGUARD"]);
+
 
     ui.layout("任务界面", "loginactivate.xml");
     var usData = readConfigString("userName");
     var pwData = readConfigString("password");
-    head_bar=activity.findViewById(getResourceID('header_layout', 'id'));//获取头部布局
-    the_label=activity.findViewById(getResourceID('tl', 'id')); //获取标签栏
-    js_start_BT=activity.findViewById(getResourceID('fb', 'id')); //获取按钮
+    head_bar = activity.findViewById(getResourceID('header_layout', 'id'));//获取头部布局
+    the_label = activity.findViewById(getResourceID('tl', 'id')); //获取标签栏
+    js_start_BT = activity.findViewById(getResourceID('fb', 'id')); //获取按钮
 
     //启动脚本按钮
     ui.setEvent(js_start_BT, "click", function (view) {
-       let page= activity.findViewById(getResourceID('vp', 'id')).getCurrentItem();
+        let page = activity.findViewById(getResourceID('vp', 'id')).getCurrentItem();
 
-        if (page==0) {
+        if (page == 0) {
             toast("开始任务界面的任务");
-            ui.putShareData("VarShareData",taskItems);
-        }else if(page==1){
+            ui.putShareData("VarShareData", taskItems);
+        } else if (page == 1) {
             toast("开始公共脚本");
-            ui.putShareData("VarShareData",comm_items);
+            ui.putShareData("VarShareData", comm_items);
         }
         ui.start();
     });
     //在我的信息处 不显示开始按钮
-    let viewpager=activity.findViewById(getResourceID('vp', 'id'));
+    let viewpager = activity.findViewById(getResourceID('vp', 'id'));
     viewpager.setOnPageChangeListener({
         onPageSelected: function (index) {
-            let _view= the_label.getChildAt(0);
-            if(_view.getChildAt(index).getChildAt(2).getText()=="我的信息"){
+            let _view = the_label.getChildAt(0);
+            if (_view.getChildAt(index).getChildAt(2).getText() == "我的信息") {
                 js_start_BT.setVisibility(4);
-            }else{
+            } else {
                 js_start_BT.setVisibility(0);
             }
         }
     });
 
     //判断显示那种界面
-    if (judge_availability(usData, pwData)) {//如果有效
+    if (readConfigBoolean("loginState")) {//如果有效
         login_on(); //开始进入
     } else {
         ui.findViewByTag('user_word').setVisibility(8);//隐藏操作界面
@@ -99,25 +117,68 @@ function judge_availability(user, pw) {
 
     //连接数据库判断有效性
     if (user == "" || pw == "") {
-        return false;
-    } else if (readConfigBoolean("loginState")) {
-       //  to do   连接数据库
-        return true;
-    }else {
-        return  false;
+        toast("账号或密码不正确!");
+    } else {
+        loginProgrssActivity.on("hide", function () {
+
+                let resultInfo=loginProgrssActivity.getResult();
+            if (resultInfo == "登录成功") {
+                ui.saveAllConfig(); //保存所有的值
+                updateConfig("loginState", true); //保存为登录状态
+                ui.findViewByTag('user_word').setVisibility(0);//显示操作界面
+                head_bar.setVisibility(0);//显示bar栏
+                js_start_BT.setVisibility(0);//恢复开始按钮
+                login_on(); //开始进入
+            } else {
+                toast("账号或密码不正确!");
+            }
+        });
+
+        loginProgrssActivity.postShow(function () {
+            var url = "http://47.98.194.121:80/login";
+            var pa = {"username": user.toString() + "", "password": pw.toString() + ""};
+            var httpResult = http.httpPost(url, pa, null, 5 * 1000, {"User-Agent": "test"});
+            loge("result ->     " + httpResult);
+            return httpResult;
+        });
     }
 }
 
 //账号注册   一共六个字段
-function register_account(name, userName, password, question, answer) {
+function register_account(nickname, userName, password, question, answer) {
 
     let imei = device.getIMEI();
 
-    //  to do   连接数据库
+    loginProgrssActivity.on("hide", function () {
+        let resultInfo=loginProgrssActivity.getResult();
+        if (resultInfo== "注册成功") {
+            toast("注册成功");
+        } else {
+            toast("注册失败:" + resultInfo);
+        }
+    });
+
+
+    loginProgrssActivity.postShow(function () {
+        var url = "http://47.98.194.121:80/system/user/register";
+        var pa = {
+            "nickname": nickname,
+            "username": userName,
+            "password": password,
+            "question": question,
+            "answer": answer,
+            "IMEI": imei
+        }
+        var httpResult = http.httpPost(url, pa, null, 5 * 1000, {"User-Agent": "test"});
+        loge("result ->     " + httpResult);
+        return httpResult;
+    });
 
     return true; //成功返回true;
 }
 
+
+//登入
 function login_on() {
 
     //展示操作界面
@@ -138,8 +199,8 @@ function login_on() {
     execScript(2, readResString('js/commObject.js'));
     execScript(2, readResString('js/myInfo.js'));
 
+    myPopActivity=myForgetActivity=null;
 }
-
 
 
 function main2() {
@@ -159,7 +220,6 @@ function main2() {
         btn.setTextSize(17)
         //点击事件
         btn.onClick(function (view) {
-            updateConfig("loginState",true); //保存为登录状态
             var user_input = ui.findViewByTag("userName");
             var pw_input = ui.findViewByTag("password");
             let ut = user_input.getText();
@@ -172,17 +232,8 @@ function main2() {
                 pw_input.setError('密码不能为空');
                 return;
             }
-            if (judge_availability(ut, pt)) {
-                //保存所有的值
-                ui.saveAllConfig();
-                ui.findViewByTag('user_word').setVisibility(0);//显示操作界面
-                head_bar.setVisibility(0);//显示bar栏
-                js_start_BT.setVisibility(0);//恢复开始按钮
-                login_on(); //开始进入
-            } else {
-                toast("账号或密码不正确!");
-                return;
-            }
+            judge_availability(ut, pt);
+
         });
         CreateImageButtonNext(btn);//一半部分
     });
@@ -222,8 +273,8 @@ function CreateImageButtonNext(btn, color1, color2) {
     let params = view.getLayoutParams(); //获取布局参数
 
     //params.width = ViewGroup.LayoutParams.WRAP_CONTENT;//控件宽度 包裹内容的宽度
-    let  hereW= view.getParent().getLayoutParams().width; //match_parent 为-1
-    params.width =(hereW==-1?resources.getDisplayMetrics().widthPixels: hereW)* 0.6;
+    let hereW = view.getParent().getLayoutParams().width; //match_parent 为-1
+    params.width = (hereW == -1 ? resources.getDisplayMetrics().widthPixels : hereW) * 0.6;
     params.gravity = Gravity.CENTER;//layout_gravity; 这里使用java的设置方式
     view.setGravity(Gravity.CENTER); //这是相当于 gravity 与上面的不一样
     view.setLayoutParams(params);  //使新的布局参数生效
@@ -355,14 +406,12 @@ function re_drawing_layout() {
                     toast("请填写完整");
                     return;
                 } else {
-                    infoList[v] = _text;
+                    infoList[v] = _text.toString() + "";
                 }
             }
             if (infoList["re_password_ed"].toString() == infoList["re_confirm_ed"].toString()) {
-                if (register_account(infoList["re_name_ed"], infoList["re_account_ed"], infoList["re_password_ed"],
-                    infoList["re_question_ed"], infoList["re_answer_ed"])) {
-                    toast("注册成功");
-                }
+                 register_account(infoList["re_name_ed"], infoList["re_account_ed"], infoList["re_password_ed"],
+                    infoList["re_question_ed"], infoList["re_answer_ed"])//注册
             } else {
                 toast("两次密码不一致!");
                 return;
@@ -446,7 +495,6 @@ function setEditTextType(tagName, _type) {
     });
 
 }
-
 
 
 //获取内置资源ID
@@ -648,45 +696,45 @@ var px2dp = function (px) {
 // 返回 合并的数组
 function containArr(sqlArr, localArr) {
 
-   let  toTopArr= JSON.parse(readConfigString("toTop"));  //要置顶的数组编号(按顺序)
-   let  toDelete=JSON.parse(readConfigString("toDelete")); //要删除的数组编号
+    let toTopArr = JSON.parse(readConfigString("toTop"));  //要置顶的数组编号(按顺序)
+    let toDelete = JSON.parse(readConfigString("toDelete")); //要删除的数组编号
     let newArr = [];
-    let tempArr=[]; //临时数组存放没有排序的置顶对象
-   if(localArr){
-       go_here:
-           for (let local of localArr) {
-               let index = local.id_number; //获取编号
-               for (let sql of sqlArr) {
-                   if (sql.id_number == index){
-                       if(toDelete.lastIndexOf(index)>-1){ //如果在删除列表 就不插入数组
-                           continue go_here;
-                       }
+    let tempArr = []; //临时数组存放没有排序的置顶对象
+    if (localArr) {
+        go_here:
+            for (let local of localArr) {
+                let index = local.id_number; //获取编号
+                for (let sql of sqlArr) {
+                    if (sql.id_number == index) {
+                        if (toDelete.lastIndexOf(index) > -1) { //如果在删除列表 就不插入数组
+                            continue go_here;
+                        }
 
-                       local.prompt=sql.prompt; //修改本地对象的提示语
-                       local.path=sql.path;  //修改本地对象的脚本访问路径
+                        local.prompt = sql.prompt; //修改本地对象的提示语
+                        local.path = sql.path;  //修改本地对象的脚本访问路径
 
-                       if(toTopArr.lastIndexOf(index)>-1){
-                           tempArr[index] =local//放在临时数组中没有排序
-                           continue go_here;
-                       }
-                       newArr.push(local);
-                       continue go_here;
-                   }else{
-                       newArr.push(sql);
-                   }
-               }
-           }
+                        if (toTopArr.lastIndexOf(index) > -1) {
+                            tempArr[index] = local//放在临时数组中没有排序
+                            continue go_here;
+                        }
+                        newArr.push(local);
+                        continue go_here;
+                    } else {
+                        newArr.push(sql);
+                    }
+                }
+            }
 
-           //将要置顶的对象排序
-         let _arr=[];
-          for (let i of toTopArr){
-              _arr.push(tempArr[i]);
-          }
-       newArr=_arr.concat(newArr);//数组合并
+        //将要置顶的对象排序
+        let _arr = [];
+        for (let i of toTopArr) {
+            _arr.push(tempArr[i]);
+        }
+        newArr = _arr.concat(newArr);//数组合并
 
-   }else{
-       newArr=sqlArr; //直接是数据库返回的集合
-   }
+    } else {
+        newArr = sqlArr; //直接是数据库返回的集合
+    }
 
     return newArr;
 }

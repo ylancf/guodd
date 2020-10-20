@@ -13,5 +13,10 @@
     <orderEntry type="library" name="android" level="project" />
     <orderEntry type="library" name="opencv-4.3.0" level="project" />
     <orderEntry type="library" name="com/android" level="project" />
+    <orderEntry type="library" name="annotation-1.1.0" level="project" />
+    <orderEntry type="library" name="classes" level="project" />
+    <orderEntry type="library" name="classes2" level="project" />
+    <orderEntry type="library" name="classes3" level="project" />
+    <orderEntry type="library" name="lint" level="project" />
   </component>
 </module>

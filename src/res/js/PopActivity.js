@@ -52,7 +52,7 @@ let PopActivity = (function () {
         //-1代表LayoutParams.MATCH_PARENT，即该布局的尺寸将填满它的父控件；-2代表LayoutParams.WRAP_CONTENT
         toolbar.setLayoutParams(Toolbar.LayoutParams(-1, -2));
         toolbar.setTag('pop_toolbar');
-        toolbar.setPadding(0, statusBarHeight, 0, 0);
+        toolbar.setPadding(0, statusBarHeight+10, 0, 0);
         toolbar.setBackgroundColor(Color.parseColor('#1095DA'));
         //设置返回的箭头
         toolbar.setNavigationIcon(getResourceID('abc_ic_ab_back_material'));//ic_back

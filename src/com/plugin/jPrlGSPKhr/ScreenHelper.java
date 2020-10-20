@@ -1,0 +1,70 @@
+package com.plugin.jPrlGSPKhr;
+
+import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Binder;
+import android.os.Build;
+import android.os.IBinder;
+import android.util.Log;
+import android.widget.Toast;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+
+
+public class ScreenHelper {
+
+    private Context context;
+    BroadcastReceiver screenReceiver;
+
+    public ScreenHelper(Context context) {
+        this.context = context;
+        intiFunction();
+        // 注册一个监听屏幕开启和关闭的广播
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        filter.addAction("unlockScreen233");
+        context.registerReceiver(screenReceiver, filter);
+
+    }
+
+    private void intiFunction() {
+        screenReceiver = new BroadcastReceiver() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                // TODO Auto-generated method stub
+                String action = intent.getAction();
+                if (action.equals(Intent.ACTION_SCREEN_ON)) {
+
+                } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {//如果接受到关闭屏幕的广播
+
+                    PowerManagerWakeLock.release(); //当屏幕关闭时 换回系统锁屏
+
+                } else if (action.equals("unlockScreen233")) {
+
+                    PowerManagerWakeLock.acquire(context);
+
+                }
+            }
+        };
+    }
+
+
+    //判断是否锁屏
+    public  boolean  ScreenIsLock(){
+      return   PowerManagerWakeLock.ScreenIsLock(context);
+
+    }
+
+
+    //退出后恢复原来的系统锁屏
+    public void onDestroy() {
+        PowerManagerWakeLock.release();
+        context.unregisterReceiver(screenReceiver);
+    }
+
+}

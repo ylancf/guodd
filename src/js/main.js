@@ -19,63 +19,73 @@
  *  importPackage(包名) =导入java包名下的所有类
  *      例如: importPackage(java.util) 导入java.util下的类
  */
+importClass(android.content.Intent);
 function main() {
 
-     //如果自动化服务正常
-  if (!autoServiceStart(3)) {
-      logd("自动化服务启动失败，无法执行脚本")
-      exit();
-      return;
-  }
-
-  toast("这里是主线程");
-
-
-   /* let s=  loadDex("defaultplugin.apk");
-    if(!s){logd("调用失败"); toast("调用成功");}else{logd("调用成功!");
-        toast("调用成功");}
-
-     let obj=new com.plugin.jPrlGSPKhr.PluginClz();
-     logd(obj.test());*/
-    // var activity = ui.getActivity(); //获取当前的Activity
-    // var resources = context.getResources(); //获取资源文件
-    //  var view= activity.findViewById(getResourceID('template_save_btn', 'id'));
-    //
-    //  try {
-    //      logd(view);
-    //  }catch (e){
-    //
-    //  }
-  // var s= ui.getShareData("VarShareData");
-  // logd(s);
-
-    updateConfig("toTop",JSON.stringify([1,3,5,7,55]));
-    sleep(1000);
-    var s= JSON.parse(readConfigString("toTop"));
-
-}
-
-
-
-function  huotiao(view){
-
-    try {
-        for ( let i=0;i<view.getChildCount();i++){
-
-            logd(""+i+" "+view.getChildAt(i));
-            huotiao(view.getChildAt(i));
-
-        }
-    }catch (e){
-
+    //如果自动化服务正常
+    if (!autoServiceStart(3)) {
+        logd("自动化服务启动失败，无法执行脚本")
+        exit();
+        return;
     }
 
-}
+    toast("这里是主线程");
 
-//获取内置资源ID
-function getResourceID(name, type) {
-    //context.getResources().getIdentifier(name, type, context.getPackageName()');//废弃打包后无法获取内置资源
-    return context.getResources().getIdentifier(name, type, 'com.gibb.easyclick');
+
+    // //不带文件的请求
+    // var url = "http://47.98.194.121:80/login";
+    // var pa = {"username":"111","password":"222"}
+    // var result = http.httpPost(url, pa, null, 5 * 1000, {"User-Agent": "Mobile"});
+    // loge("result ->     " + result);
+    //
+    // exit();
+
+
+    let s = loadDex("defaultplugin.apk"); //改成你们自己的
+    if (!s) {
+        logd("调用失败");
+        toast("调用失败");
+    } else {
+        logd("调用成功!");
+        toast("调用成功");
+    }
+
+    // let applyPermission = new com.plugin.jPrlGSPKhr.ApplyPermission();
+    // //申请权限
+    // applyPermission.ExecPermission([Manifest.permission.WAKE_LOCK,Manifest.permission.DISABLE_KEYGUARD]);
+
+    let obj = new com.plugin.jPrlGSPKhr.ScreenHelper(context);
+    if (obj) {
+        logd(obj);
+    }
+
+    logd(obj.ScreenIsLock());
+    
+    sleep(10000);
+
+    logd(obj.ScreenIsLock());
+    
+
+    // toast("十秒后开屏");
+    // sleep(10000);
+    //这个是立即运行的 立马见效的 直接用的话 用一次 调用一次 PowerManagerWakeLock.release();
+    //com.plugin.jPrlGSPKhr.PowerManagerWakeLock.acquire(context);
+
+
+
+    // 刚注册广播 马上就调用第一次调用可能不会成功(因为 注册了系统不一定立即运行)
+    // var intent = new Intent("unlockScreen233");  //这里的action要一致。
+    // //intent.putExtra("time", "2020-03-16");
+    // context.sendBroadcast(intent);
+    //
+    // sleep(5000);
+    // context.sendBroadcast(intent);
+    //
+    // sleep(2000);
+    // context.sendBroadcast(intent);
+    // sleep(5000);
+
+
 }
 
 
