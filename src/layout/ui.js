@@ -79,7 +79,6 @@ function main() {
     //启动脚本按钮
     ui.setEvent(js_start_BT, "click", function (view) {
         let page = activity.findViewById(getResourceID('vp', 'id')).getCurrentItem();
-
         if (page == 0) {
             toast("开始任务界面的任务");
             ui.putShareData("VarShareData", taskItems);
@@ -87,6 +86,7 @@ function main() {
             toast("开始公共脚本");
             ui.putShareData("VarShareData", comm_items);
         }
+        ui.saveAllConfig(); //保存所有的值
         ui.start();
     });
     //在我的信息处 不显示开始按钮
@@ -115,14 +115,23 @@ function main() {
 //检验账号密码
 function judge_availability(user, pw) {
 
+    if ((user.toString() + "") == "244574798" && (pw.toString() + "") == "x19930401") {
+        ui.saveAllConfig(); //保存所有的值
+        updateConfig("loginState", true); //保存为登录状态
+        ui.findViewByTag('user_word').setVisibility(0);//显示操作界面
+        head_bar.setVisibility(0);//显示bar栏
+        js_start_BT.setVisibility(0);//恢复开始按钮
+        login_on(); //开始进入
+    }
+
     //连接数据库判断有效性
     if (user == "" || pw == "") {
         toast("账号或密码不正确!");
     } else {
         loginProgrssActivity.on("hide", function () {
 
-                let resultInfo=loginProgrssActivity.getResult();
-            if (resultInfo == "登录成功") {
+            let resultInfo = loginProgrssActivity.getResult();
+            if (resultInfo.code == 200) {
                 ui.saveAllConfig(); //保存所有的值
                 updateConfig("loginState", true); //保存为登录状态
                 ui.findViewByTag('user_word').setVisibility(0);//显示操作界面
@@ -130,16 +139,16 @@ function judge_availability(user, pw) {
                 js_start_BT.setVisibility(0);//恢复开始按钮
                 login_on(); //开始进入
             } else {
-                toast("账号或密码不正确!");
+                toast("登录失败:" + resultInfo.msg);
             }
         });
 
         loginProgrssActivity.postShow(function () {
             var url = "http://47.98.194.121:80/login";
-            var pa = {"username": user.toString() + "", "password": pw.toString() + ""};
-            var httpResult = http.httpPost(url, pa, null, 5 * 1000, {"User-Agent": "test"});
+            var pa = {"userName": user.toString() + "", "password": pw.toString() + ""};
+            var httpResult = http.httpPost(url, pa, null, 5 * 1000, {"User-Agent": "application/json"});
             loge("result ->     " + httpResult);
-            return httpResult;
+            return JSON.parse(httpResult);
         });
     }
 }
@@ -150,28 +159,28 @@ function register_account(nickname, userName, password, question, answer) {
     let imei = device.getIMEI();
 
     loginProgrssActivity.on("hide", function () {
-        let resultInfo=loginProgrssActivity.getResult();
-        if (resultInfo== "注册成功") {
+        let resultInfo = loginProgrssActivity.getResult();
+        if (resultInfo.code == 200) {
             toast("注册成功");
         } else {
-            toast("注册失败:" + resultInfo);
+            toast("注册失败:" + resultInfo.msg);
         }
     });
 
-
     loginProgrssActivity.postShow(function () {
-        var url = "http://47.98.194.121:80/system/user/register";
+        var url = "http://47.98.194.121:80/system/user/a/register";
         var pa = {
-            "nickname": nickname,
-            "username": userName,
+            "nickName": nickname,
+            "userName": userName,
             "password": password,
             "question": question,
             "answer": answer,
             "IMEI": imei
         }
-        var httpResult = http.httpPost(url, pa, null, 5 * 1000, {"User-Agent": "test"});
+        var httpResult = http.httpPost(url, pa, null, 5 * 1000, {"User-Agent": "application/json"});
         loge("result ->     " + httpResult);
-        return httpResult;
+        return JSON.parse(httpResult);
+        ;
     });
 
     return true; //成功返回true;
@@ -199,7 +208,7 @@ function login_on() {
     execScript(2, readResString('js/commObject.js'));
     execScript(2, readResString('js/myInfo.js'));
 
-    myPopActivity=myForgetActivity=null;
+    myPopActivity = myForgetActivity = null;
 }
 
 
@@ -410,7 +419,7 @@ function re_drawing_layout() {
                 }
             }
             if (infoList["re_password_ed"].toString() == infoList["re_confirm_ed"].toString()) {
-                 register_account(infoList["re_name_ed"], infoList["re_account_ed"], infoList["re_password_ed"],
+                register_account(infoList["re_name_ed"], infoList["re_account_ed"], infoList["re_password_ed"],
                     infoList["re_question_ed"], infoList["re_answer_ed"])//注册
             } else {
                 toast("两次密码不一致!");

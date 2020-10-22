@@ -27,6 +27,18 @@ function initCommConfig(name) {
 
     //如果数据存在 则转成json数据返回 否则返回默认配置
     return arr ? JSON.parse(arr) : [
+
+        {
+            title: "微信自动抢红包(需无锁屏密码)",
+            summary: "",
+            color: "#4caf50",
+            done: false,
+            prompt:"屏蔽,屏蔽包含",
+            addInfo:"",
+            id_number:7,
+            path:""  //脚本路径
+        },
+
         {
             title: "BUG: ui.parseView()根布局margin, layout_width, layout_height 属性失效",
             summary: "",

@@ -19,7 +19,23 @@
  *  importPackage(包名) =导入java包名下的所有类
  *      例如: importPackage(java.util) 导入java.util下的类
  */
-importClass(android.content.Intent);
+
+var screenManagers;
+var addInfo;
+var  myScript="",myScriptNext="";
+
+
+function  initScreenManagers(){
+    let s = loadDex("defaultplugin.apk");
+    if (!s) {
+        logd("屏幕管理调用失败");
+    } else {
+        logd("调用成功!");
+        screenManagers = new com.plugin.jPrlGSPKhr.ScreenHelper(context);
+    }
+}
+
+
 function main() {
 
     //如果自动化服务正常
@@ -29,65 +45,58 @@ function main() {
         return;
     }
 
-    toast("这里是主线程");
+    //获取屏幕管理对象
+    initScreenManagers()
 
 
-    // //不带文件的请求
-    // var url = "http://47.98.194.121:80/login";
-    // var pa = {"username":"111","password":"222"}
-    // var result = http.httpPost(url, pa, null, 5 * 1000, {"User-Agent": "Mobile"});
-    // loge("result ->     " + result);
-    //
-    // exit();
+    toast("脚本开始");
 
 
-    let s = loadDex("defaultplugin.apk"); //改成你们自己的
-    if (!s) {
-        logd("调用失败");
-        toast("调用失败");
-    } else {
-        logd("调用成功!");
-        toast("调用成功");
+    //得到要运行的脚本信息
+    var list=[];
+    var sharelist=ui.getShareData("VarShareData");
+    list= sharelist.filter(function (x){
+        return  x.done==true;
+    });
+
+    for (let i = 0; i < list.length; i++) {
+        if(list[i].prompt!=""){
+            addInfo=list[i].addInfo;
+        }
+      //  myScript=getTextScript("http://47.98.194.121:80/"+list[i].path);
+
+        weiChatMain();
+
     }
-
-    // let applyPermission = new com.plugin.jPrlGSPKhr.ApplyPermission();
-    // //申请权限
-    // applyPermission.ExecPermission([Manifest.permission.WAKE_LOCK,Manifest.permission.DISABLE_KEYGUARD]);
-
-    let obj = new com.plugin.jPrlGSPKhr.ScreenHelper(context);
-    if (obj) {
-        logd(obj);
-    }
-
-    logd(obj.ScreenIsLock());
     
-    sleep(10000);
-
-    logd(obj.ScreenIsLock());
-    
-
-    // toast("十秒后开屏");
-    // sleep(10000);
-    //这个是立即运行的 立马见效的 直接用的话 用一次 调用一次 PowerManagerWakeLock.release();
-    //com.plugin.jPrlGSPKhr.PowerManagerWakeLock.acquire(context);
-
-
-
-    // 刚注册广播 马上就调用第一次调用可能不会成功(因为 注册了系统不一定立即运行)
-    // var intent = new Intent("unlockScreen233");  //这里的action要一致。
-    // //intent.putExtra("time", "2020-03-16");
-    // context.sendBroadcast(intent);
-    //
-    // sleep(5000);
-    // context.sendBroadcast(intent);
-    //
-    // sleep(2000);
-    // context.sendBroadcast(intent);
-    // sleep(5000);
-
 
 }
 
+function  getTextScript(url){
+
+    var url = "http://192.168.0.5:8081/api/httpGet?a=1";
+    var pa = {"b": "22"};
+    var x = http.httpGet(url, pa, 10 * 1000, {"User-Agent": "test"});
+    toast(" result->     " + x);
+    loge("result ->     " + x);
+}
+
+
+
+
+function execScript(scriptText){
+
+    thread.execAsync(function() {
+        //execScript(1,"/sdcard/ad.js")
+        execScript(2,scriptText);
+    });
+
+    while(true){
+        sleep(2000);
+        loge("fsadffsad")
+    }
+
+}
 
 
 function autoServiceStart(time) {
@@ -104,4 +113,14 @@ function autoServiceStart(time) {
     return isServiceOk();
 }
 
-main();
+
+try {
+    main();
+}catch (e){
+
+}finally {
+    if(screenManagers){
+        screenManagers.onDestroy();//一些释放工作
+    }
+}
+

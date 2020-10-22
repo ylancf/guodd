@@ -18,10 +18,11 @@ public class ScreenHelper {
 
     private Context context;
     BroadcastReceiver screenReceiver;
-
+   private  Intent intent;
     public ScreenHelper(Context context) {
         this.context = context;
         intiFunction();
+        intent = new Intent("unlockScreen233");
         // 注册一个监听屏幕开启和关闭的广播
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_SCREEN_ON);
@@ -60,6 +61,12 @@ public class ScreenHelper {
 
     }
 
+
+    //执行解锁
+    public void  PerformUnlock(){
+         //intent.putExtra("time", "2020-03-16");
+          context.sendBroadcast(intent);
+    }
 
     //退出后恢复原来的系统锁屏
     public void onDestroy() {
