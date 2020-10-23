@@ -106,8 +106,8 @@ function initTaskListView(){
 
         //设置背景色
         itemView.color.setBackgroundColor(Color.parseColor(item.color));
-        //改变水波纹颜色
-        itemView.card.getBackground().setColor(android.content.res.ColorStateList.valueOf(Color.parseColor('#2F000000')));
+        //改变水波纹颜色 不支持只能不用
+        //itemView.card.getBackground().setColor(android.content.res.ColorStateList.valueOf(Color.parseColor('#2F000000')));
         // //设置选中或取消  这里不需要这个功能
         // let paint = itemView.title.paint;
         // if (item.done) {

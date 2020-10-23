@@ -27,6 +27,18 @@ function initCommConfig(name) {
 
     //如果数据存在 则转成json数据返回 否则返回默认配置
     return arr ? JSON.parse(arr) : [
+
+        {
+            title: "微信自动抢红包(需无锁屏密码)",
+            summary: "",
+            color: "#4caf50",
+            done: false,
+            prompt:"屏蔽,屏蔽包含",
+            addInfo:"",
+            id_number:7,
+            path:""  //脚本路径
+        },
+
         {
             title: "BUG: ui.parseView()根布局margin, layout_width, layout_height 属性失效",
             summary: "",
@@ -91,7 +103,7 @@ function initCommListView() {
         //设置背景色
         itemView.color.setBackgroundColor(Color.parseColor(item.color));
         //改变水波纹颜色
-        itemView.card.getBackground().setColor(android.content.res.ColorStateList.valueOf(Color.parseColor('#2F000000')));
+       // itemView.card.getBackground().setColor(android.content.res.ColorStateList.valueOf(Color.parseColor('#2F000000')));
 
         //跑马灯效果
         itemView.title.setEllipsize(android.text.TextUtils.TruncateAt.MARQUEE);
@@ -114,7 +126,7 @@ function initCommListView() {
                     let str = "时间:" + _date + ",时长:" + r_time + ",次数:" + r_number
                     itemView.setViewValue('summary', str);
                     itemView.setViewValue('prompt', _prompt);
-                    itemView.setViewValue('addInfo', _addInfo);
+                    itemView.setViewValue('comm_addInfo', _addInfo);
                     comm_items[position].summary = str; //更新数据
                     comm_items[position].prompt = _prompt;
                     comm_items[position].addInfo = _addInfo;
@@ -126,8 +138,7 @@ function initCommListView() {
         //复选框改变选中
         ui.setEvent(itemView.done, 'checkedChange', (view, isChecked) => {
             comm_items[position].done = isChecked;//更新数组数据
-            if(isChecked){
-                logd("我是实现了");};
+
             itemView.title.invalidate();
         });
     });

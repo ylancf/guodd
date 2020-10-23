@@ -11,6 +11,8 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
+
+//已经作废 不在使用
 public class ScreenSaver extends Service {
 
     private final IBinder binder= new LocalBinder();
@@ -53,6 +55,10 @@ public class ScreenSaver extends Service {
             }
         }
     };
+
+
+
+
 
     public void onDestroy() {
         PowerManagerWakeLock.release();

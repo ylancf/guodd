@@ -33,6 +33,7 @@ public class ApplyPermission extends Activity {
     String[] permissions;  //Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE,
     //String s= Manifest.permission.WAKE_LOCK;//,Manifest.permission.DISABLE_KEYGUARD
 
+    // applyPermission.ExecPermission(context,ui.getActivity(),["android.permission.WAKE_LOCK","android.permission.DISABLE_KEYGUARD"]);
 
     private Activity activity;
     private Context context;

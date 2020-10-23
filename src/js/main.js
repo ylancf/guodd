@@ -24,7 +24,6 @@ var screenManagers;
 var addInfo;
 var  myScript="",myScriptNext="";
 
-
 function  initScreenManagers(){
     let s = loadDex("defaultplugin.apk");
     if (!s) {
@@ -44,35 +43,30 @@ function main() {
         exit();
         return;
     }
-
     //获取屏幕管理对象
     initScreenManagers()
-
-
     toast("脚本开始");
-
-
     //得到要运行的脚本信息
-    var list=[];
-    var sharelist=ui.getShareData("VarShareData");
-    list= sharelist.filter(function (x){
-        return  x.done==true;
+    let list = [];
+    let shareList = ui.getShareData("VarShareData");
+    list = shareList.filter(function (x) {
+        return x.done == true;
     });
 
     for (let i = 0; i < list.length; i++) {
-        if(list[i].prompt!=""){
-            addInfo=list[i].addInfo;
+        if (list[i].prompt != "") {
+            addInfo = list[i].addInfo;
         }
-      //  myScript=getTextScript("http://47.98.194.121:80/"+list[i].path);
+
+        //  myScript=getTextScript("http://47.98.194.121:80/"+list[i].path);
+
 
         weiChatMain();
-
     }
-    
 
 }
 
-function  getTextScript(url){
+function getTextScript(url) {
 
     var url = "http://192.168.0.5:8081/api/httpGet?a=1";
     var pa = {"b": "22"};
@@ -82,16 +76,14 @@ function  getTextScript(url){
 }
 
 
+function execScript(scriptText) {
 
-
-function execScript(scriptText){
-
-    thread.execAsync(function() {
+    thread.execAsync(function () {
         //execScript(1,"/sdcard/ad.js")
-        execScript(2,scriptText);
+        execScript(2, scriptText);
     });
 
-    while(true){
+    while (true) {
         sleep(2000);
         loge("fsadffsad")
     }
@@ -116,10 +108,10 @@ function autoServiceStart(time) {
 
 try {
     main();
-}catch (e){
+} catch (e) {
 
-}finally {
-    if(screenManagers){
+} finally {
+    if (screenManagers) {
         screenManagers.onDestroy();//一些释放工作
     }
 }

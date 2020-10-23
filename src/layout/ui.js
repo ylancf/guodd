@@ -50,45 +50,40 @@ activity.getWindow().setNavigationBarColor(0x999999);//导航栏颜色
 SystemUiVisibility(false);//设置暗色系状态栏
 var loginProgrssActivity = new LoginProgrss();
 var the_label, js_start_BT, head_bar;
-
+var startBTState=false; //记录开始按钮的状态
 function main() {
 
 
-    // let s = loadDex("defaultplugin.apk");
-    // if (!s) {
-    //     logd("调用失败");
-    //     toast("调用失败");
-    // } else {
-    //     logd("调用成功!");
-    //     toast("调用成功");
-    // }
-
-    // 泪目
-    // let applyPermission = new com.plugin.jPrlGSPKhr.ApplyPermission();
-    // //申请权限
-    // applyPermission.ExecPermission(context,ui.getActivity(),["android.permission.WAKE_LOCK","android.permission.DISABLE_KEYGUARD"]);
-
-
     ui.layout("任务界面", "loginactivate.xml");
-    var usData = readConfigString("userName");
-    var pwData = readConfigString("password");
     head_bar = activity.findViewById(getResourceID('header_layout', 'id'));//获取头部布局
     the_label = activity.findViewById(getResourceID('tl', 'id')); //获取标签栏
     js_start_BT = activity.findViewById(getResourceID('fb', 'id')); //获取按钮
 
+
     //启动脚本按钮
     ui.setEvent(js_start_BT, "click", function (view) {
-        let page = activity.findViewById(getResourceID('vp', 'id')).getCurrentItem();
-        if (page == 0) {
-            toast("开始任务界面的任务");
-            ui.putShareData("VarShareData", taskItems);
-        } else if (page == 1) {
-            toast("开始公共脚本");
-            ui.putShareData("VarShareData", comm_items);
+
+        startBTState=!startBTState;
+        if(startBTState){
+            let page = activity.findViewById(getResourceID('vp', 'id')).getCurrentItem();
+            if (page == 0) {
+                toast("开始任务界面的任务");
+                ui.putShareData("VarShareData", taskItems);
+            } else if (page == 1) {
+                toast("开始公共脚本");
+                ui.putShareData("VarShareData", comm_items);
+            }
+            updateConfig("todoItems", JSON.stringify(taskItems));
+            updateConfig("commItems",JSON.stringify(comm_items));
+            ui.saveAllConfig(); //保存所有的值
+
+            ui.start();
+        }else{
+            ui.stopTask();
         }
-        ui.saveAllConfig(); //保存所有的值
-        ui.start();
     });
+
+
     //在我的信息处 不显示开始按钮
     let viewpager = activity.findViewById(getResourceID('vp', 'id'));
     viewpager.setOnPageChangeListener({
@@ -102,7 +97,7 @@ function main() {
         }
     });
 
-    //判断显示那种界面
+        //判断显示那种界面
     if (readConfigBoolean("loginState")) {//如果有效
         login_on(); //开始进入
     } else {
@@ -114,15 +109,6 @@ function main() {
 
 //检验账号密码
 function judge_availability(user, pw) {
-
-    if ((user.toString() + "") == "244574798" && (pw.toString() + "") == "x19930401") {
-        ui.saveAllConfig(); //保存所有的值
-        updateConfig("loginState", true); //保存为登录状态
-        ui.findViewByTag('user_word').setVisibility(0);//显示操作界面
-        head_bar.setVisibility(0);//显示bar栏
-        js_start_BT.setVisibility(0);//恢复开始按钮
-        login_on(); //开始进入
-    }
 
     //连接数据库判断有效性
     if (user == "" || pw == "") {
@@ -145,8 +131,8 @@ function judge_availability(user, pw) {
 
         loginProgrssActivity.postShow(function () {
             var url = "http://47.98.194.121:80/login";
-            var pa = {"userName": user.toString() + "", "password": pw.toString() + ""};
-            var httpResult = http.httpPost(url, pa, null, 5 * 1000, {"User-Agent": "application/json"});
+            var pa = {"username": user.toString() + "", "password": pw.toString() + ""};
+            var httpResult = http.httpPost(url, pa, null, 5 * 1000, {"Content-Type": "application/json"});
             loge("result ->     " + httpResult);
             return JSON.parse(httpResult);
         });
@@ -207,8 +193,8 @@ function login_on() {
     execScript(2, readResString('js/mianObject.js'));
     execScript(2, readResString('js/commObject.js'));
     execScript(2, readResString('js/myInfo.js'));
+    myPopActivity = myForgetActivity = null; //去掉已经不需要的对象
 
-    myPopActivity = myForgetActivity = null;
 }
 
 
@@ -381,7 +367,6 @@ function re_drawing_layout() {
         for (let n of ed_list) {
             updateConfig(n, "");
         }
-        myPopActivity = null;
     });
 
     //排断两次密码是否一致
@@ -749,4 +734,14 @@ function containArr(sqlArr, localArr) {
 }
 
 
-main();
+try {
+    main();
+}catch (e){
+
+    var create=file.create("/sdcard/AppDebug.txt");
+    toast(create);
+    var data=e.message;
+    file.writeFile(data,"/sdcard/test.txt");
+
+}
+

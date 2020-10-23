@@ -109,13 +109,12 @@ let PopSetUp=function (){
 
 
         ui.setEvent(confirm, 'click', function (view) {
-            let _date=start_time.getText();
-            let r_time = run_time.getText();
-            let r_number = run_number.getText();
-            let _prompt=set_prompt.getText();
-            let _addInfo=set_addInfo.getText();
-            mCallback(true, _date.toString().trim(), r_time.toString().trim(),r_number.toString().trim(),
-                _prompt,_addInfo);
+            let _date=start_time.getText().toString()+"";
+            let r_time = run_time.getText().toString()+"";
+            let r_number = run_number.getText().toString()+"";
+            let _prompt=set_prompt.getText().toString()+"";
+            let _addInfo=set_addInfo.getText().toString()+"";
+            mCallback(true, _date.trim(), r_time.trim(),r_number.trim(), _prompt,_addInfo);
             mCallback = null;
             pw.dismiss();
         });

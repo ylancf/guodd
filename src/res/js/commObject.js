@@ -103,7 +103,7 @@ function initCommListView() {
         //设置背景色
         itemView.color.setBackgroundColor(Color.parseColor(item.color));
         //改变水波纹颜色
-        itemView.card.getBackground().setColor(android.content.res.ColorStateList.valueOf(Color.parseColor('#2F000000')));
+       // itemView.card.getBackground().setColor(android.content.res.ColorStateList.valueOf(Color.parseColor('#2F000000')));
 
         //跑马灯效果
         itemView.title.setEllipsize(android.text.TextUtils.TruncateAt.MARQUEE);
@@ -126,7 +126,7 @@ function initCommListView() {
                     let str = "时间:" + _date + ",时长:" + r_time + ",次数:" + r_number
                     itemView.setViewValue('summary', str);
                     itemView.setViewValue('prompt', _prompt);
-                    itemView.setViewValue('addInfo', _addInfo);
+                    itemView.setViewValue('comm_addInfo', _addInfo);
                     comm_items[position].summary = str; //更新数据
                     comm_items[position].prompt = _prompt;
                     comm_items[position].addInfo = _addInfo;
@@ -138,8 +138,7 @@ function initCommListView() {
         //复选框改变选中
         ui.setEvent(itemView.done, 'checkedChange', (view, isChecked) => {
             comm_items[position].done = isChecked;//更新数组数据
-            if(isChecked){
-                logd("我是实现了");};
+
             itemView.title.invalidate();
         });
     });
