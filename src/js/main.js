@@ -21,19 +21,9 @@
  */
 
 var screenManagers;
-var addInfo;
+var addInfo="";
+var startTime,endTime,runTimes;
 var  myScript="",myScriptNext="";
-
-function  initScreenManagers(){
-    let s = loadDex("defaultplugin.apk");
-    if (!s) {
-        logd("屏幕管理调用失败");
-    } else {
-        logd("调用成功!");
-        screenManagers = new com.plugin.jPrlGSPKhr.ScreenHelper(context);
-    }
-}
-
 
 function main() {
 
@@ -46,25 +36,53 @@ function main() {
     //获取屏幕管理对象
     initScreenManagers()
     toast("脚本开始");
-    //得到要运行的脚本信息
-    let list = [];
-    let shareList = ui.getShareData("VarShareData");
-    list = shareList.filter(function (x) {
-        return x.done == true;
-    });
+    // //得到要运行的脚本信息
+    // let list = [];
+    // let shareList = ui.getShareData("VarShareData");
+    // list = shareList.filter(function (x) {
+    //     return x.done == true;
+    // });
+    //
+    //
 
-    for (let i = 0; i < list.length; i++) {
-        if (list[i].prompt != "") {
-            addInfo = list[i].addInfo;
-        }
+   //
+   // list= listSorting(list);//按时间排序
+   //
+   //  logd(JSON.stringify(list));
+   //
+   //  list.forEach(function (target){
+   //      addInfo = target.addInfo;
+   //      startTime=target.startTime;
+   //      endTime=target.endTime;
+   //      runTimes=target.runTimes;
+   //
+   //      //  myScript=getTextScript("http://47.98.194.121:80/"+list[i].path);
+   //
+   //
+   //
+   //
+   //
+   //      if (endTime<=new Date()) {
+   //          toastLog(target.title + "时间到结束!")
+   //      }else if(runTimes==0){
+   //          toastLog(target.title + "次数到结束!")
+   //      }
+   //
+   //  });
 
-        //  myScript=getTextScript("http://47.98.194.121:80/"+list[i].path);
+    let dj=text("dddddd");
 
 
-        weiChatMain();
-    }
+   // sleep(10000);
+   //     //weiChatMain();
+   //  startTravel();
 
+       
 }
+
+
+
+
 
 function getTextScript(url) {
 
@@ -85,34 +103,20 @@ function execScript(scriptText) {
 
     while (true) {
         sleep(2000);
-        loge("fsadffsad")
+        loge("脚本运行中");
     }
 
 }
 
 
-function autoServiceStart(time) {
-    for (var i = 0; i < time; i++) {
-        if (isServiceOk()) {
-            return true;
-        }
-        var started = startEnv();
-        logd("第" + (i + 1) + "次启动服务结果: " + started);
-        if (isServiceOk()) {
-            return true;
-        }
-    }
-    return isServiceOk();
-}
 
-
-try {
+// try {
     main();
-} catch (e) {
-
-} finally {
-    if (screenManagers) {
-        screenManagers.onDestroy();//一些释放工作
-    }
-}
+// } catch (e) {
+//    logd(e.message);
+// } finally {
+//     if (screenManagers) {
+//         screenManagers.onDestroy();//一些释放工作
+//     }
+// }
 

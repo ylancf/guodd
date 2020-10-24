@@ -73,11 +73,11 @@ function main() {
                 toast("开始公共脚本");
                 ui.putShareData("VarShareData", comm_items);
             }
-            updateConfig("todoItems", JSON.stringify(taskItems));
+            updateConfig("todoItems", JSON.stringify(taskItems)); //自定义数据
             updateConfig("commItems",JSON.stringify(comm_items));
-            ui.saveAllConfig(); //保存所有的值
+            ui.saveAllConfig(); //保存所有的值  所有动作的结果
 
-            ui.start();
+            ui.start();  //z执行main
         }else{
             ui.stopTask();
         }
@@ -113,6 +113,7 @@ function judge_availability(user, pw) {
     //连接数据库判断有效性
     if (user == "" || pw == "") {
         toast("账号或密码不正确!");
+        return false;
     } else {
         loginProgrssActivity.on("hide", function () {
 
