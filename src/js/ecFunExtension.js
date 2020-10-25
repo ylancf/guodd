@@ -4,21 +4,36 @@
 
 ImageWrapper.prototype.captureScreenEx = function (bounds) {
 
+     let myImg;
+    if(bounds){
+        var  img = this.captureScreen(bounds.left,bounds.top,bounds.right,bounds.bottom);
+    }else{
+        var  img = this.captureFullScreen()
+    }
+     return  img;
 
-    return  execSync(function() {
-        var imgCopy;
-        //lock.lock();
-        if(bounds){
-            var  img = this.captureScreen(bounds.left,bounds.top,bounds.right,bounds.bottom);
-        }else{
-            var  img = this.captureFullScreen()
-        }
-        imgCopy.copy(img);
-        img.recycle();//回收图片
-        //lock.unlock();
-        return imgCopy;
 
-    },1000);
+
+
+
+    // var imgCopy;
+    // let thred= execSync(function() {
+    //     //lock.lock();
+    //     if(bounds){
+    //         var  img = this.captureScreen(bounds.left,bounds.top,bounds.right,bounds.bottom);
+    //     }else{
+    //         var  img = this.captureFullScreen()
+    //     }
+    //     logd("img"+img);
+    //     imgCopy.copy(img);
+    //     logd("imgcopy"+imgCopy);
+    //     sleep(10000);
+    //     img.recycle();//回收图片
+    //     //lock.unlock();
+    // },1000);
+    // logd("返回")
+    // return imgCopy;
+
 
 };
 
@@ -37,13 +52,13 @@ NodeInfo.prototype.boundsEx=function (){
     }
 }
 //判断节点是否存在
-NodeInfo.prototype.exist=function (){
+S.prototype.exist=function (){
 
-    this.getOneNodeInfo(10)
-    if(this==null){
-        return false;
-    }else{
+    let res =this.getOneNodeInfo(0)
+    if(res){
         return true;
+    }else{
+        return false;
     }
 
 

@@ -7,7 +7,23 @@ function initScreenManagers() {
         logd("调用成功!");
         screenManagers = new com.plugin.jPrlGSPKhr.ScreenHelper(context);
     }
+
+
+
+
 }
+
+//请求截图权限
+function requestSCap(){
+
+    toastLog("部分手机空白处隐藏了勾选框,但可以点击");
+    let request = image.requestScreenCapture(10000,0);
+    if (!request) {
+        request = image.requestScreenCapture(10000,0);
+    }
+    logd("申请截图结果... "+request)
+}
+
 
 
 function autoServiceStart(time) {
@@ -82,6 +98,11 @@ function toastLog(msg) {
     toast(msg);
 }
 
+function  localClick(_node){
+    if(!_node){return  false;}
+    _node.click();
+    return true;
+}
 
 //关闭app  参数 包名
 function closeApp(pkgName) {
@@ -115,29 +136,3 @@ function closeApp(pkgName) {
 
 
 
-// function  closeApp(){
-//     thread.stopAll();
-//
-//     var packageName = app.getPackageName(appName)
-//     if (!packageName) { return false; }
-//     var setFace = app.openAppSetting(packageName);
-//     log("打开设置结果:" + setFace);
-//     text(appName).findOne(10000);
-//     let is_sure = textMatches(/(.*强.*|.*停.*|.*结.*|.*运行.*)/).findOne(10000);
-//     if (is_sure && is_sure.enabled()) {
-//         let jiesu = textMatches(/(.*强.*|.*停.*|.*结.*|.*运行.*)/).findOne(3000);
-//         if (jiesu) { jiesu.click(); } else { log("jiesu未找到"); return false; }
-//         let _sure = textMatches(/(.*确.*|.*定.*)/).findOne(3000);
-//         if (_sure) { _sure.click(); } else { log("_sure未找到"); return false; }
-//         log(getAppName(packageName) + "应用已被关闭");
-//         sleep(1000);
-//         back();
-//         return true;
-//
-//     } else {
-//         log(getAppName(packageName) + "应用不能被正常关闭或不在后台运行");
-//         return false;
-//     }
-//
-//
-// }

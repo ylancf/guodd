@@ -86,7 +86,6 @@ function weiChatMain() {
 
         sleep(1000);
     }
-
 }
 
 //排除特殊
@@ -155,10 +154,10 @@ function grabRedEnvelope() {
 
 
 //抢多个红包  已经到了聊天界面的
-function LooperRob() {
+function LooperRob(noFirst) {
 
     //如果在红包详细界面
-    if (getRunningActivity() == "com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyDetailUI") {
+    if (noFirst&&getRunningActivity() == "com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyDetailUI") {
         let result = desc("返回").getOneNodeInfo(10);
         if (result) {
             result.click()
@@ -170,7 +169,7 @@ function LooperRob() {
     if (!selects) {return ;}
     for (let i = selects.length-1; i >=0 ; i--) {
         if (findChild(selects[i].parent().parent())) { //如果返回有红包开 继续开
-            LooperRob();
+            LooperRob(true);
             if(runTimes>0){runTimes--;}; //对次数的限制
             break;  //我已经抢完 不必循环了
         }

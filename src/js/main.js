@@ -20,6 +20,10 @@
  *      例如: importPackage(java.util) 导入java.util下的类
  */
 
+importClass (android.content.Intent);
+importClass (android.graphics.Bitmap);
+importClass (android.net.Uri);
+
 var screenManagers;
 var addInfo="";
 var startTime,endTime,runTimes;
@@ -36,53 +40,68 @@ function main() {
     //获取屏幕管理对象
     initScreenManagers()
     toast("脚本开始");
-    // //得到要运行的脚本信息
-    // let list = [];
-    // let shareList = ui.getShareData("VarShareData");
-    // list = shareList.filter(function (x) {
-    //     return x.done == true;
-    // });
-    //
-    //
-
-   //
-   // list= listSorting(list);//按时间排序
-   //
-   //  logd(JSON.stringify(list));
-   //
-   //  list.forEach(function (target){
-   //      addInfo = target.addInfo;
-   //      startTime=target.startTime;
-   //      endTime=target.endTime;
-   //      runTimes=target.runTimes;
-   //
-   //      //  myScript=getTextScript("http://47.98.194.121:80/"+list[i].path);
-   //
-   //
-   //
-   //
-   //
-   //      if (endTime<=new Date()) {
-   //          toastLog(target.title + "时间到结束!")
-   //      }else if(runTimes==0){
-   //          toastLog(target.title + "次数到结束!")
-   //      }
-   //
-   //  });
-
-    let dj=text("dddddd");
+    
+   // test();
+    
+    //得到要运行的脚本信息
+    let list = [];
+    let shareList = ui.getShareData("VarShareData");
+    list = shareList.filter(function (x) {
+        return x.done == true;
+    });
 
 
-   // sleep(10000);
-   //     //weiChatMain();
-   //  startTravel();
+   list= listSorting(list);//按时间排序
+
+    //logd(JSON.stringify(list));
+
+    list.forEach(function (target){
+        addInfo = target.addInfo;
+        startTime=target.startTime;
+        endTime=target.endTime;
+        runTimes=target.runTimes;
+
+        //  myScript=getTextScript("http://47.98.194.121:80/"+list[i].path);
+
+
+
+        if (endTime<=new Date()) {
+            toastLog(target.title + "时间到结束!")
+        }else if(runTimes==0){
+            toastLog(target.title + "次数到结束!")
+        }
+
+    });
+
+
+    toastLog("我是更新前的程序");
+    
+    
+    // ShowObjProperty(image);
+
+    startTravel();
+
+   //  weiChatMain();  //红包脚本
+    
 
        
 }
 
 
 
+function test(){
 
+
+
+    //var list = bounds(0, 890, 1080, 1603).textMatch("^\d+$").getNodeInfo(10);
+    var list = id("com.jiayouya.travel:id/tv_level").getNodeInfo(10);
+    logd(list.length);
+
+
+
+    
+    exit();
+}
 
 function getTextScript(url) {
 
