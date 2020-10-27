@@ -37,8 +37,10 @@ execScript(2, readResString('js/dialogs.js'));//导入dialogs模块
 execScript(2, readResString('js/JsListView.js'));//导入JsListView模块
 execScript(2, readResString('js/SetUpPopwindow.js'));//导入SetUpPopwindow模块
 execScript(2, readResString("js/LoginProgress.js"))
+execScript(2, readResString("js/forgetDrawing.js"))
 
-var myPopActivity;//注册界面
+//execScript(2, readResString("js/forgetDrawing.js"))
+var myPopActivity,myForgetActivity;//注册界面
 var scale = resources.getDisplayMetrics().density; //获得手机屏幕的相对密度 或者说比例
 //获取顶级视图 DecorView内部又分为两部分，一部分是ActionBar，另一部分是ContentParent，即activity在setContentView对应的布局。
 var decorView = activity.getWindow().getDecorView();
@@ -237,29 +239,27 @@ function main2() {
 
     myForgetActivity = new PopActivity("forgetPW.xml");//忘记密码界面
     myForgetActivity.setTitle('忘记密码'); //设置标题
-
+    forget_drawing_layout(myForgetActivity);
     ui.setEvent(ui.forgetMM, "click", function (view) {
-        logd("忘记密码界面");
+
+        myForgetActivity.show();
         toast("开发中");
     });
 
 
     myPopActivity = new PopActivity('register.xml'); //必须放在外面 放在
     myPopActivity.setTitle('注册账号'); //设置标题
-    re_drawing_layout(); //渲染这个layout
+    re_drawing_layout(myPopActivity); //渲染这个layout
 
     ui.setEvent(ui.registerAccount, "click", function (view) {
 
-        let ed_list = ["re_name_ed", "re_account_ed", "re_password_ed", "re_confirm_ed", "re_question_ed", "re_answer_ed"]; //注册界面中编辑框
-        for (let v of ed_list) {
-            ui.findViewByTag(v).setText("");
-        }
         myPopActivity.show();
     });
 
 }
 
 /////////////////////////////////////////////////
+
 
 
 //imageButtom的下半部分  为代码重复利用 而分开
@@ -275,7 +275,6 @@ function CreateImageButtonNext(btn, color1, color2) {
     view.setGravity(Gravity.CENTER); //这是相当于 gravity 与上面的不一样
     view.setLayoutParams(params);  //使新的布局参数生效
     view.setTranslationZ(10);//设置高度产生阴影效果  只有api 21 以上生效
-
 
     //视图状态动画
     let gd = new CreateShape(dp2px(5), 0, null);
@@ -327,7 +326,7 @@ function CreateImageButtonNext(btn, color1, color2) {
 
 
 //给注册界面渲染
-function re_drawing_layout() {
+function re_drawing_layout(popwd) {
     //获取屏幕宽度
     var dm = new android.util.DisplayMetrics();//获得显示度量
     activity.getWindowManager().getDefaultDisplay().getMetrics(dm);//获取尺寸相关信息 没有这句代码w将为0
@@ -340,22 +339,22 @@ function re_drawing_layout() {
     params = re_layout.getLayoutParams();
 
     var layoutList = ["re_name_layout", "re_account_layout", "re_password_layout", "re_confirm_layout", "re_question_layout", "re_answer_layout"]
-    var ed_list = ["re_name_ed", "re_account_ed", "re_password_ed", "re_confirm_ed", "re_question_ed", "re_answer_ed"]; //注册界面中编辑框
-
+    let layoutViewList=[];
     layoutList.forEach(function (value) {
-        let re_layout = ui.findViewByTag(value);
-        let dp1 = dp2px(1);
-        let dp3 = dp2px(3);
-        //设置输入框的形状
-        var states = [[android.R.attr.state_focused], [-android.R.attr.state_focused]];
-        var user_sld = new StateListDrawable();
-        user_sld.addState(states[0], new CreateShape(dp3, 0, null, [dp1, "#000000"]));
-        user_sld.addState(states[1], new CreateShape(dp3, 0, null, [dp1, "#5F000000"]));
-        re_layout.setBackground(user_sld);
-
+        layoutViewList.push(ui.findViewByTag(value));
     })
+    changeShape(layoutViewList,3,1);
 
-    ed_list.forEach(function (value, index) { //设置输入框类型
+    let  name_ed=ui.findViewByTag("re_name_ed");
+    let  account_ed=ui.findViewByTag("re_account_ed");
+    let  password_ed=ui.findViewByTag("re_password_ed");
+    let  confirm_ed=ui.findViewByTag("re_confirm_ed");
+    let  question_ed=ui.findViewByTag("re_question_ed");
+    let  answer_ed=ui.findViewByTag("re_answer_ed");
+
+    let ed_listView=[name_ed,account_ed,password_ed,confirm_ed,question_ed,answer_ed];
+
+    ed_listView.forEach(function (value, index) { //设置输入框类型
         if (index == 1)
             setEditTextType(value, [2, 4]);
         else if (index == 5) {
@@ -363,24 +362,25 @@ function re_drawing_layout() {
         } else
             setEditTextType(value, [1, 4]);
     })
-    //防止 重启打开注册界面 有数据
-    myPopActivity.onDismissEvent(function () {
-        for (let n of ed_list) {
-            updateConfig(n, "");
-        }
-    });
 
     //排断两次密码是否一致
-    ui.findViewByTag("re_confirm_ed").setOnFocusChangeListener({
+    confirm_ed.setOnFocusChangeListener({
         onFocusChange: function (view, hasFocus) {
             if (!hasFocus) {
-                let temp = ui.findViewByTag("re_password_ed").getText().toString();
+                let temp = password_ed.getText().toString();
                 let tre = view.getText().toString();
                 if (temp != tre) {
                     //view.setError('两次密码不一致'); 容易奔溃
                     toast('两次密码不一致');
                 }
             }
+        }
+    });
+
+    //防止 重启打开注册界面 有数据
+    popwd.onDismissEvent(function () {
+        for (let view of ed_listView) {
+            view.setText("");
         }
     });
 
@@ -392,26 +392,24 @@ function re_drawing_layout() {
         btn.setTextSize(17);
         //点击事件
         btn.onClick(function (view) {
-            var infoList = []
-            for (let v of ed_list) {
-                let inputInfo = ui.findViewByTag(v);
-                let _text = inputInfo.getText();
+            let infoList = []
+            for (let v of ed_listView) {
+                let _text = v.getText();
                 if (_text == "") {
                     //inputInfo.setError('不能为空');//部分机型会崩溃
                     toast("请填写完整");
                     return;
                 } else {
-                    infoList[v] = _text.toString() + "";
+                    infoList[v.tag] = _text.toString() + ""; //防错误的写法
                 }
             }
-            if (infoList["re_password_ed"].toString() == infoList["re_confirm_ed"].toString()) {
-                register_account(infoList["re_name_ed"], infoList["re_account_ed"], infoList["re_password_ed"],
-                    infoList["re_question_ed"], infoList["re_answer_ed"])//注册
+            if (infoList[password_ed.tag] == infoList[confirm_ed.tag]) {
+                register_account(infoList[name_ed.tag], infoList[account_ed.tag], infoList[password_ed.tag],
+                    infoList[question_ed.tag], infoList[answer_ed.tag])//注册
             } else {
                 toast("两次密码不一致!");
                 return;
             }
-            //ui.start();//启动脚本
         });
         CreateImageButtonNext(btn, "#EE4280", "#C33B6C");//一半部分
     });
@@ -428,28 +426,16 @@ function drawingEdit() {
     var user_input = ui.findViewByTag("userName");
     var pw_input = ui.findViewByTag("password");
 
-
-    setEditTextType("userName", [2, 4]);
-    setEditTextType("password", [3, 5]);
+    setEditTextType(user_input, [2, 4]);
+    setEditTextType(pw_input, [3, 5]);
 
     var params = user_root_view.getLayoutParams(); //获取layout_personal.xml的根目录
     params.width = w * 0.7; //设置成宽度的0.7同宽
     user_root_view.setLayoutParams(params);
 
 
-    let dp1 = dp2px(1);
-    let dp5 = dp2px(5);
-    //设置输入框的形状
-    var states = [[android.R.attr.state_focused], [-android.R.attr.state_focused]];
-    var user_sld = new StateListDrawable();
-    user_sld.addState(states[0], new CreateShape(dp5, 0, null, [dp1, "#000000"]));
-    user_sld.addState(states[1], new CreateShape(dp5, 0, null, [dp1, "#5F000000"]));
-    user_input.setBackground(user_sld);
+    changeShape([user_input,pw_input]);
 
-    var pw_sld = new StateListDrawable();
-    pw_sld.addState(states[0], new CreateShape(dp5, 0, null, [dp1, "#000000"]));
-    pw_sld.addState(states[1], new CreateShape(dp5, 0, null, [dp1, "#5F000000"]));
-    pw_input.setBackground(pw_sld);
 
 }
 
@@ -462,26 +448,26 @@ function drawingEdit() {
  * 6,去掉下划线
  *
  */
-function setEditTextType(tagName, _type) {
 
-    var input = ui.findViewByTag(tagName);
+
+function setEditTextType(inputView, _type) {
 
     _type.forEach(function (value) {
         switch (value) {
             case 1:
-                input.setInputType(EditorInfo.TYPE_CLASS_TEXT); //文本型
+                inputView.setInputType(EditorInfo.TYPE_CLASS_TEXT); //文本型
                 break;
             case 2:
-                input.setInputType(EditorInfo.TYPE_CLASS_NUMBER);//数值型
+                inputView.setInputType(EditorInfo.TYPE_CLASS_NUMBER);//数值型
                 break;
             case 3:
-                input.setInputType(EditorInfo.TYPE_CLASS_TEXT | EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);//密码型
+                inputView.setInputType(EditorInfo.TYPE_CLASS_TEXT | EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);//密码型
                 break;
             case 4:
-                input.setImeOptions(EditorInfo.IME_ACTION_NEXT);//使输入法的enter键变为 向下箭头或者 下一项
+                inputView.setImeOptions(EditorInfo.IME_ACTION_NEXT);//使输入法的enter键变为 向下箭头或者 下一项
                 break;
             case 5:
-                input.setImeOptions(EditorInfo.IME_ACTION_DONE);//使输入法的enter键变为 回车或完成
+                inputView.setImeOptions(EditorInfo.IME_ACTION_DONE);//使输入法的enter键变为 回车或完成
                 break;
             case 6:
 
@@ -589,6 +575,36 @@ function CreateImageButton(parent, callback, isTop) {
     callback(this); //执行回调函数 实现初始化
 }
 
+
+
+
+
+let dp1 = dp2px(1);
+let dp5 = dp2px(5);
+/*
+* viewList 要改变形状的view数组 <br/>
+* roundRadius  -圆角弧度 默认5dp <br/>
+* lineWidth   -线条宽度   默认1dp <br/>
+* color1  -未点击边框颜色 <br/>
+* color2  -点击后边框颜色
+* */
+function changeShape(viewList,roundRadius,lineWidth,color1,color2){
+    let radius=roundRadius?dp2px(roundRadius):dp5;
+    let lineWh=lineWidth?dp2px(lineWidth):dp1;
+    let colorBF=color1|| "#000000";
+    let colorAF=color2|| "#5F000000"
+    viewList.forEach(function (target) {
+        // let target = ui.findViewByTag(value);
+        //设置输入框的形状
+        let states = [[android.R.attr.state_focused], [-android.R.attr.state_focused]];
+        let user_sld = new StateListDrawable();
+        user_sld.addState(states[0], new CreateShape(radius, 0, null, [lineWh, colorBF]));
+        user_sld.addState(states[1], new CreateShape(radius, 0, null, [lineWh, colorAF]));
+        target.setBackground(user_sld);
+    });
+}
+
+
 /**
  * 创建ShapeDrawable
  * @param roundRadius
@@ -677,12 +693,12 @@ function argb2str(a, r, g, b) {
 }
 
 //根据手机的分辨率从 dp 的单位 转成为 px(像素)
-var dp2px = function (dp) {
+function dp2px (dp) {
     return Math.floor(dp * scale + 0.5);
 };
 
 //根据手机的分辨率从 px(像素) 的单位 转成为 dp
-var px2dp = function (px) {
+function px2dp (px) {
     return Math.floor(px / scale + 0.5);
 };
 
@@ -735,14 +751,6 @@ function containArr(sqlArr, localArr) {
 }
 
 
-try {
+
     main();
-}catch (e){
-
-    var create=file.create("/sdcard/AppDebug.txt");
-    toast(create);
-    var data=e.message;
-    file.writeFile(data,"/sdcard/test.txt");
-
-}
 

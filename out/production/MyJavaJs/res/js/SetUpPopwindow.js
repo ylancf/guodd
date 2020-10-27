@@ -17,7 +17,7 @@ let PopSetUp=function (){
     var run_time = ui.findViewByTag('setUp_run_time');
     var run_number = ui.findViewByTag('setUp_run_number');
     var set_prompt=ui.findViewByTag("setUp_prompt");
-    var set_addInfo=ui.findViewByTag("setUp_addInfo_ed");
+    var addInfo_ed=ui.findViewByTag("setUp_addInfo_ed");
     var cancel = ui.findViewByTag('setUp_cancel');
     var confirm = ui.findViewByTag('setUp_confirm');
     var mCallback = null;
@@ -36,7 +36,7 @@ let PopSetUp=function (){
         logd("是否显示"+prompt)
         if(prompt!=""){ //判断是否显示附加信息
             set_prompt.setText(prompt);
-            set_addInfo.setText(_view.findViewWithTag("comm_addInfo").getText());
+            addInfo_ed.setText(_view.findViewWithTag("comm_addInfo").getText());
             ui.findViewByTag("setUp_addInfo_layout").setVisibility(0); //显示附加信息
 
         }
@@ -69,15 +69,15 @@ let PopSetUp=function (){
     function initSetPuPopWP(_os){
 
         let hereThis=_os;
-        setEditTextType("setUp_start_time",[1,4]);
-        setEditTextType("setUp_run_time",[2,4]);
+        setEditTextType(start_time,[1,4]);
+        setEditTextType(run_time,[2,4]);
 
         let infoView=ui.findViewByTag("setUp_addInfo_layout");
         if(infoView.visibility==8){ //判断附加信息是否有添加
-            setEditTextType("setUp_run_number",[2,5]);
+            setEditTextType(run_number,[2,5]);
         }else{
-            setEditTextType("setUp_run_number",[2,4]);
-            setEditTextType("setUp_addInfo_ed",[1,5]);
+            setEditTextType(run_number,[2,4]);
+            setEditTextType(addInfo_ed,[1,5]);
         }
 
 
@@ -113,25 +113,12 @@ let PopSetUp=function (){
             let r_time = run_time.getText().toString()+"";
             let r_number = run_number.getText().toString()+"";
             let _prompt=set_prompt.getText().toString()+"";
-            let _addInfo=set_addInfo.getText().toString()+"";
+            let _addInfo=addInfo_ed.getText().toString()+"";
             mCallback(true, _date.trim(), r_time.trim(),r_number.trim(), _prompt,_addInfo);
             mCallback = null;
             pw.dismiss();
         });
 
-        // let dp1 = dp2px(1);
-        // let dp5 = dp2px(5);
-        // //设置输入框的形状
-        // var states = [[android.R.attr.state_focused], [-android.R.attr.state_focused]];
-        // var user_sld = new StateListDrawable();
-        // user_sld.addState(states[0], new CreateShape(dp5, 0, null, [dp1, "#000000"]));
-        // user_sld.addState(states[1], new CreateShape(dp5, 0, null, [dp1, "#5F000000"]));
-        // user_input.setBackground(user_sld);
-        //
-        // var pw_sld = new StateListDrawable();
-        // pw_sld.addState(states[0], new CreateShape(dp5, 0, null, [dp1, "#000000"]));
-        // pw_sld.addState(states[1], new CreateShape(dp5, 0, null, [dp1, "#5F000000"]));
-        // pw_input.setBackground(pw_sld);
 
         //pw.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         pw.setBackgroundDrawable(new BitmapDrawable()); //这样设置可以是 点击空不处关闭这个Popupwindow 使返回键也可以关闭这个pw 以及使下行代码有效(测试后没啥区别)

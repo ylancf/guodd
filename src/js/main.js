@@ -42,7 +42,9 @@ function main() {
     toast("脚本开始");
     
    // test();
-    
+
+
+
     //得到要运行的脚本信息
     let list = [];
     let shareList = ui.getShareData("VarShareData");
@@ -93,12 +95,12 @@ function test(){
 
 
 
-    //var list = bounds(0, 890, 1080, 1603).textMatch("^\d+$").getNodeInfo(10);
-    var list = id("com.jiayouya.travel:id/tv_level").getNodeInfo(10);
-    logd(list.length);
-
-
-
+     var v=ui.findViewByTag("userName");
+     if(v){
+         logd(v.tag);
+     }else{
+         logd("没有")
+     }
     
     exit();
 }

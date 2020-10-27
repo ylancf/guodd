@@ -26,21 +26,11 @@ function myInfoActivity(){
 
     let toTopEdit=ui.findViewByTag("myself_top_ed");
     let deleteEdit=ui.findViewByTag("myself_delete_ed");
-    setEditTextType("myself_top_ed",[1,5]);
-    setEditTextType("myself_delete_ed",[1,5]);
-    let dp1 = dp2px(1);
-    //设置输入框的形状
-    var states = [[android.R.attr.state_focused], [-android.R.attr.state_focused]];
-    var top_sld = new StateListDrawable();
-    top_sld.addState(states[0], new CreateShape(dp1, 0, null, [dp1, "#20ff80"]));
-    top_sld.addState(states[1], new CreateShape(dp1, 0, null, [dp1, "#5F000000"]));
-    toTopEdit.setBackground(top_sld);
+    setEditTextType(toTopEdit,[1,5]);
+    setEditTextType(deleteEdit,[1,5]);
 
-    var delete_sld = new StateListDrawable();
-    delete_sld.addState(states[0], new CreateShape(dp1, 0, null, [dp1, "#20ff80"]));
-    delete_sld.addState(states[1], new CreateShape(dp1, 0, null, [dp1, "#5F000000"]));
-    deleteEdit.setBackground(delete_sld);
 
+    changeShape([toTopEdit,deleteEdit],1,1,"#20ff80");
 
     toTopEdit.setOnFocusChangeListener({
         onFocusChange: function (view,hasFocus){ //不能使用这里的
