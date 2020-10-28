@@ -27,7 +27,7 @@ function initConfig(name) {
     //如果数据存在 则转成json数据返回 否则返回默认配置
     return arr ? JSON.parse(arr) : [
         {
-            title: "BUG: ui.parseView()根布局margin, layout_width, layout_height 属性失效",
+            title: "这个界面没脚本,脚本会不定期增加",
             summary: "紧急",
             color: "#f44336",
             done: false,
@@ -36,7 +36,7 @@ function initConfig(name) {
 
         },
         {
-            title: "让老猫给ui增加若干Bug",
+            title: "有无障碍免开启永久保活方式",
             summary: "无限期",
             color: "#ff5722",
             done: false,
@@ -44,7 +44,7 @@ function initConfig(name) {
             path:""  //脚本路径
         },
         {
-            title: "修复dialogs ui模式下无法连续弹出",
+            title: "更新失败请到百度云下载",
             summary: "2099年12月",
             color: "#4caf50",
             done: false,

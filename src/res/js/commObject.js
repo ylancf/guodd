@@ -38,6 +38,16 @@ function initCommConfig(name) {
             id_number:7,
             path:""  //脚本路径
         },
+        {
+            title: "旅行世界(邀请码:1857014)",
+            summary: "",
+            color: "#ff5722",
+            done: false,
+            prompt:"",
+            addInfo:"",
+            id_number:2,
+            path:""  //脚本路径
+        },
 
         {
             title: "BUG: ui.parseView()根布局margin, layout_width, layout_height 属性失效",
@@ -47,16 +57,6 @@ function initCommConfig(name) {
             prompt:"",//附加信息的提示
             addInfo:"",//附加信息
             id_number:1, //唯一id 即数据库的id
-            path:""  //脚本路径
-        },
-        {
-            title: "让老猫给ui增加若干Bug",
-            summary: "",
-            color: "#ff5722",
-            done: false,
-            prompt:"",
-            addInfo:"",
-            id_number:2,
             path:""  //脚本路径
         },
         {
@@ -73,7 +73,7 @@ function initCommConfig(name) {
             title: "荒废的一天",
             summary: "",
             color: "#2196f3",
-            done: true,
+            done: false,
             prompt:"年级,班级",
             addInfo:"",
             id_number:4,

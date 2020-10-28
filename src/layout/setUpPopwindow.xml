@@ -39,13 +39,12 @@
                     <TextView android:text="开始时间:"
                               android:layout_width="0"
                               android:textColor="#C040FF"
-                              android:layout_height="wrap_content"
-                              android:layout_weight="1"/>
-                    <EditText android:layout_weight="2"
-                              android:layout_height="wrap_content"
-                              android:layout_width="0"
-                              android:tag="setUp_start_time"
-                              android:hint="例:15:06 不填为立即开始"/>
+                              android:layout_height="wrap_content"/>
+                    <EditText
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:tag="setUp_start_time"
+                            android:hint="例:15:06 不填为立即开始"/>
 
                 </LinearLayout>
                 <LinearLayout android:layout_width="match_parent"
@@ -54,13 +53,12 @@
                     <TextView android:text="运行时长:"
                               android:textColor="#C040FF"
                               android:layout_width="0"
-                              android:layout_height="wrap_content"
-                              android:layout_weight="1"/>
-                    <EditText android:layout_weight="2"
-                              android:layout_height="wrap_content"
-                              android:layout_width="0"
-                              android:tag="setUp_run_time"
-                              android:hint="(分钟)不填一直运行"/>
+                              android:layout_height="wrap_content"/>
+                    <EditText
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:tag="setUp_run_time"
+                            android:hint="(分钟)不填一直运行"/>
                 </LinearLayout>
 
                 <LinearLayout android:layout_width="match_parent"
@@ -69,13 +67,12 @@
                     <TextView android:text="运行次数:"
                               android:textColor="#C040FF"
                               android:layout_width="0"
-                              android:layout_height="wrap_content"
-                              android:layout_weight="1"/>
-                    <EditText android:layout_weight="2"
-                              android:layout_height="wrap_content"
-                              android:layout_width="0"
-                              android:tag="setUp_run_number"
-                              android:hint="与时长二选一"/>
+                              android:layout_height="wrap_content"/>
+                    <EditText
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:tag="setUp_run_number"
+                            android:hint="与时长二选一"/>
                 </LinearLayout>
 
 
@@ -104,13 +101,12 @@
                         <TextView android:text="附加信息:"
                                   android:textColor="#C040FF"
                                   android:layout_width="0"
-                                  android:layout_height="wrap_content"
-                                  android:layout_weight="1"/>
-                        <EditText android:layout_weight="2"
-                                  android:layout_height="wrap_content"
-                                  android:layout_width="0"
-                                  android:tag="setUp_addInfo_ed"
-                                  android:hint="例:年龄|25|项目|马拉松"/>
+                                  android:layout_height="wrap_content"/>
+                        <EditText
+                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"
+                                android:tag="setUp_addInfo_ed"
+                                android:hint="例:年龄|25|项目|马拉松"/>
                     </LinearLayout>
 
                 </LinearLayout>

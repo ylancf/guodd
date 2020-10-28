@@ -39,7 +39,7 @@
                       android:layout_height="wrap_content"
                       android:textSize="17dp"
                       android:gravity="center"
-                      android:text="预计收益:120.6"/>
+                      android:text="私人定制联系:vxylancf"/>
             <TextView android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:textSize="17dp"

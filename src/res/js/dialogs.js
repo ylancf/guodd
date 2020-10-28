@@ -26,7 +26,6 @@ var dialogs = {};
  * 例: confirm('确定吗').then(value=>{
  *   //ToDo: 对话框消失后会执行这里 value为true或false, 表示点击"确定"或"取消"
  * });
- *
  */
 
 /**

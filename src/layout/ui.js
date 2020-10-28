@@ -40,7 +40,7 @@ execScript(2, readResString("js/LoginProgress.js"))
 execScript(2, readResString("js/forgetDrawing.js"))
 
 //execScript(2, readResString("js/forgetDrawing.js"))
-var myPopActivity,myForgetActivity;//注册界面
+var myPopActivity, myForgetActivity;//注册界面
 var scale = resources.getDisplayMetrics().density; //获得手机屏幕的相对密度 或者说比例
 //获取顶级视图 DecorView内部又分为两部分，一部分是ActionBar，另一部分是ContentParent，即activity在setContentView对应的布局。
 var decorView = activity.getWindow().getDecorView();
@@ -52,7 +52,7 @@ activity.getWindow().setNavigationBarColor(0x999999);//导航栏颜色
 SystemUiVisibility(false);//设置暗色系状态栏
 var loginProgrssActivity = new LoginProgrss();
 var the_label, js_start_BT, head_bar;
-var startBTState=false; //记录开始按钮的状态
+var startBTState = false; //记录开始按钮的状态
 function main() {
 
 
@@ -65,22 +65,23 @@ function main() {
     //启动脚本按钮
     ui.setEvent(js_start_BT, "click", function (view) {
 
-        startBTState=!startBTState;
-        if(startBTState){
+        startBTState = !startBTState;
+        if (startBTState) {
             let page = activity.findViewById(getResourceID('vp', 'id')).getCurrentItem();
             if (page == 0) {
-                toast("开始任务界面的任务");
-                ui.putShareData("VarShareData", taskItems);
+                toast("任务界面,没有脚本可以执行");
+                return;
+               // ui.putShareData("VarShareData", taskItems);
             } else if (page == 1) {
                 toast("开始公共脚本");
                 ui.putShareData("VarShareData", comm_items);
             }
             updateConfig("todoItems", JSON.stringify(taskItems)); //自定义数据
-            updateConfig("commItems",JSON.stringify(comm_items));
+            updateConfig("commItems", JSON.stringify(comm_items));
             ui.saveAllConfig(); //保存所有的值  所有动作的结果
 
             ui.start();  //z执行main
-        }else{
+        } else {
             ui.stopTask();
         }
     });
@@ -98,15 +99,13 @@ function main() {
             }
         }
     });
-
-        //判断显示那种界面
+    //判断显示那种界面
     if (readConfigBoolean("loginState")) {//如果有效
         login_on(); //开始进入
     } else {
         ui.findViewByTag('user_word').setVisibility(8);//隐藏操作界面
         main2(); //并执行一些渲染工作
     }
-
 }
 
 //检验账号密码
@@ -120,6 +119,7 @@ function judge_availability(user, pw) {
         loginProgrssActivity.on("hide", function () {
 
             let resultInfo = loginProgrssActivity.getResult();
+
             if (resultInfo.code == 200) {
                 ui.saveAllConfig(); //保存所有的值
                 updateConfig("loginState", true); //保存为登录状态
@@ -133,9 +133,9 @@ function judge_availability(user, pw) {
         });
 
         loginProgrssActivity.postShow(function () {
-            var url = "http://47.98.194.121:80/login";
-            var pa = {"username": user.toString() + "", "password": pw.toString() + ""};
-            var httpResult = http.httpPost(url, pa, null, 5 * 1000, {"Content-Type": "application/json"});
+            let url = "http://47.98.194.121:80/login";
+            let pa = {"username": user.toString() + "", "password": pw.toString() + ""};
+            let httpResult = http.httpPost(url, pa, null, 5 * 1000, {"Content-Type": "application/json"});
             loge("result ->     " + httpResult);
             return JSON.parse(httpResult);
         });
@@ -157,8 +157,8 @@ function register_account(nickname, userName, password, question, answer) {
     });
 
     loginProgrssActivity.postShow(function () {
-        var url = "http://47.98.194.121:80/system/user/a/register";
-        var pa = {
+        let url = "http://47.98.194.121:80/system/user/a/register";
+        let pa = {
             "nickName": nickname,
             "userName": userName,
             "password": password,
@@ -166,7 +166,7 @@ function register_account(nickname, userName, password, question, answer) {
             "answer": answer,
             "IMEI": imei
         }
-        var httpResult = http.httpPost(url, pa, null, 5 * 1000, {"User-Agent": "application/json"});
+        let httpResult = http.httpPost(url, pa, null, 5 * 1000, {"User-Agent": "application/json"});
         loge("result ->     " + httpResult);
         return JSON.parse(httpResult);
         ;
@@ -193,7 +193,7 @@ function login_on() {
     ui.layout("公共脚本", "intr.xml");
     ui.layout("我的信息", "myselfInfo.xml");
     //导入模块
-    execScript(2, readResString('js/mianObject.js'));
+    execScript(2, readResString('js/taskObject.js'));
     execScript(2, readResString('js/commObject.js'));
     execScript(2, readResString('js/myInfo.js'));
     myPopActivity = myForgetActivity = null; //去掉已经不需要的对象
@@ -259,7 +259,6 @@ function main2() {
 }
 
 /////////////////////////////////////////////////
-
 
 
 //imageButtom的下半部分  为代码重复利用 而分开
@@ -339,20 +338,20 @@ function re_drawing_layout(popwd) {
     params = re_layout.getLayoutParams();
 
     var layoutList = ["re_name_layout", "re_account_layout", "re_password_layout", "re_confirm_layout", "re_question_layout", "re_answer_layout"]
-    let layoutViewList=[];
+    let layoutViewList = [];
     layoutList.forEach(function (value) {
         layoutViewList.push(ui.findViewByTag(value));
     })
-    changeShape(layoutViewList,3,1);
+    changeShape(layoutViewList, 3, 1);
 
-    let  name_ed=ui.findViewByTag("re_name_ed");
-    let  account_ed=ui.findViewByTag("re_account_ed");
-    let  password_ed=ui.findViewByTag("re_password_ed");
-    let  confirm_ed=ui.findViewByTag("re_confirm_ed");
-    let  question_ed=ui.findViewByTag("re_question_ed");
-    let  answer_ed=ui.findViewByTag("re_answer_ed");
+    let name_ed = ui.findViewByTag("re_name_ed");
+    let account_ed = ui.findViewByTag("re_account_ed");
+    let password_ed = ui.findViewByTag("re_password_ed");
+    let confirm_ed = ui.findViewByTag("re_confirm_ed");
+    let question_ed = ui.findViewByTag("re_question_ed");
+    let answer_ed = ui.findViewByTag("re_answer_ed");
 
-    let ed_listView=[name_ed,account_ed,password_ed,confirm_ed,question_ed,answer_ed];
+    let ed_listView = [name_ed, account_ed, password_ed, confirm_ed, question_ed, answer_ed];
 
     ed_listView.forEach(function (value, index) { //设置输入框类型
         if (index == 1)
@@ -434,7 +433,7 @@ function drawingEdit() {
     user_root_view.setLayoutParams(params);
 
 
-    changeShape([user_input,pw_input]);
+    changeShape([user_input, pw_input]);
 
 
 }
@@ -576,11 +575,9 @@ function CreateImageButton(parent, callback, isTop) {
 }
 
 
-
-
-
 let dp1 = dp2px(1);
 let dp5 = dp2px(5);
+
 /*
 * viewList 要改变形状的view数组 <br/>
 * roundRadius  -圆角弧度 默认5dp <br/>
@@ -588,11 +585,11 @@ let dp5 = dp2px(5);
 * color1  -未点击边框颜色 <br/>
 * color2  -点击后边框颜色
 * */
-function changeShape(viewList,roundRadius,lineWidth,color1,color2){
-    let radius=roundRadius?dp2px(roundRadius):dp5;
-    let lineWh=lineWidth?dp2px(lineWidth):dp1;
-    let colorBF=color1|| "#000000";
-    let colorAF=color2|| "#5F000000"
+function changeShape(viewList, roundRadius, lineWidth, color1, color2) {
+    let radius = roundRadius ? dp2px(roundRadius) : dp5;
+    let lineWh = lineWidth ? dp2px(lineWidth) : dp1;
+    let colorBF = color1 || "#000000";
+    let colorAF = color2 || "#5F000000"
     viewList.forEach(function (target) {
         // let target = ui.findViewByTag(value);
         //设置输入框的形状
@@ -693,12 +690,12 @@ function argb2str(a, r, g, b) {
 }
 
 //根据手机的分辨率从 dp 的单位 转成为 px(像素)
-function dp2px (dp) {
+function dp2px(dp) {
     return Math.floor(dp * scale + 0.5);
 };
 
 //根据手机的分辨率从 px(像素) 的单位 转成为 dp
-function px2dp (px) {
+function px2dp(px) {
     return Math.floor(px / scale + 0.5);
 };
 
@@ -751,6 +748,5 @@ function containArr(sqlArr, localArr) {
 }
 
 
-
-    main();
+main();
 

@@ -116,12 +116,12 @@ function travelWorld() {
     var commBT;
     if (text("怎么玩").exist()) {
         sleep(500, 1300);
-        localClick(text("关闭").getOneNodeInfo(10));
+        localClick(text("关闭").getOneNodeInfo(0));
         sleep(800, 1500);
     }
 
 
-    if (commBT = idMatch(".*img_close.*").getOneNodeInfo(10), commBT) {
+    if (commBT = idMatch(".*img_close.*").getOneNodeInfo(0), commBT) {
         localClick(commBT);
     }
 
@@ -208,54 +208,71 @@ excluisiver.GGTVCloseFun = function (regularMark, gg_delay, class_name) {
                     var miao = parseInt(time.text);
                     if (!isNaN(miao)) {
                         i = 0;
-                        if (miao == 2 || miao == 1) {
-                            sleep(2000);
+                        if (miao == 3 || miao == 2||miao==1) {
+                            sleep(3000);
                             break;
                         }
                     }
                 } else {
                     sleep(600);
                     //直接寻找x
-                    let tryCloseArr = bounds(0, 10, 1080, 250).getNodeInfo(10).filter(function (w) {
-                        return (w.boundsEx().width() == w.boundsEx().height()) && (w.boundsEx().width() < 150)
-                    });
+                     removeNodeFlag(0);
+                    let try_Close_Arr = bounds(0, 10, 1080, 250).getNodeInfo(10);
+                    if(try_Close_Arr){
 
-                    if (imgHandler(tryCloseArr) != false) {
-                        logd("确认有关闭标志");
-                        gg_delay = 0; //已经找到x 就不需要延迟了
-                        break;
+                        let tryCloseArr=try_Close_Arr.filter(function (w) {
+                            return (w.boundsEx().width() == w.boundsEx().height()) && (w.boundsEx().width() < 150)
+                        });
+
+                        if (imgHandler(tryCloseArr) != false) {
+                            logd("确认有关闭标志");
+                            gg_delay = 0; //已经找到x 就不需要延迟了
+                            break;
+                        }
+
+
                     }
+
                 }
                 sleep(800);
             }
 
+            removeNodeFlag(0);
             sleep(random(1000, 3000) + gg_delay);
-
-            var arr = bounds(0, 0, 1080, 250).getNodeInfo(10).filter(function (w) {
-                let ratio = w.boundsEx().width() / w.boundsEx().height();
-                return w.boundsEx().width() > 20 && w.boundsEx().width() < 170 && ratio < 1.1 && ratio > 0.9;
-            });
-
-            var target = imgHandler(arr);
             var X_Click = false;
-            if (target) {
-                regularClick(target, regularMark);
-                logd("点击");
-                X_Click = true;
-            }
-
-
-            if (!X_Click) {
-                logd("未能成功退出广告,尝试中..");
-                let arrTry = bounds(0, 0, 1080, 1920).getNodeInfo(10).filter(function (w) {
+            var _arr = bounds(0, 0, 1080, 250).getNodeInfo(10);
+            if(_arr){
+                var arr= _arr.filter(function (w) {
                     let ratio = w.boundsEx().width() / w.boundsEx().height();
                     return w.boundsEx().width() > 20 && w.boundsEx().width() < 170 && ratio < 1.1 && ratio > 0.9;
                 });
-                let target = imgHandler(arrTry);
+                var target = imgHandler(arr);
+
                 if (target) {
-                    localClick(target);
+                    regularClick(target, regularMark);
                     logd("点击");
+                    X_Click = true;
                 }
+            }
+
+            if (!X_Click) {
+                logd("未能成功退出广告,尝试中..");
+                removeNodeFlag(0);
+                let _arrTry = bounds(0, 0, 1080, 1920).getNodeInfo(10);
+                if(_arrTry){
+
+                   var arrTry= _arrTry.filter(function (w) {
+                        let ratio = w.boundsEx().width() / w.boundsEx().height();
+                        return w.boundsEx().width() > 20 && w.boundsEx().width() < 170 && ratio < 1.1 && ratio > 0.9;
+                    });
+                    let target = imgHandler(arrTry);
+                    if (target) {
+                        localClick(target);
+                        logd("点击");
+                    }
+
+                }
+
 
                 let tryClose;
                 if (tryClose = idMatch(".*close.*").getOneNodeInfo(10), tryClose) {
