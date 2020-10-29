@@ -53,8 +53,8 @@ SystemUiVisibility(false);//设置暗色系状态栏
 var loginProgrssActivity = new LoginProgrss();
 var the_label, js_start_BT, head_bar;
 var startBTState = false; //记录开始按钮的状态
+var loadFinish=false;  //用于关闭下载弹出的 没想到更好的办法只能这个了
 function main() {
-
 
     ui.layout("任务界面", "loginactivate.xml");
     head_bar = activity.findViewById(getResourceID('header_layout', 'id'));//获取头部布局
@@ -106,6 +106,9 @@ function main() {
         ui.findViewByTag('user_word').setVisibility(8);//隐藏操作界面
         main2(); //并执行一些渲染工作
     }
+
+    checkApkVersion();//检查更新
+
 }
 
 //检验账号密码
@@ -171,8 +174,6 @@ function register_account(nickname, userName, password, question, answer) {
         return JSON.parse(httpResult);
         ;
     });
-
-    return true; //成功返回true;
 }
 
 
@@ -743,10 +744,91 @@ function containArr(sqlArr, localArr) {
     } else {
         newArr = sqlArr; //直接是数据库返回的集合
     }
-
     return newArr;
 }
 
 
+function checkApkVersion(){
+
+    loginProgrssActivity.on("hide", function () {
+        let resultInfo = loginProgrssActivity.getResult();
+        if (resultInfo.code == 200) {
+            toast("发现新版本");
+            updateApk(resultInfo.update_url)
+
+        }
+    });
+
+    loginProgrssActivity.postShow(function () {
+        let testData =  JSON.parse(readResString("package.txt"));
+        let  getHttpUrl = "http://47.98.194.121:80/system/ver/upgradeDown?version="+testData.version
+        var getHttpResult = http.httpGetDefault(getHttpUrl, 5 * 1000, {"User-Agent": "test"});
+        logd("result ->     " + getHttpResult);
+        return JSON.parse(getHttpResult);
+        ;
+    });
+
+}
+
+
+//文件安装测试
+function updateApk(url){
+
+    let s = loadDex("defaultplugin.apk");
+    if (!s) {
+        logd("插件调用失败");
+    } else {
+        logd("插件调用成功!");
+
+        var obj =new  com.plugin.jPrlGSPKhr.loadDownAPK(context);
+        var path=obj.getPath()+"testApk.apk";
+        obj.setHanderClass({
+
+            setProgress:function (value){
+                ui.getHandler().post(function () {  //使用handle 改变主页面控件 线程中只能使用这个方式改变主线程的界面
+                    try {
+                        if(value==100){ loadFinish=true;}
+
+                        let v=ui.findViewByTag("progressPer");
+                        if(v){v.setText(value+"%")};
+
+                    } catch (e) {
+                        logd(e.message);
+
+                    }
+                });
+
+            },
+            finish:function (){
+
+                //打开安装包界面
+                let m ={
+                    "action":"android.intent.action.VIEW",
+                    "uri":"file://"+path,
+                    "type":"application/vnd.android.package-archive"
+                };
+                let x = utils.openActivity(m);
+                logd("x "+x);
+            }
+        });
+
+        confirm('发现新版本,现在更新?').then(value=>{
+            if(value){
+                loadFinish=false;
+                loadDownBar("下载中..",true).then(value=>{
+                    if(!value){
+                        obj.LoadDownStop();
+                    }
+                });
+                obj.downloadAPK(path,url);
+            }
+        });
+    }
+}
+
+
+
+
 main();
+
 

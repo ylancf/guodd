@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:android="http://schemas.android.com/apk/res/android"
+               xsi:noNamespaceSchemaLocation="layout.xsd"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+    <TextView android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:textSize="17dp"
+              android:gravity="center"
+              android:tag="progressPer"
+              android:text="0"/>
+
+
+</LinearLayout>

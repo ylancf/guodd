@@ -41,9 +41,9 @@ function main() {
     initScreenManagers()
     toast("脚本开始");
     
-   // test();
 
 
+    updateConfig("loginState", true);
 
     //得到要运行的脚本信息
     let list = [];
@@ -63,8 +63,15 @@ function main() {
         endTime=target.endTime;
         runTimes=target.runTimes;
 
+        //加一个sleep 待定时间 执行
+
         //  myScript=getTextScript("http://47.98.194.121:80/"+list[i].path);
 
+        if(target.title.indexOf("微信自动抢红包")>-1){
+              weiChatMain();  //红包脚本
+        }else if(target.title.indexOf("旅行世界")>-1){
+              startTravel();
+        }
 
 
         if (endTime<=new Date()) {
@@ -81,29 +88,11 @@ function main() {
     
     // ShowObjProperty(image);
 
-    startTravel();
-
-   //  weiChatMain();  //红包脚本
-    
-
-       
 }
 
 
 
-function test(){
 
-
-
-     var v=ui.findViewByTag("userName");
-     if(v){
-         logd(v.tag);
-     }else{
-         logd("没有")
-     }
-    
-    exit();
-}
 
 function getTextScript(url) {
 
@@ -115,7 +104,7 @@ function getTextScript(url) {
 }
 
 
-function execScript(scriptText) {
+function exec_Script(scriptText) {
 
     thread.execAsync(function () {
         //execScript(1,"/sdcard/ad.js")
@@ -132,7 +121,8 @@ function execScript(scriptText) {
 
 
 // try {
-    main();
+    //main();
+test();
 // } catch (e) {
 //    logd(e.message);
 // } finally {
@@ -141,3 +131,8 @@ function execScript(scriptText) {
 //     }
 // }
 
+function  test(){
+    var testData = readResString("package.txt");
+    logd(testData);
+
+}

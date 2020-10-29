@@ -62,6 +62,21 @@ function rawInput(title, prefill) {
         .show();
 }
 
+
+
+
+function loadDownBar(title,order){
+
+    return new Dialogs()
+        .title(title)
+        .ProgressBar()
+        .setButtonText("negative","取消")
+        .show(order);
+
+}
+
+
+
 /**
  * 显示一个带有选项列表的对话框，等待用户选择，返回用户选择的选项索引(0 ~ item.length - 1)。如果用户取消了选择，返回-1。
  * @param title {string} 对话框的标题。
@@ -134,6 +149,7 @@ function Dialogs() {
     var result = null;
     var input = null;
     var listView = null;
+    var aDialog;
     var DIALOG_TYPE = 0;
     var mCallback = function () {
     };
@@ -206,6 +222,11 @@ function Dialogs() {
         return this;
     }
 
+    this.ProgressBar=function (){
+        initProgress();
+        return this;
+    }
+
     this.select = function (items) {
         initListView(2, items);
         return this;
@@ -221,12 +242,21 @@ function Dialogs() {
         return this;
     }
 
-    this.show = function () {
-        if (isUiThread()) {
+    this.show = function (order) {
+        if (isUiThread()||order) {
             new java.lang.Thread({
                 run: function () {
                     countDownLatch = new CountDownLatch(1);
                     show();
+
+                    while (order&&countDownLatch.getCount!=0){   //为了进度条完成后关闭
+                        if ( loadFinish) {
+                            countDownLatch.countDown();
+                            dialog.dismiss();
+                           break;
+                        }
+                        sleep(1000);
+                    }
                     countDownLatch.await();
                     mCallback(getResult());
                     return;
@@ -258,7 +288,7 @@ function Dialogs() {
             } else {
                 dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
             }
-            dialog.show();
+            aDialog=dialog.show();
             dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(Config.positive.textColor);
             dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(Config.negative.textColor);
             dialog.getButton(dialog.BUTTON_NEUTRAL).setTextColor(Config.neutral.textColor);
@@ -279,6 +309,9 @@ function Dialogs() {
                 break
             case 4:
                 mResult = result === false ? [] : getCheckedItemPositions();
+                break
+            case 5:
+                mResult = result === false ? result: true;
                 break
         }
         return mResult;
@@ -307,6 +340,20 @@ function Dialogs() {
         input.setLayoutParams(lp);
     }
 
+    function initProgress(){
+        DIALOG_TYPE = 5;
+        //let view = new android.widget.LinearLayout(context);
+       let  view =  ui.parseView("progressBar.xml")
+        bar = new ProgressBar(context);
+        view.addView(bar,-1);
+
+        builder.setView(view);
+        let lp = new android.widget.LinearLayout.LayoutParams(-1, -2);
+        lp.setMargins(dp2px(20), 0, dp2px(20), 0);
+        view.setLayoutParams(lp);
+    }
+
+
     function initListView(type, items, index) {
         DIALOG_TYPE = type;
         if (listView == null) listView = new ListView(context);
@@ -330,7 +377,7 @@ function Dialogs() {
         if (typeof (index) == 'number') index = [index];
         listView.post({
             run: function () {
-                for (i in index) listView.setItemChecked(index[i], true);
+                for (let i in index) listView.setItemChecked(index[i], true);
             }
         });
         return;
