@@ -14,7 +14,7 @@
 * */
 
 
-function weiChatMain() {
+function weiChatMain2() {
     //开始再这里编写代码了！！
     //判断是否有权限
     let res = hasNotificationPermission();

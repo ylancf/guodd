@@ -5,81 +5,116 @@ let popSetUp
 
 function commObject() {
 
-    comm_items = initCommConfig('commItems');//本地保存的列表
+
     popSetUp = new PopSetUp(); //不能循环new  会出错
-    popSetUp.on("hide",function (){
+    popSetUp.on("hide", function () {
+        logd("comm_items:" + comm_items);
         ui.saveConfig('commItems', JSON.stringify(comm_items));//保存参数
     });
-    initCommListView();
+    initCommConfig('commItems');//本地保存的列表
 }
 
 function initCommConfig(name) {
 
     //从ui配置中读取指定数据
     let arr = JSON.parse(ui.getConfigJSON())[name];
+    if (arr == "") {
+        arr = []
+    } else {
+        arr = JSON.parse(arr);
+    }
 
+    logd("arr:" + arr);
+    logd("arr:" + arr.length);
     //此处要使用联网修改
 
-    //从数据库中获取数组
-    // let sqlArr = [];
-    // containArr(sqlArr,arr)
+
+    //let cdl = new java.util.concurrent.CountDownLatch(1);
+    loginProgrssActivity.on("hide", function () {
+        logd("///")
+        let resultInfo = loginProgrssActivity.getResult();
+        logd("//////////////");
+        if (resultInfo.msg == "操作成功") {
+            logd("进入了")
+
+            logd("类型:" + typeof (resultInfo.data));
+            let sqlArr = resultInfo.data;
+            // let sqlArr =JSON.parse(resultInfo.data);
+            comm_items = containArr(sqlArr, arr);
+            logd("comm_items:" + comm_items)
+            initCommListView();
+        }
+
+    });
+
+    loginProgrssActivity.postShow(function () {
+        let getHttpUrl = "http://47.98.194.121:80/system/info/list"
+        let getHttpResult = http.httpGetDefault(getHttpUrl, 5 * 1000, {"User-Agent": "test"});
+        logd("result ->     " + getHttpResult);
+        return JSON.parse(getHttpResult);
+        ;
+    });
+
+    //cdl.await();
+
+    return;
 
 
     //如果数据存在 则转成json数据返回 否则返回默认配置
-    return arr ? JSON.parse(arr) : [
-
-        {
-            title: "微信自动抢红包(需无锁屏密码)",
-            summary: "",
-            color: "#4caf50",
-            done: false,
-            prompt:"屏蔽,屏蔽包含",
-            addInfo:"",
-            id_number:7,
-            path:""  //脚本路径
-        },
-        {
-            title: "旅行世界(邀请码:1857014)",
-            summary: "",
-            color: "#ff5722",
-            done: false,
-            prompt:"",
-            addInfo:"",
-            id_number:2,
-            path:""  //脚本路径
-        },
-
-        {
-            title: "BUG: ui.parseView()根布局margin, layout_width, layout_height 属性失效",
-            summary: "",
-            color: "#f44336",
-            done: false,
-            prompt:"",//附加信息的提示
-            addInfo:"",//附加信息
-            id_number:1, //唯一id 即数据库的id
-            path:""  //脚本路径
-        },
-        {
-            title: "修复dialogs ui模式下无法连续弹出",
-            summary: "",
-            color: "#4caf50",
-            done: false,
-            prompt:"",
-            addInfo:"",
-            id_number:3,
-            path:""  //脚本路径
-        },
-        {
-            title: "荒废的一天",
-            summary: "",
-            color: "#2196f3",
-            done: false,
-            prompt:"年级,班级",
-            addInfo:"",
-            id_number:4,
-            path:""  //脚本路径
-        }
-    ];
+    // return arr ? JSON.parse(arr) : [
+    //
+    //     {
+    //         title: "微信自动抢红包(需无锁屏密码)",
+    //         summary: "",
+    //         color: "",
+    //         done: false,
+    //         prompt:"屏蔽,屏蔽包含",
+    //         addInfo:"",
+    //         idNumber:7,
+    //         path:""  //脚本路径
+    //     },
+    //     {
+    //         title: "旅行世界(邀请码:1857014)",
+    //         summary: "",
+    //         color: "",
+    //         done: false,
+    //         prompt:"",
+    //         addInfo:"",
+    //         idNumber:2,
+    //         path:""  //脚本路径
+    //     },
+    //
+    //     {
+    //         title: "BUG: ui.parseView()根布局margin, layout_width, layout_height 属性失效",
+    //         summary: "",
+    //         color: "#f44336",
+    //         done: false,
+    //         prompt:"",//附加信息的提示
+    //         addInfo:"",//附加信息
+    //         idNumber:1, //唯一id 即数据库的id
+    //         path:""  //脚本路径
+    //     },
+    //     {
+    //         title: "修复dialogs ui模式下无法连续弹出",
+    //         summary: "",
+    //         color: "#4caf50",
+    //         done: false,
+    //         prompt:"",
+    //         addInfo:"",
+    //         idNumber:3,
+    //         path:""  //脚本路径
+    //     },
+    //     {
+    //         title: "荒废的一天",
+    //         summary: "",
+    //         color: "#2196f3",
+    //         done: false,
+    //         prompt:"年级,班级",
+    //         addInfo:"",
+    //         idNumber:4,
+    //         path:""  //脚本路径
+    //     }
+    // ];
 }
 
 
@@ -95,15 +130,15 @@ function initCommListView() {
     list.setContentView('comJavaScriptList.xml', (itemView, item, position) => {
         //设置参数
         itemView.setViewValue('title', item.title);
-        itemView.setViewValue('summary', item.summary == "" ? (item.summary="时间:,时长:,次数:") : item.summary);
+        itemView.setViewValue('summary', !item.summary || item.summary == "" ? (item.summary = "时间:,时长:,次数:") : item.summary);
         itemView.setViewValue('done', item.done);
-        itemView.setViewValue('id_number', item.id_number);
-        itemView.setViewValue('comm_prompt',item.prompt?item.prompt:"");
-        itemView.setViewValue('comm_addInfo',item.addInfo?item.addInfo:"");
+        itemView.setViewValue('idNumber', item.idNumber);
+        itemView.setViewValue('comm_prompt', item.prompt ? item.prompt : "");
+        itemView.setViewValue('comm_addInfo', item.addInfo ? item.addInfo : "");
         //设置背景色
-        itemView.color.setBackgroundColor(Color.parseColor(item.color));
+        itemView.color.setBackgroundColor(Color.parseColor(item.color != "" ? item.color : materialColors[random(0, materialColors.length - 1)]));
         //改变水波纹颜色
-       // itemView.card.getBackground().setColor(android.content.res.ColorStateList.valueOf(Color.parseColor('#2F000000')));
+        //itemView.card.getBackground().setColor(android.content.res.ColorStateList.valueOf(Color.parseColor('#2F000000')));
 
         //跑马灯效果
         itemView.title.setEllipsize(android.text.TextUtils.TruncateAt.MARQUEE);
@@ -122,7 +157,7 @@ function initCommListView() {
         //根布局长按事件
         itemView.view.setOnLongClickListener({
             onLongClick: function () {
-                popSetUp.show(itemView.view, function (result, _date, r_time, r_number, _prompt,_addInfo) {
+                popSetUp.show(itemView.view, function (result, _date, r_time, r_number, _prompt, _addInfo) {
                     let str = "时间:" + _date + ",时长:" + r_time + ",次数:" + r_number
                     itemView.setViewValue('summary', str);
                     itemView.setViewValue('prompt', _prompt);

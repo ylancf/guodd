@@ -107,7 +107,7 @@ function main() {
         main2(); //并执行一些渲染工作
     }
 
-    checkApkVersion();//检查更新
+    //checkApkVersion();//检查更新
 
 }
 
@@ -195,7 +195,9 @@ function login_on() {
     ui.layout("我的信息", "myselfInfo.xml");
     //导入模块
     execScript(2, readResString('js/taskObject.js'));
+
     execScript(2, readResString('js/commObject.js'));
+
     execScript(2, readResString('js/myInfo.js'));
     myPopActivity = myForgetActivity = null; //去掉已经不需要的对象
 
@@ -705,31 +707,31 @@ function px2dp(px) {
 // 返回 合并的数组
 function containArr(sqlArr, localArr) {
 
-    let toTopArr = JSON.parse(readConfigString("toTop"));  //要置顶的数组编号(按顺序)
-    let toDelete = JSON.parse(readConfigString("toDelete")); //要删除的数组编号
+
+    let toTopArr = readConfigString("toTop")==""?[]:JSON.parse(readConfigString("toTop"));  //要置顶的数组编号(按顺序)
+    let toDelete = readConfigString("toDelete")==""?[]:JSON.parse(readConfigString("toDelete")); //要删除的数组编号
     let newArr = [];
     let tempArr = []; //临时数组存放没有排序的置顶对象
-    if (localArr) {
-        go_here:
-            for (let local of localArr) {
-                let index = local.id_number; //获取编号
+    if (localArr.length!=0) {
+
+        go_here: for (let local of localArr) {
+                let index = local.idNumber; //获取编号
                 for (let sql of sqlArr) {
-                    if (sql.id_number == index) {
+                    if (sql.idNumber == index) {
+                        logd(sql.idNumber+"==" +index);
                         if (toDelete.lastIndexOf(index) > -1) { //如果在删除列表 就不插入数组
                             continue go_here;
                         }
-
                         local.prompt = sql.prompt; //修改本地对象的提示语
                         local.path = sql.path;  //修改本地对象的脚本访问路径
-
+                        logd(local.title + " "+ local.path);
                         if (toTopArr.lastIndexOf(index) > -1) {
                             tempArr[index] = local//放在临时数组中没有排序
                             continue go_here;
                         }
                         newArr.push(local);
+                        logd("我增加了"+ local)
                         continue go_here;
-                    } else {
-                        newArr.push(sql);
                     }
                 }
             }
@@ -752,10 +754,9 @@ function checkApkVersion(){
 
     loginProgrssActivity.on("hide", function () {
         let resultInfo = loginProgrssActivity.getResult();
-        if (resultInfo.code == 200) {
+        if (resultInfo.update_url) {
             toast("发现新版本");
             updateApk(resultInfo.update_url)
-
         }
     });
 
@@ -765,7 +766,6 @@ function checkApkVersion(){
         var getHttpResult = http.httpGetDefault(getHttpUrl, 5 * 1000, {"User-Agent": "test"});
         logd("result ->     " + getHttpResult);
         return JSON.parse(getHttpResult);
-        ;
     });
 
 }

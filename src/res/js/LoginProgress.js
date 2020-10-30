@@ -27,10 +27,13 @@ let LoginProgrss = function () {
         thread.execAsync(function () {
             try {
                 result = execFun();
+                logd("execFun执行成功")
             } catch (e) {
-
+                logd(e.message);
             } finally {
+                logd("finally执行成功")
                 ui.getHandler().post(function () {
+                    logd("post执行成功");
                     loginProgrssActivity.hide();
                 });
             }
@@ -67,6 +70,7 @@ let LoginProgrss = function () {
     }
 
     this.getResult = function () {
+        logd("getResult 执行了");
         return result;
     }
 

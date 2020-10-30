@@ -31,7 +31,7 @@ function initConfig(name) {
             summary: "紧急",
             color: "#f44336",
             done: false,
-            id_number:1,
+            idNumber:1,
             path:""  //脚本路径
 
         },
@@ -40,7 +40,7 @@ function initConfig(name) {
             summary: "无限期",
             color: "#ff5722",
             done: false,
-            id_number:2,
+            idNumber:2,
             path:""  //脚本路径
         },
         {
@@ -48,7 +48,7 @@ function initConfig(name) {
             summary: "2099年12月",
             color: "#4caf50",
             done: false,
-            id_number:3,
+            idNumber:3,
             path:""  //脚本路径
         },
         {
@@ -56,7 +56,7 @@ function initConfig(name) {
             summary: "每天",
             color: "#2196f3",
             done: true,
-            id_number:4,
+            idNumber:4,
             path:""  //脚本路径
         }
     ];
@@ -101,7 +101,7 @@ function initTaskListView(){
         itemView.setViewValue('title', item.title);
         itemView.setViewValue('summary', item.summary);
         itemView.setViewValue('done', item.done);
-        itemView.setViewValue('id_number', item.id_number);
+        itemView.setViewValue('idNumber', item.idNumber);
 
 
         //设置背景色
