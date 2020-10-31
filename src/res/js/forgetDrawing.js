@@ -47,9 +47,6 @@ function forget_drawing_layout(popwd) {
     });
 
 
-
-
-
     //排断两次密码是否一致
     confirm_ed.setOnFocusChangeListener({
         onFocusChange: function (view, hasFocus) {
@@ -170,7 +167,7 @@ function forget_drawing_layout(popwd) {
                 }
             }
         });
-        CreateImageButtonNext(btn, "#EE4280", "#C33B6C");//一半部分
+        CreateImageButtonNext(btn, "#20c040", "#20a040",0.5);//一半部分
     });
     //添加一个按钮
 

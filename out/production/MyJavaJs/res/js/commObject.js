@@ -18,25 +18,20 @@ function initCommConfig(name) {
 
     //从ui配置中读取指定数据
     let arr = JSON.parse(ui.getConfigJSON())[name];
-    if (arr == "") {
+    if (arr == ""||arr) {
         arr = []
     } else {
         arr = JSON.parse(arr);
     }
 
-    logd("arr:" + arr);
-    logd("arr:" + arr.length);
     //此处要使用联网修改
 
     let progressAct= new ProBarAct();
     progressAct.on("hide", function () {
         logd("///")
         let resultInfo = progressAct.result;
-        logd("//////////////");
         if (resultInfo.msg == "操作成功") {
             logd("进入了")
-
-            logd("类型:" + typeof (resultInfo.data));
             let sqlArr = resultInfo.data;
             // let sqlArr =JSON.parse(resultInfo.data);
             comm_items = containArr(sqlArr, arr);

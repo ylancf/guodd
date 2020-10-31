@@ -24,8 +24,13 @@ function mainObj() {
 function initConfig(name) {
     //从ui配置中读取指定数据
     let arr = JSON.parse(ui.getConfigJSON())[name];
-    //如果数据存在 则转成json数据返回 否则返回默认配置
-    return arr ? JSON.parse(arr) : [
+    if (arr == ""||arr) {
+        arr = []
+    } else {
+        arr = JSON.parse(arr);
+    }
+
+    return arr.length!=0 ? arr : [
         {
             title: "这个界面没脚本,脚本会不定期增加",
             summary: "紧急",

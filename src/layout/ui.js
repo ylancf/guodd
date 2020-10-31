@@ -265,14 +265,14 @@ function main2() {
 
 
 //imageButtom的下半部分  为代码重复利用 而分开
-function CreateImageButtonNext(btn, color1, color2) {
+function CreateImageButtonNext(btn, color1, color2,_widthPro) {
 
     let view = btn.getView();
     let params = view.getLayoutParams(); //获取布局参数
-
+    let widthPro=_widthPro||0.6;
     //params.width = ViewGroup.LayoutParams.WRAP_CONTENT;//控件宽度 包裹内容的宽度
     let hereW = view.getParent().getLayoutParams().width; //match_parent 为-1
-    params.width = (hereW == -1 ? resources.getDisplayMetrics().widthPixels : hereW) * 0.6;
+    params.width = (hereW == -1 ? resources.getDisplayMetrics().widthPixels : hereW) * widthPro;
     params.gravity = Gravity.CENTER;//layout_gravity; 这里使用java的设置方式
     view.setGravity(Gravity.CENTER); //这是相当于 gravity 与上面的不一样
     view.setLayoutParams(params);  //使新的布局参数生效
