@@ -12,7 +12,6 @@ function commObject() {
         ui.saveConfig('commItems', JSON.stringify(comm_items));//保存参数
     });
     initCommConfig('commItems');//本地保存的列表
-    checkApkVersion();//检查更新 暂时放在这里
 }
 
 function initCommConfig(name) {
@@ -29,11 +28,10 @@ function initCommConfig(name) {
     logd("arr:" + arr.length);
     //此处要使用联网修改
 
-
-    //let cdl = new java.util.concurrent.CountDownLatch(1);
-    loginProgrssActivity.on("hide", function () {
+    let progressAct= new ProBarAct();
+    progressAct.on("hide", function () {
         logd("///")
-        let resultInfo = loginProgrssActivity.getResult();
+        let resultInfo = progressAct.result;
         logd("//////////////");
         if (resultInfo.msg == "操作成功") {
             logd("进入了")
@@ -48,15 +46,13 @@ function initCommConfig(name) {
 
     });
 
-    loginProgrssActivity.postShow(function () {
+    progressAct.postShow(function () {
         let getHttpUrl = "http://47.98.194.121:80/system/info/list"
         let getHttpResult = http.httpGetDefault(getHttpUrl, 5 * 1000, {"User-Agent": "test"});
         logd("result ->     " + getHttpResult);
         return JSON.parse(getHttpResult);
         ;
     });
-
-    //cdl.await();
 
     return;
 

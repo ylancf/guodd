@@ -36,7 +36,7 @@ execScript(2, readResString('js/PopActivity.js'));
 execScript(2, readResString('js/dialogs.js'));//导入dialogs模块
 execScript(2, readResString('js/JsListView.js'));//导入JsListView模块
 execScript(2, readResString('js/SetUpPopwindow.js'));//导入SetUpPopwindow模块
-execScript(2, readResString("js/LoginProgress.js"))
+execScript(2, readResString("js/ProBarActivity.js"))
 execScript(2, readResString("js/forgetDrawing.js"))
 
 //execScript(2, readResString("js/forgetDrawing.js"))
@@ -50,7 +50,7 @@ decorView.getChildAt(0).getChildAt(1).setFitsSystemWindows(true);
 activity.getWindow().setStatusBarColor(Color.TRANSPARENT);//状态栏颜色 设置成透明
 activity.getWindow().setNavigationBarColor(0x999999);//导航栏颜色
 SystemUiVisibility(false);//设置暗色系状态栏
-var loginProgrssActivity = new LoginProgrss();
+var httpProgressActivity = new ProBarAct();
 var the_label, js_start_BT, head_bar;
 var startBTState = false; //记录开始按钮的状态
 var loadFinish=false;  //用于关闭下载弹出的 没想到更好的办法只能这个了
@@ -107,7 +107,7 @@ function main() {
         main2(); //并执行一些渲染工作
     }
 
-    //checkApkVersion();//检查更新
+    checkApkVersion();//检查更新
 
 }
 
@@ -119,9 +119,9 @@ function judge_availability(user, pw) {
         toast("账号或密码不正确!");
         return false;
     } else {
-        loginProgrssActivity.on("hide", function () {
+        httpProgressActivity.on("hide", function () {
 
-            let resultInfo = loginProgrssActivity.getResult();
+            let resultInfo = httpProgressActivity.result;
 
             if (resultInfo.code == 200) {
                 ui.saveAllConfig(); //保存所有的值
@@ -135,7 +135,7 @@ function judge_availability(user, pw) {
             }
         });
 
-        loginProgrssActivity.postShow(function () {
+        httpProgressActivity.postShow(function () {
             let url = "http://47.98.194.121:80/login";
             let pa = {"username": user.toString() + "", "password": pw.toString() + ""};
             let httpResult = http.httpPost(url, pa, null, 5 * 1000, {"Content-Type": "application/json"});
@@ -150,8 +150,8 @@ function register_account(nickname, userName, password, question, answer) {
 
     let imei = device.getIMEI();
 
-    loginProgrssActivity.on("hide", function () {
-        let resultInfo = loginProgrssActivity.getResult();
+    httpProgressActivity.on("hide", function () {
+        let resultInfo = httpProgressActivity.result;
         if (resultInfo.code == 200) {
             toast("注册成功");
         } else {
@@ -159,7 +159,7 @@ function register_account(nickname, userName, password, question, answer) {
         }
     });
 
-    loginProgrssActivity.postShow(function () {
+    httpProgressActivity.postShow(function () {
         let url = "http://47.98.194.121:80/system/user/a/register";
         let pa = {
             "nickName": nickname,
@@ -199,7 +199,7 @@ function login_on() {
     execScript(2, readResString('js/commObject.js'));
 
     execScript(2, readResString('js/myInfo.js'));
-    myPopActivity = myForgetActivity = null; //去掉已经不需要的对象
+    myPopActivity = myForgetActivity =httpProgressActivity= null; //去掉已经不需要的对象
 
 }
 
@@ -751,23 +751,23 @@ function containArr(sqlArr, localArr) {
 
 
 function checkApkVersion(){
+    let progressAct= new ProBarAct();
 
-    loginProgrssActivity.on("hide", function () {
-        let resultInfo = loginProgrssActivity.getResult();
+    progressAct.on("hide", function () {
+        let resultInfo = progressAct.result;
         if (resultInfo.update_url) {
             toast("发现新版本");
             updateApk(resultInfo.update_url)
         }
     });
 
-    loginProgrssActivity.postShow(function () {
+    progressAct.postShow(function () {
         let testData =  JSON.parse(readResString("package.txt"));
         let  getHttpUrl = "http://47.98.194.121:80/system/ver/upgradeDown?version="+testData.version
-        var getHttpResult = http.httpGetDefault(getHttpUrl, 5 * 1000, {"User-Agent": "test"});
+        let getHttpResult = http.httpGetDefault(getHttpUrl, 5 * 1000, {"User-Agent": "test"});
         logd("result ->     " + getHttpResult);
         return JSON.parse(getHttpResult);
     });
-
 }
 
 
@@ -825,8 +825,6 @@ function updateApk(url){
         });
     }
 }
-
-
 
 
 main();

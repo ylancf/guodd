@@ -78,9 +78,9 @@ function forget_drawing_layout(popwd) {
         onClick:function (){
              accountStr=account_ed.getText().toString()+"";
             //发送数据库
-            loginProgrssActivity.on("hide", function () {
+            httpProgressActivity.on("hide", function () {
 
-                let resultInfo = loginProgrssActivity.getResult();
+                let resultInfo = httpProgressActivity.result;
                 if (resultInfo.code == 200) {
                   //  question_tv.setText(resultInfo.question);
                     toastLog("此处要返回信息");
@@ -89,7 +89,7 @@ function forget_drawing_layout(popwd) {
                 }
             });
 
-            loginProgrssActivity.postShow(function () {
+            httpProgressActivity.postShow(function () {
                 var url = "http://47.98.194.121:80/login";
                 var pa = {"userName": accountStr};
                 var httpResult = http.httpPost(url, pa, null, 5 * 1000, {"Content-Type": "application/json"});
@@ -115,9 +115,9 @@ function forget_drawing_layout(popwd) {
                 return;
             }else if( question_layuot.getVisibility()==0){ //0 可见 4 不可见但占位置 8不可见不占位置
                 //访问数据库
-                loginProgrssActivity.on("hide", function () {
+                httpProgressActivity.on("hide", function () {
 
-                    let resultInfo = loginProgrssActivity.getResult();
+                    let resultInfo = httpProgressActivity.result;
                     if (resultInfo.code == 200&& true) {
                         toastLog("此处要修改  true ");
                         question_layuot.setVisibility(8);
@@ -127,7 +127,7 @@ function forget_drawing_layout(popwd) {
                     }
                 });
                   //发送数据库
-                loginProgrssActivity.postShow(function () {
+                httpProgressActivity.postShow(function () {
                     var url = "http://47.98.194.121:80/login";
                     var pa = {"userName": accountStr,"answer": answer_ed.getText().toString()+""};
                     var httpResult = http.httpPost(url, pa, null, 5 * 1000, {"Content-Type": "application/json"});
@@ -146,9 +146,9 @@ function forget_drawing_layout(popwd) {
                     //访问数据库
 
                     //访问数据库
-                    loginProgrssActivity.on("hide", function () {
+                    httpProgressActivity.on("hide", function () {
 
-                        let resultInfo = loginProgrssActivity.getResult();
+                        let resultInfo = httpProgressActivity.result;
                         if (resultInfo.code == 200&& true) {
                             toastLog("此处要修改  true ");
                              toastLog("密码修改成功")
@@ -157,7 +157,7 @@ function forget_drawing_layout(popwd) {
                         }
                     });
                     //发送数据库
-                    loginProgrssActivity.postShow(function () {
+                    httpProgressActivity.postShow(function () {
                         var url = "http://47.98.194.121:80/login";
                         var pa = {"userName": accountStr,"password": new_password};
                         var httpResult = http.httpPost(url, pa, null, 5 * 1000, {"Content-Type": "application/json"});
