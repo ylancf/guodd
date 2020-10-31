@@ -749,7 +749,6 @@ function containArr(sqlArr, localArr) {
     return newArr;
 }
 
-
 function checkApkVersion(){
     let progressAct= new ProBarAct();
 

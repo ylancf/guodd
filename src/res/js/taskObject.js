@@ -24,7 +24,7 @@ function mainObj() {
 function initConfig(name) {
     //从ui配置中读取指定数据
     let arr = JSON.parse(ui.getConfigJSON())[name];
-    if (arr == ""||arr) {
+    if (arr == ""||!arr) {
         arr = []
     } else {
         arr = JSON.parse(arr);

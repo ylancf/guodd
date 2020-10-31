@@ -18,7 +18,7 @@ function initCommConfig(name) {
 
     //从ui配置中读取指定数据
     let arr = JSON.parse(ui.getConfigJSON())[name];
-    if (arr == ""||arr) {
+    if (arr == ""||!arr) {
         arr = []
     } else {
         arr = JSON.parse(arr);
@@ -121,7 +121,7 @@ function initCommListView() {
 
     list.setContentView('comJavaScriptList.xml', (itemView, item, position) => {
         //设置参数
-        itemView.setViewValue('title', item.title);
+        itemView.setViewValue('title', item.idNumber+"."+item.title);
         itemView.setViewValue('summary', !item.summary || item.summary == "" ? (item.summary = "时间:,时长:,次数:") : item.summary);
         itemView.setViewValue('done', item.done);
         itemView.setViewValue('idNumber', item.idNumber);
