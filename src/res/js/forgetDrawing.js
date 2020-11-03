@@ -87,7 +87,7 @@ function forget_drawing_layout(popwd) {
             });
 
             httpProgressActivity.postShow(function () {
-                var url = "http://47.98.194.121:80/login";
+                var url = "http://47.98.194.121:80/getUserQuestion";
                 var pa = {"userName": accountStr};
                 var httpResult = http.httpPost(url, pa, null, 5 * 1000, {"Content-Type": "application/json"});
                 loge("result ->     " + httpResult);
@@ -108,6 +108,7 @@ function forget_drawing_layout(popwd) {
         btn.onClick(function (view) {
 
             if(question_tv.getText().toString()==""){
+
                 toast("点击箭头获得问题");
                 return;
             }else if( question_layuot.getVisibility()==0){ //0 可见 4 不可见但占位置 8不可见不占位置
@@ -125,7 +126,7 @@ function forget_drawing_layout(popwd) {
                 });
                   //发送数据库
                 httpProgressActivity.postShow(function () {
-                    var url = "http://47.98.194.121:80/login";
+                    var url = "http://47.98.194.121:80/checkMyAnswer";
                     var pa = {"userName": accountStr,"answer": answer_ed.getText().toString()+""};
                     var httpResult = http.httpPost(url, pa, null, 5 * 1000, {"Content-Type": "application/json"});
                     loge("result ->     " + httpResult);
@@ -139,6 +140,8 @@ function forget_drawing_layout(popwd) {
                     return;
                 }
                 let new_comfirm=confirm_ed.getText().toString()+"";
+
+
                 if (new_password==new_comfirm) {
                     //访问数据库
 
@@ -155,7 +158,7 @@ function forget_drawing_layout(popwd) {
                     });
                     //发送数据库
                     httpProgressActivity.postShow(function () {
-                        var url = "http://47.98.194.121:80/login";
+                        var url = "http://47.98.194.121:80/resetPwdByQA";
                         var pa = {"userName": accountStr,"password": new_password};
                         var httpResult = http.httpPost(url, pa, null, 5 * 1000, {"Content-Type": "application/json"});
                         loge("result ->     " + httpResult);
