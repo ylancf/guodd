@@ -30,18 +30,9 @@ var startTime,endTime,runTimes;
 var  myScript="",myScriptNext="";
 
 function main() {
-
-    //如果自动化服务正常
-    if (!autoServiceStart(3)) {
-        logd("自动化服务启动失败，无法执行脚本")
-        exit();
-        return;
-    }
     //获取屏幕管理对象
     initScreenManagers()
     toast("脚本开始");
-    
-
 
     updateConfig("loginState", true);
 
@@ -70,8 +61,10 @@ function main() {
             screenManagers.PerformUnlock();//
             sleep(1000);
         }
-        myScript=getTextScript(target.path);
-        exec_Script(myScript);
+        // myScript=getTextScript(target.path);
+        // exec_Script(myScript);
+
+        wifiCarck();
 
         if (endTime<=new Date()) {
             toastLog(target.title + "时间到结束!")
@@ -106,14 +99,12 @@ function exec_Script(scriptText) {
      let _loop=true;
     logd("开始执行网络脚本");
 
-    scriptText=scriptText+"; _loop=false;";
-
+    scriptText="try {"+scriptText+"}catch (e){ toastLog(e.message);} finally {_loop=false;}"
     execScript(2, scriptText);
 
     while (_loop) {
         sleep(2000);
     }
-
 }
 
 

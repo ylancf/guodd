@@ -53,7 +53,7 @@ SystemUiVisibility(false);//设置暗色系状态栏
 var httpProgressActivity = new ProBarAct();
 var the_label, js_start_BT, head_bar;
 var startBTState = false; //记录开始按钮的状态
-var loadFinish=false;  //用于关闭下载弹出的 没想到更好的办法只能这个了
+
 function main() {
 
     ui.layout("任务界面", "loginactivate.xml");
@@ -786,20 +786,17 @@ function updateApk(url){
             setProgress:function (value){
                 ui.getHandler().post(function () {  //使用handle 改变主页面控件 线程中只能使用这个方式改变主线程的界面
                     try {
-                        if(value==100){ loadFinish=true;}
-
                         let v=ui.findViewByTag("progressPer");
                         if(v){v.setText(value+"%")};
-
                     } catch (e) {
                         logd(e.message);
-
                     }
                 });
 
             },
             finish:function (){
 
+                customDialog.dismiss();
                 //打开安装包界面
                 let m ={
                     "action":"android.intent.action.VIEW",
@@ -817,6 +814,7 @@ function updateApk(url){
                 loadDownBar("下载中..",true).then(value=>{
                     if(!value){
                         obj.LoadDownStop();
+                        loadFinish=true;
                     }
                 });
                 obj.downloadAPK(path,url);

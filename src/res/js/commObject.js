@@ -28,7 +28,6 @@ function initCommConfig(name) {
 
     let progressAct= new ProBarAct();
     progressAct.on("hide", function () {
-        logd("///")
         let resultInfo = progressAct.result;
         if (resultInfo.msg == "操作成功") {
             logd("进入了")
@@ -45,6 +44,10 @@ function initCommConfig(name) {
         let getHttpUrl = "http://47.98.194.121:80/system/info/list"
         let getHttpResult = http.httpGetDefault(getHttpUrl, 5 * 1000, {"User-Agent": "test"});
         logd("result ->     " + getHttpResult);
+        if(!getHttpResult) {
+          toastLog("检查网络");
+          exit();
+        }
         return JSON.parse(getHttpResult);
         ;
     });

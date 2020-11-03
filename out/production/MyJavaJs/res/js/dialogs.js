@@ -19,6 +19,7 @@ importClass(android.app.AlertDialog);
 importClass(android.content.DialogInterface);
 
 var dialogs = {};
+var customDialog;  //用于关闭提示窗
 
 /**
  * ToDo: UI模式下 所有函数会返回一个Promise。
@@ -142,7 +143,6 @@ function DialogsBuilder() {
 
 
 function Dialogs() {
-    var dialog;
     var mGlobal;
     var builder = new AlertDialog.Builder(ui.getActivity());
     var countDownLatch;
@@ -248,15 +248,6 @@ function Dialogs() {
                 run: function () {
                     countDownLatch = new CountDownLatch(1);
                     show();
-
-                    while (order&&countDownLatch.getCount!=0){   //为了进度条完成后关闭
-                        if ( loadFinish) {
-                            countDownLatch.countDown();
-                            dialog.dismiss();
-                           break;
-                        }
-                        sleep(1000);
-                    }
                     countDownLatch.await();
                     mCallback(getResult());
                     return;
@@ -282,16 +273,16 @@ function Dialogs() {
     function show() {
         MainPost(() => {
             isShow = true;
-            dialog = builder.create()
+            customDialog = builder.create()
             if (android.os.Build.VERSION.SDK_INT >= 26) {
-                dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+                customDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
             } else {
-                dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+                customDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
             }
-            aDialog=dialog.show();
-            dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(Config.positive.textColor);
-            dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(Config.negative.textColor);
-            dialog.getButton(dialog.BUTTON_NEUTRAL).setTextColor(Config.neutral.textColor);
+            aDialog=customDialog.show();
+            customDialog.getButton(customDialog.BUTTON_POSITIVE).setTextColor(Config.positive.textColor);
+            customDialog.getButton(customDialog.BUTTON_NEGATIVE).setTextColor(Config.negative.textColor);
+            customDialog.getButton(customDialog.BUTTON_NEUTRAL).setTextColor(Config.neutral.textColor);
         });
     }
 
@@ -343,7 +334,7 @@ function Dialogs() {
     function initProgress(){
         DIALOG_TYPE = 5;
         //let view = new android.widget.LinearLayout(context);
-       let  view =  ui.parseView("progressBar.xml")
+       let view =  ui.parseView("progressBar.xml")
         bar = new ProgressBar(context);
         view.addView(bar,-1);
 
@@ -366,7 +357,7 @@ function Dialogs() {
             onItemClick: function (parent, view, position, id) {
                 result = position;
                 countDownLatch.countDown();
-                dialog.dismiss();
+                customDialog.dismiss();
             }
         });
     }

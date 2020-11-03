@@ -1,28 +1,28 @@
-/*
- * @Author: 大柒
- * @QQ: 531310591@qq.com
- * @Date: 2020-08-22 21:49:03
- * @Version: EasyClick RC19
- * @LastEditors: 大柒
- * @LastEditTime: 2020-08-23 08:47:16
- * @Description: dialogs 有Bug
- */
+
+importClass(android.view.Gravity);
 importClass(android.view.ViewGroup);
+importClass(android.view.WindowManager);
+importClass(android.widget.TextView);
 importClass(android.widget.EditText);
+importClass(android.widget.ListView);
 importClass(android.widget.CheckBox);
 importClass(android.widget.ProgressBar);
+importClass(android.widget.LinearLayout);
 importClass(android.widget.ArrayAdapter);
 importClass(android.widget.SimpleAdapter);
+importClass(java.util.HashMap);
 importClass(java.util.ArrayList);
 importClass(java.util.concurrent.CountDownLatch);
+importClass(android.graphics.Color);
 importClass(android.app.AlertDialog);
 importClass(android.content.DialogInterface);
 
 var dialogs = {};
-var customDialog;  //用于关闭提示窗
-
+var dialog;
+var resources = context.getResources(); //获取资源文件
+var scale = resources.getDisplayMetrics().density; //获得手机屏幕的相对密度 或者说比例
 /**
- * ToDo: UI模式下 所有函数会返回一个Promise。
+ * ToDo:
  * 用 .then()接收返回参数
  * 例: confirm('确定吗').then(value=>{
  *   //ToDo: 对话框消失后会执行这里 value为true或false, 表示点击"确定"或"取消"
@@ -65,7 +65,7 @@ function rawInput(title, prefill) {
 
 
 
-
+//下线对话框
 function loadDownBar(title,order){
 
     return new Dialogs()
@@ -98,12 +98,12 @@ dialogs.select = function (title, items) {
  * @param index {number} 对话框的初始选项的位置，默认为0。
  * @returns {number|void|Promise<PaymentResponse>|*}
  */
-dialogs.singleChoice = function (title, items, index) {
+dialogs.singleChoice = function (title, items, index,order) {
     return new Dialogs()
         .title(title)
         .singleChoice(items, index)
         .setButtonText('positive', '确定')
-        .show();
+        .show(order);
 }
 
 /**
@@ -243,7 +243,8 @@ function Dialogs() {
     }
 
     this.show = function (order) {
-        if (isUiThread()||order) {
+        logd("我进入了show");
+        if (order) {
             new java.lang.Thread({
                 run: function () {
                     countDownLatch = new CountDownLatch(1);
@@ -262,7 +263,6 @@ function Dialogs() {
     }
 
     function Promise() {
-
         this.then = function (callback) {
             mCallback = callback;
         }
@@ -273,16 +273,16 @@ function Dialogs() {
     function show() {
         MainPost(() => {
             isShow = true;
-            customDialog = builder.create()
+            dialog = builder.create()
             if (android.os.Build.VERSION.SDK_INT >= 26) {
-                customDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+                dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
             } else {
-                customDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+                dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
             }
-            aDialog=customDialog.show();
-            customDialog.getButton(customDialog.BUTTON_POSITIVE).setTextColor(Config.positive.textColor);
-            customDialog.getButton(customDialog.BUTTON_NEGATIVE).setTextColor(Config.negative.textColor);
-            customDialog.getButton(customDialog.BUTTON_NEUTRAL).setTextColor(Config.neutral.textColor);
+            aDialog=dialog.show();
+            dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(Config.positive.textColor);
+            dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(Config.negative.textColor);
+            dialog.getButton(dialog.BUTTON_NEUTRAL).setTextColor(Config.neutral.textColor);
         });
     }
 
@@ -334,10 +334,9 @@ function Dialogs() {
     function initProgress(){
         DIALOG_TYPE = 5;
         //let view = new android.widget.LinearLayout(context);
-       let view =  ui.parseView("progressBar.xml")
+        let  view =  ui.parseView("progressBar.xml")
         bar = new ProgressBar(context);
         view.addView(bar,-1);
-
         builder.setView(view);
         let lp = new android.widget.LinearLayout.LayoutParams(-1, -2);
         lp.setMargins(dp2px(20), 0, dp2px(20), 0);
@@ -357,7 +356,7 @@ function Dialogs() {
             onItemClick: function (parent, view, position, id) {
                 result = position;
                 countDownLatch.countDown();
-                customDialog.dismiss();
+                dialog.dismiss();
             }
         });
     }
@@ -373,6 +372,13 @@ function Dialogs() {
         });
         return;
     }
+
+
+    //根据手机的分辨率从 dp 的单位 转成为 px(像素)
+    function dp2px(dp) {
+        return Math.floor(dp * scale + 0.5);
+    };
+
 
     function isUiThread() {
         let Looper = android.os.Looper;

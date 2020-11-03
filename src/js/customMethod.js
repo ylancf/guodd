@@ -1,5 +1,19 @@
-//初始化屏幕类
+//初始化屏幕类   放一些中要的封装方法
+
+
+importClass(android.content.Intent);
+importClass(android.net.Uri)
+
+
 function initScreenManagers() {
+
+    //如果自动化服务正常
+    if (!autoServiceStart(3)) {
+        logd("自动化服务启动失败，无法执行脚本")
+        exit();
+        return;
+    }
+
     let s = loadDex("defaultplugin.apk");
     if (!s) {
         logd("屏幕管理调用失败");
@@ -39,6 +53,123 @@ function autoServiceStart(time) {
     }
     return isServiceOk();
 }
+
+//权限检查与申请
+function PermissionCheck(permisstionJson){
+    new com.plugin.jPrlGSPKhr.ApplyPermission(context,JSON.stringify(permisstionJson),{
+        goToSet:function (str){
+            let result= confirm("权限申请", "缺少权限--"+str+"\n是否现在去申请?");
+            if(result){
+                var intent = new Intent();
+                intent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+                intent.setData(Uri.parse("package:com.ylancf.gdd"))
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                try {
+                    context.startActivity(intent);
+                } catch (e) {
+                    loge(e)
+                }
+            }
+            exit();
+        },
+        continueRun:function (){
+
+        }
+    });
+}
+
+
+//获得屏幕的宽高
+function getScreenWidthHeight(){
+    let activity = ui.getActivity(); //获取当前的Activity
+    let dm = new android.util.DisplayMetrics();//获得显示度量
+    activity.getWindowManager().getDefaultDisplay().getMetrics(dm);//获取尺寸相关信息 没有这句代码w将为0
+    let w = dm.widthPixels;//获得屏幕宽度
+    let h=dm.heightPixels;
+
+    return {width:w,height:h}
+}
+
+
+
+
+//下载东西的方法
+// url 下载地址
+// fileName 文件名和缀
+// path   路径(后头不用/)   默认为 系统Download 文件夹
+
+function downloadPassword(url,fileName,path) {
+
+    let loadInfo = {
+        setProgress: function (value) {
+            ui.getHandler().post(function () {  //使用handle 改变主页面控件 线程中只能使用这个方式改变主线程的界面
+                try {
+                    let v = ui.findViewByTag("progressPer");
+                    if (v) {
+                        v.setText(value + "%")
+                    };
+                } catch (e) {
+                    logd(e.message);
+                }
+            });
+        },
+        finish: function () {
+            dialog.dismiss();
+        },
+        sendLog: function (info) {
+            logd(info);
+        },
+        sendToast:function (info){
+            toast(info);
+        }
+    };
+
+    var obj = new com.plugin.jPrlGSPKhr.loadDownTool(context, loadInfo);
+    if(path){
+        var path = path+"/"+ fileName;
+    }else{
+        var path = obj.getPath() + fileName;
+    }
+    if (!file.exists(path)) {
+        let result=confirm("提示", "需要下载密码字典,或手动添加到文件夹DownLoad/password.txt,是否下载?");
+        if(result){
+            loadDownBar("下载字典中..", true).then(value => {
+                if (!value) {
+                    obj.LoadDownStop();
+                }
+            });
+            obj.download(path, url);
+        }else{
+            exit();
+        }
+    }
+}
+
+
+//判断是否高于某个版本
+// 参数 version - 1.0.1
+function check_Version(uVersion){
+    // try {
+        let versionData =  JSON.parse(readResString("package.txt"));
+        if(versionData){
+            let  currentVersion =versionData.version.replace(".","");
+            let  version=uVersion.replace(".","");
+            if(Number(currentVersion)>Number(version)){
+                return true;
+            }else{
+                return  false;
+            }
+        }
+    // }catch (e){
+    //     logd(e.message);
+    //     return  false;
+    // }
+}
+
+
+
+
+
 
 
 //直到节点消失  返回值 消失返回true 否则 false

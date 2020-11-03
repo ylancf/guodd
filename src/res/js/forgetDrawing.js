@@ -141,7 +141,6 @@ function forget_drawing_layout(popwd) {
                 }
                 let new_comfirm=confirm_ed.getText().toString()+"";
 
-
                 if (new_password==new_comfirm) {
                     //访问数据库
 
