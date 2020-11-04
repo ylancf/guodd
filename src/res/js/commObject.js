@@ -125,13 +125,13 @@ function initCommListView() {
     list.setContentView('comJavaScriptList.xml', (itemView, item, position) => {
         //设置参数
         itemView.setViewValue('title', item.idNumber+"."+item.title);
-        itemView.setViewValue('summary', !item.summary || item.summary == "" ? (item.summary = "时间:,时长:,次数:") : item.summary);
-        itemView.setViewValue('done', item.done);
+        itemView.setViewValue('summary', (item.summary.indexOf("时间")==-1) ? (item.summary = "时间:,时长:,次数:") : item.summary);
+        itemView.setViewValue('done', item.done==true?true:false);
         itemView.setViewValue('idNumber', item.idNumber);
         itemView.setViewValue('comm_prompt', item.prompt ? item.prompt : "");
         itemView.setViewValue('comm_addInfo', item.addInfo ? item.addInfo : "");
         //设置背景色
-        itemView.color.setBackgroundColor(Color.parseColor(item.color != "" ? item.color : materialColors[random(0, materialColors.length - 1)]));
+        itemView.color.setBackgroundColor(Color.parseColor( materialColors[random(0, materialColors.length - 1)]));
         //改变水波纹颜色
         //itemView.card.getBackground().setColor(android.content.res.ColorStateList.valueOf(Color.parseColor('#2F000000')));
 

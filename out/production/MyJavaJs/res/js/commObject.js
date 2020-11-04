@@ -28,7 +28,6 @@ function initCommConfig(name) {
 
     let progressAct= new ProBarAct();
     progressAct.on("hide", function () {
-        logd("///")
         let resultInfo = progressAct.result;
         if (resultInfo.msg == "操作成功") {
             logd("进入了")
@@ -45,6 +44,10 @@ function initCommConfig(name) {
         let getHttpUrl = "http://47.98.194.121:80/system/info/list"
         let getHttpResult = http.httpGetDefault(getHttpUrl, 5 * 1000, {"User-Agent": "test"});
         logd("result ->     " + getHttpResult);
+        if(!getHttpResult) {
+          toastLog("检查网络");
+          exit();
+        }
         return JSON.parse(getHttpResult);
         ;
     });
@@ -122,13 +125,13 @@ function initCommListView() {
     list.setContentView('comJavaScriptList.xml', (itemView, item, position) => {
         //设置参数
         itemView.setViewValue('title', item.idNumber+"."+item.title);
-        itemView.setViewValue('summary', !item.summary || item.summary == "" ? (item.summary = "时间:,时长:,次数:") : item.summary);
-        itemView.setViewValue('done', item.done);
+        itemView.setViewValue('summary', (item.summary.indexOf("时间")==-1) ? (item.summary = "时间:,时长:,次数:") : item.summary);
+        itemView.setViewValue('done', (item.done==false||item.done==0)?false:true);
         itemView.setViewValue('idNumber', item.idNumber);
         itemView.setViewValue('comm_prompt', item.prompt ? item.prompt : "");
         itemView.setViewValue('comm_addInfo', item.addInfo ? item.addInfo : "");
         //设置背景色
-        itemView.color.setBackgroundColor(Color.parseColor(item.color != "" ? item.color : materialColors[random(0, materialColors.length - 1)]));
+        itemView.color.setBackgroundColor(Color.parseColor( materialColors[random(0, materialColors.length - 1)]));
         //改变水波纹颜色
         //itemView.card.getBackground().setColor(android.content.res.ColorStateList.valueOf(Color.parseColor('#2F000000')));
 

@@ -707,45 +707,51 @@ function px2dp(px) {
 // 返回 合并的数组
 function containArr(sqlArr, localArr) {
 
-
     let toTopArr = readConfigString("toTop")==""?[]:JSON.parse(readConfigString("toTop"));  //要置顶的数组编号(按顺序)
     let toDelete = readConfigString("toDelete")==""?[]:JSON.parse(readConfigString("toDelete")); //要删除的数组编号
     let newArr = [];
     let tempArr = []; //临时数组存放没有排序的置顶对象
-    if (localArr.length!=0) {
 
-        go_here: for (let local of localArr) {
-                let index = local.idNumber; //获取编号
-                for (let sql of sqlArr) {
-                    if (sql.idNumber == index) {
-                        logd(sql.idNumber+"==" +index);
-                        if (toDelete.lastIndexOf(index) > -1) { //如果在删除列表 就不插入数组
-                            continue go_here;
-                        }
-                        local.prompt = sql.prompt; //修改本地对象的提示语
-                        local.path = sql.path;  //修改本地对象的脚本访问路径
-                        logd(local.title + " "+ local.path);
-                        if (toTopArr.lastIndexOf(index) > -1) {
-                            tempArr[index] = local//放在临时数组中没有排序
-                            continue go_here;
-                        }
-                        newArr.push(local);
-                        logd("我增加了"+ local)
-                        continue go_here;
+    if (localArr.length != 0) {
+        go_here1:  for (let sql of sqlArr) {
+            let index = sql.idNumber; //获取编号
+            //如果本地没有则直接添加
+            if (toDelete.lastIndexOf(index + "") > -1) { //如果在删除列表 就不插入数组
+                continue go_here1;
+            }
+            for (let local of localArr) {
+                if (local.idNumber == index) {
+                    local.prompt = sql.prompt; //修改本地对象的提示语
+                    local.path = sql.path;  //修改本地对象的脚本访问路径
+                    logd(local.title + " " + local.path);
+
+                    if (toTopArr.lastIndexOf(index + "") > -1) {
+                        tempArr[index] = local//放在临时数组中没有排序
+                        continue go_here1;
                     }
+                    newArr.push(local);
+                    continue go_here1;
                 }
             }
-
+            if (toTopArr.lastIndexOf(index + "") > -1) { //如果要置顶
+                tempArr[index] = sql//放在临时数组中没有排序
+                continue go_here1;
+            }
+            newArr.push(sql);//放入数组
+        }
         //将要置顶的对象排序
         let _arr = [];
         for (let i of toTopArr) {
-            _arr.push(tempArr[i]);
+            if (tempArr[i]) {
+                _arr.push(tempArr[i]);
+            }
         }
         newArr = _arr.concat(newArr);//数组合并
-
     } else {
         newArr = sqlArr; //直接是数据库返回的集合
     }
+
+
     return newArr;
 }
 

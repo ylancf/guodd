@@ -61,10 +61,8 @@ function main() {
             screenManagers.PerformUnlock();//
             sleep(1000);
         }
-        // myScript=getTextScript(target.path);
-        // exec_Script(myScript);
-
-        wifiCarck();
+        myScript=getTextScript(target.path);
+        exec_Script(myScript);
 
         if (endTime<=new Date()) {
             toastLog(target.title + "时间到结束!")
@@ -122,10 +120,6 @@ main();
 
 function  test(){
    
-    let arr = JSON.parse(ui.getConfigJSON())["uuuu"];
-    logd(arr);
-    if (arr) {
-
-    };
+   updateConfig("commItems","")
 
 }
