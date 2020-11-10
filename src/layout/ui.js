@@ -721,6 +721,7 @@ function containArr(sqlArr, localArr) {
             }
             for (let local of localArr) {
                 if (local.idNumber == index) {
+                    local.title=sql.title;
                     local.prompt = sql.prompt; //修改本地对象的提示语
                     local.path = sql.path;  //修改本地对象的脚本访问路径
                     logd(local.title + " " + local.path);

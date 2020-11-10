@@ -61,8 +61,11 @@ function main() {
             screenManagers.PerformUnlock();//
             sleep(1000);
         }
-        myScript=getTextScript(target.path);
-        exec_Script(myScript);
+          myScript=getTextScript(target.path);
+          exec_Script(myScript);
+
+        sleep(100000);
+
 
         if (endTime<=new Date()) {
             toastLog(target.title + "时间到结束!")
@@ -71,12 +74,6 @@ function main() {
         }
 
     });
-
-
-    toastLog("我是更新前的程序");
-    
-    
-    // ShowObjProperty(image);
 
 }
 
@@ -107,19 +104,12 @@ function exec_Script(scriptText) {
 
 
 
-// try {
+
 main();
-//test();
-// } catch (e) {
-//    logd(e.message);
-// } finally {
-//     if (screenManagers) {
-//         screenManagers.onDestroy();//一些释放工作
-//     }
-// }
 
 function  test(){
-   
-   updateConfig("commItems","")
+
+    var result = closeCtrlWindow();
+    toastLog("是否展示:"+result);
 
 }

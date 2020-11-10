@@ -176,8 +176,6 @@ function forget_drawing_layout(popwd) {
 }
 
 
-
-
 // 图片按钮的缩放
 function viewScale(view) {
 

@@ -126,7 +126,7 @@ function initCommListView() {
         //设置参数
         itemView.setViewValue('title', item.idNumber+"."+item.title);
         itemView.setViewValue('summary', (item.summary.indexOf("时间")==-1) ? (item.summary = "时间:,时长:,次数:") : item.summary);
-        itemView.setViewValue('done', (item.done==false||item.done==0)?false:true);
+        itemView.setViewValue('done', item.done==true?true:false);
         itemView.setViewValue('idNumber', item.idNumber);
         itemView.setViewValue('comm_prompt', item.prompt ? item.prompt : "");
         itemView.setViewValue('comm_addInfo', item.addInfo ? item.addInfo : "");
