@@ -46,14 +46,14 @@ function ShowObjProperty( obj ) {
     for ( var p in obj ){
         // 方法
         if ( typeof( obj[p] ) === "function" ){
-            attributes += '方法：' + p + '\r\n'
+            methods += '方法：' + p + '\r\n'
             // obj[p]();
         } else {
             // p 为属性名称，obj[p]为对应属性的值
-            methods += '属性：' + p + " = " + obj[p] + "\r\n" ;
+            attributes += '属性：' + p + " = " + obj[p] + "\r\n" ;
         }
     }
     // 最后显示所有的属性
-    logd("方法"+attributes);
-    logd("属性"+methods ) ;
+    logd("方法"+methods);
+    logd("属性"+attributes ) ;
 }

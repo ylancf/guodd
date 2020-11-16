@@ -125,7 +125,7 @@ function initCommListView() {
     list.setContentView('comJavaScriptList.xml', (itemView, item, position) => {
         //设置参数
         itemView.setViewValue('title', item.idNumber+"."+item.title);
-        itemView.setViewValue('summary', (item.summary.indexOf("时间")==-1) ? (item.summary = "时间:,时长:,次数:") : item.summary);
+        itemView.setViewValue('summary', (item.summary==null||item.summary.indexOf("时间")==-1) ? (item.summary = "时间:,时长:,次数:") : item.summary);
         itemView.setViewValue('done', item.done==true?true:false);
         itemView.setViewValue('idNumber', item.idNumber);
         itemView.setViewValue('comm_prompt', item.prompt ? item.prompt : "");

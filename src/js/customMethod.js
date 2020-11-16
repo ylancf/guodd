@@ -86,7 +86,8 @@ function getScreenWidthHeight(){
     activity.getWindowManager().getDefaultDisplay().getMetrics(dm);//获取尺寸相关信息 没有这句代码w将为0
     let w = dm.widthPixels;//获得屏幕宽度
     let h=dm.heightPixels;
-
+    // let w=device.getScreenWidth();
+    // let h=device.getScreenHeight();
     return {width:w,height:h}
 }
 

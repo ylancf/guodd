@@ -26,7 +26,7 @@ importClass(android.graphics.drawable.StateListDrawable);
 importClass(android.graphics.drawable.GradientDrawable);
 importClass(android.view.animation.OvershootInterpolator);
 importClass(android.view.animation.AnticipateInterpolator);
-importClass(android.support.v4.graphics.drawable.DrawableCompat);
+//importClass(android.support.v4.graphics.drawable.DrawableCompat);
 
 
 var activity = ui.getActivity(); //获取当前的Activity
@@ -91,14 +91,21 @@ function main() {
     let viewpager = activity.findViewById(getResourceID('vp', 'id'));
     viewpager.setOnPageChangeListener({
         onPageSelected: function (index) {
-            let _view = the_label.getChildAt(0);
-            if (_view.getChildAt(index).getChildAt(2).getText() == "我的信息") {
-                js_start_BT.setVisibility(4);
+            let tabTitle=the_label.getChildAt(0).getChildAt(index).getChildAt(2); //获得名称
+            if (tabTitle.getText() == "我的信息") {
+                js_start_BT.setVisibility(8);
             } else {
                 js_start_BT.setVisibility(0);
             }
+            //改掉bar名称  ec5.7 可用 5.8报错
+            activity.findViewById(getResourceID('tv_title', 'id')).setText(tabTitle.getText());//修改标题栏内容
+            the_label.getTabAt(index).select(); //改变选择
         }
     });
+
+
+
+
     //判断显示那种界面
     if (readConfigBoolean("loginState")) {//如果有效
         login_on(); //开始进入
@@ -191,6 +198,7 @@ function login_on() {
     v1.removeView(v2);
     v1.addView(v2);
 
+
     ui.layout("公共脚本", "intr.xml");
     ui.layout("我的信息", "myselfInfo.xml");
     //导入模块
@@ -200,6 +208,57 @@ function login_on() {
 
     execScript(2, readResString('js/myInfo.js'));
     myPopActivity = myForgetActivity =httpProgressActivity= null; //去掉已经不需要的对象
+
+    //设置开始按钮的位置
+    let params=js_start_BT.getLayoutParams();
+    params.setMargins(40,40,40,80);
+    js_start_BT.setLayoutParams(params);
+
+
+
+    //移动顶部导航栏 做成底部导航栏
+    let the_label=activity.findViewById(getResourceID('tl', 'id'));
+    let tl_parent = the_label.getParent();
+    tl_parent.removeView(the_label);
+    tl_parent.getParent().addView(the_label);
+    let tl_param=the_label.getLayoutParams();
+    tl_param.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, -1);
+    tl_param.height=-2;
+    the_label.setLayoutParams(tl_param);
+    the_label.setPadding(0,5,0,5);//
+    the_label.setBackgroundColor(Color.parseColor('#CCCCCC')); //设置导航背景色
+    the_label.setSelectedTabIndicatorHeight(0); //取消下划线
+
+    //创建bitmap对象数组
+    let bpArr=[getResDrawable("ic_looks_1_black_48dp"),
+        getResDrawable("ic_looks_2_black_48dp"),
+        getResDrawable("ic_looks_3_black_48dp")];
+    bpArr[0].setTint(Color.parseColor("#DD0000"));//设置红色(默认项的颜色)
+
+
+
+    //设置导航图片
+    //let imagePara=new LinearLayout.LayoutParams(dp2px(60),dp2px(60));
+    for (let i=0;i<the_label.getTabCount();i++){
+        the_label.getChildAt(0).getChildAt(i).getChildAt(0).setVisibility(0); //设置图片可见
+        the_label.getChildAt(0).getChildAt(i).getChildAt(0).setImageDrawable(bpArr[i]);  //
+        //tl.getChildAt(0).getChildAt(i).getChildAt(0).setLayoutParams(imagePara);  //设置图片大小
+        //tl.getChildAt(0).getChildAt(i).getChildAt(2).setVisibility(8); //设置文字不可见
+    }
+
+    //监听事件
+    the_label.addOnTabSelectedListener({
+        onTabSelected(_tab){
+            ui.run(0,()=>{bpArr[_tab.getPosition()].setTint(Color.parseColor("#DD0000"));}) //设置图片颜色
+        },
+        onTabUnselected(_tab){
+            ui.run(0,()=>{bpArr[_tab.getPosition()].setTint(Color.parseColor("#222222"));}) //恢复图片颜色
+        }
+    });
+
+
+
+
 
 }
 
@@ -330,9 +389,7 @@ function CreateImageButtonNext(btn, color1, color2,_widthPro) {
 //给注册界面渲染
 function re_drawing_layout(popwd) {
     //获取屏幕宽度
-    var dm = new android.util.DisplayMetrics();//获得显示度量
-    activity.getWindowManager().getDefaultDisplay().getMetrics(dm);//获取尺寸相关信息 没有这句代码w将为0
-    var w = dm.widthPixels;//获得屏幕宽度
+    var w= device.getScreenWidth();
     var re_layout = ui.findViewByTag("register_layout");
     var params = re_layout.getLayoutParams();//获取 register_layout的参数
     params.width = w * 0.8;//宽度设置为80%
@@ -421,9 +478,7 @@ function re_drawing_layout(popwd) {
 
 //对登录界面的输入框进行渲染
 function drawingEdit() {
-    var dm = new android.util.DisplayMetrics();//获得显示度量
-    activity.getWindowManager().getDefaultDisplay().getMetrics(dm);//获取尺寸相关信息 没有这句代码w将为0
-    var w = dm.widthPixels;//获得屏幕宽度
+    var w = device.getScreenWidth();//获得屏幕宽度
     var user_root_view = ui.findViewByTag('login_edt_layout');
     var user_input = ui.findViewByTag("userName");
     var pw_input = ui.findViewByTag("password");
@@ -701,7 +756,10 @@ function dp2px(dp) {
 function px2dp(px) {
     return Math.floor(px / scale + 0.5);
 };
-
+//获得图片
+function getResDrawable(name) {
+    return    new BitmapDrawable(context.getResources() ,ui.resResAsBitmap('drawable/' + name + '.png'));
+}
 
 //公共脚本的匹配用于两个数组的包含 sqlArr 包含 localArr
 // 返回 合并的数组
@@ -802,7 +860,6 @@ function updateApk(url){
 
             },
             finish:function (){
-
                 customDialog.dismiss();
                 //打开安装包界面
                 let m ={
@@ -817,11 +874,9 @@ function updateApk(url){
 
         confirm('发现新版本,现在更新?').then(value=>{
             if(value){
-                loadFinish=false;
                 loadDownBar("下载中..",true).then(value=>{
                     if(!value){
                         obj.LoadDownStop();
-                        loadFinish=true;
                     }
                 });
                 obj.downloadAPK(path,url);

@@ -16,23 +16,6 @@ ImageWrapper.prototype.captureScreenEx = function (bounds) {
 
 
 
-    // var imgCopy;
-    // let thred= execSync(function() {
-    //     //lock.lock();
-    //     if(bounds){
-    //         var  img = this.captureScreen(bounds.left,bounds.top,bounds.right,bounds.bottom);
-    //     }else{
-    //         var  img = this.captureFullScreen()
-    //     }
-    //     logd("img"+img);
-    //     imgCopy.copy(img);
-    //     logd("imgcopy"+imgCopy);
-    //     sleep(10000);
-    //     img.recycle();//回收图片
-    //     //lock.unlock();
-    // },1000);
-    // logd("返回")
-    // return imgCopy;
 
 
 };

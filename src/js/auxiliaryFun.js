@@ -3,17 +3,17 @@
 
 let excluisiver = {};
 let findCloseBT, dingWei;
-let socket_ip = socket_name = socket_port = "";
-var wait_Time = 7;  //特殊检测次数
+let socket_name = socket_port = "";
+let wait_Time = 7;  //特殊检测次数
+
+//过滤app自身特有事件
+excluisiver.FilterFun=new Function();
+
+
 //监测使用 次依赖于sim_Slide文件
 excluisiver.opposeUnexpected = function (opt) {
 
-
     toastLog("进行环境监测");
-
-
-
-
 
     thread.execAsync(function () {
         var commBT;
@@ -51,7 +51,7 @@ excluisiver.opposeUnexpected = function (opt) {
                 localClick(commBT);
             }
 
-            if (textMatch("^测试程序.*正在尝试开启.*").exist()) {
+            if (textMatch("^小飞象.*正在尝试开启.*").exist()) {
                 clickable().text("允许").getOneNodeInfo(100).click();
             }
 
@@ -89,13 +89,8 @@ excluisiver.opposeUnexpected = function (opt) {
                 regularClick(power_App_Cancel, "权限设置", 2000);
             }
 
-            switch (opt) {
+            excluisiver.FilterFun();
 
-                case "旅行世界":
-                    travelWorld();
-                    break;
-
-            }
             sleep(100);
         }
     })
@@ -110,33 +105,6 @@ excluisiver.opposeUnexpected = function (opt) {
 }
 
 
-//旅行世界
-
-function travelWorld() {
-    var commBT;
-    if (text("怎么玩").exist()) {
-        sleep(500, 1300);
-        localClick(text("关闭").getOneNodeInfo(0));
-        sleep(800, 1500);
-    }
-
-
-    if (commBT = idMatch(".*img_close.*").getOneNodeInfo(0), commBT) {
-        localClick(commBT);
-    }
-
-    //合成狗使用的 防止被关闭
-    if (bounds(140, 1038, 1000, 1528).id("com.jiayouya.travel:id/btn").exist()) {
-        sleep(5000);
-    }
-
-
-    if (!textMatch("^转盘券|看视频.*|看广告翻倍|可提现|立即获得.*收益|扩容").exist() || (textMatch("^转盘券").exist() && !rotary_Table)) {
-
-        TryCloseGG();
-    }
-
-}
 
 
 //寻找常规广告并关闭
