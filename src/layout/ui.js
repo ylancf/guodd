@@ -143,7 +143,7 @@ function judge_availability(user, pw) {
         });
 
         httpProgressActivity.postShow(function () {
-            let url = "http://47.98.194.121:80/login";
+            let url = "http://114.215.185.71:80/login";
             let pa = {"username": user.toString() + "", "password": pw.toString() + ""};
             let httpResult = http.httpPost(url, pa, null, 5 * 1000, {"Content-Type": "application/json"});
             loge("result ->     " + httpResult);
@@ -167,7 +167,7 @@ function register_account(nickname, userName, password, question, answer) {
     });
 
     httpProgressActivity.postShow(function () {
-        let url = "http://47.98.194.121:80/system/user/a/register";
+        let url = "http://114.215.185.71:80/system/user/a/register";
         let pa = {
             "nickName": nickname,
             "userName": userName,
@@ -215,7 +215,6 @@ function login_on() {
     js_start_BT.setLayoutParams(params);
 
 
-
     //移动顶部导航栏 做成底部导航栏
     let the_label=activity.findViewById(getResourceID('tl', 'id'));
     let tl_parent = the_label.getParent();
@@ -230,10 +229,10 @@ function login_on() {
     the_label.setSelectedTabIndicatorHeight(0); //取消下划线
 
     //创建bitmap对象数组
-    let bpArr=[getResDrawable("ic_looks_1_black_48dp"),
-        getResDrawable("ic_looks_2_black_48dp"),
-        getResDrawable("ic_looks_3_black_48dp")];
-    bpArr[0].setTint(Color.parseColor("#DD0000"));//设置红色(默认项的颜色)
+    let bpArr=[getResDrawable("mainhome"),
+        getResDrawable("commhot"),
+        getResDrawable("myself")];
+
 
 
 
@@ -242,17 +241,22 @@ function login_on() {
     for (let i=0;i<the_label.getTabCount();i++){
         the_label.getChildAt(0).getChildAt(i).getChildAt(0).setVisibility(0); //设置图片可见
         the_label.getChildAt(0).getChildAt(i).getChildAt(0).setImageDrawable(bpArr[i]);  //
+        the_label.getChildAt(0).getChildAt(i).getChildAt(2).setTextColor(Color.parseColor("#528EF5"));//设置字体颜色
         //tl.getChildAt(0).getChildAt(i).getChildAt(0).setLayoutParams(imagePara);  //设置图片大小
         //tl.getChildAt(0).getChildAt(i).getChildAt(2).setVisibility(8); //设置文字不可见
     }
-
+    //初始化设置
+    bpArr[0].setTint(Color.parseColor("#FF3300"));//设置红色(默认项的颜色)
+    the_label.getChildAt(0).getChildAt(0).getChildAt(2).setTextColor(Color.parseColor("#FF3300")); //设置字体颜色
     //监听事件
     the_label.addOnTabSelectedListener({
         onTabSelected(_tab){
-            ui.run(0,()=>{bpArr[_tab.getPosition()].setTint(Color.parseColor("#DD0000"));}) //设置图片颜色
+            ui.run(0,()=>{bpArr[_tab.getPosition()].setTint(Color.parseColor("#FF3300"));}) //设置图片颜色
+            the_label.getChildAt(0).getChildAt(_tab.getPosition()).getChildAt(2).setTextColor(Color.parseColor("#FF3300"));
         },
         onTabUnselected(_tab){
-            ui.run(0,()=>{bpArr[_tab.getPosition()].setTint(Color.parseColor("#222222"));}) //恢复图片颜色
+            ui.run(0,()=>{bpArr[_tab.getPosition()].setTint(Color.parseColor("#528EF5"));}) //恢复图片颜色
+            the_label.getChildAt(0).getChildAt(_tab.getPosition()).getChildAt(2).setTextColor(Color.parseColor("#528EF5"));
         }
     });
 
@@ -827,7 +831,7 @@ function checkApkVersion(){
 
     progressAct.postShow(function () {
         let testData =  JSON.parse(readResString("package.txt"));
-        let  getHttpUrl = "http://47.98.194.121:80/system/ver/upgradeDown?version="+testData.version
+        let  getHttpUrl = "http://114.215.185.71:80/system/ver/upgradeDown?version="+testData.version
         let getHttpResult = http.httpGetDefault(getHttpUrl, 5 * 1000, {"User-Agent": "test"});
         logd("result ->     " + getHttpResult);
         return JSON.parse(getHttpResult);

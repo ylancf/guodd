@@ -41,7 +41,7 @@ function initCommConfig(name) {
     });
 
     progressAct.postShow(function () {
-        let getHttpUrl = "http://47.98.194.121:80/system/info/list"
+        let getHttpUrl = "http://114.215.185.71:80/system/info/list"
         let getHttpResult = http.httpGetDefault(getHttpUrl, 5 * 1000, {"User-Agent": "test"});
         logd("result ->     " + getHttpResult);
         if(!getHttpResult) {

@@ -3,12 +3,10 @@
 
 let excluisiver = {};
 let findCloseBT, dingWei;
-let socket_name = socket_port = "";
 let wait_Time = 7;  //特殊检测次数
 
 //过滤app自身特有事件
 excluisiver.FilterFun=new Function();
-
 
 //监测使用 次依赖于sim_Slide文件
 excluisiver.opposeUnexpected = function (opt) {

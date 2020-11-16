@@ -87,7 +87,7 @@ function forget_drawing_layout(popwd) {
             });
 
             httpProgressActivity.postShow(function () {
-                var url = "http://47.98.194.121:80/getUserQuestion";
+                var url = "http://114.215.185.71:80/getUserQuestion";
                 var pa = {"userName": accountStr};
                 var httpResult = http.httpPost(url, pa, null, 5 * 1000, {"Content-Type": "application/json"});
                 loge("result ->     " + httpResult);
@@ -126,7 +126,7 @@ function forget_drawing_layout(popwd) {
                 });
                   //发送数据库
                 httpProgressActivity.postShow(function () {
-                    var url = "http://47.98.194.121:80/checkMyAnswer";
+                    var url = "http://114.215.185.71:80/checkMyAnswer";
                     var pa = {"userName": accountStr,"answer": answer_ed.getText().toString()+""};
                     var httpResult = http.httpPost(url, pa, null, 5 * 1000, {"Content-Type": "application/json"});
                     loge("result ->     " + httpResult);
@@ -157,7 +157,7 @@ function forget_drawing_layout(popwd) {
                     });
                     //发送数据库
                     httpProgressActivity.postShow(function () {
-                        var url = "http://47.98.194.121:80/resetPwdByQA";
+                        var url = "http://114.215.185.71:80/resetPwdByQA";
                         var pa = {"userName": accountStr,"password": new_password};
                         var httpResult = http.httpPost(url, pa, null, 5 * 1000, {"Content-Type": "application/json"});
                         loge("result ->     " + httpResult);
