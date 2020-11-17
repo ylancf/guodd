@@ -28,7 +28,7 @@ var screenManagers;
 var addInfo="";
 var startTime,endTime,runTimes;
 var  myScript="",myScriptNext="";
-
+var oScreenWH=getScreenWidthHeight();
 function main() {
     //获取屏幕管理对象
     initScreenManagers()
@@ -48,10 +48,10 @@ function main() {
 
 
     list.forEach(function (target){
-        addInfo = target.addInfo;
-        startTime=target.startTime;
-        endTime=target.endTime;
-        runTimes=target.runTimes;
+        addInfo = target.addInfo;   //默认为""字符
+        startTime=target.startTime; //用户没输入值时默认是当前时间
+        endTime=target.endTime;   //用户没输入时默认无限期
+        runTimes=target.runTimes; //用户没输入时默认是-1
 
         //加一个sleep 待定时间 执行
         if(new Date()<startTime){
@@ -93,7 +93,7 @@ function exec_Script(scriptText) {
 
      let _loop=true;
     logd("开始执行网络脚本");
-
+    excluisiver.FilterFun=new Function(); //防止上一个的方法影响下一个脚本
     scriptText="try {"+scriptText+"}catch (e){ toastLog(e.message);} finally {_loop=false;}"
     execScript(2, scriptText);
 

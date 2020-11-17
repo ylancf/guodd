@@ -126,10 +126,9 @@ function judge_availability(user, pw) {
         toast("账号或密码不正确!");
         return false;
     } else {
+
         httpProgressActivity.on("hide", function () {
-
             let resultInfo = httpProgressActivity.result;
-
             if (resultInfo.code == 200) {
                 ui.saveAllConfig(); //保存所有的值
                 updateConfig("loginState", true); //保存为登录状态
@@ -179,7 +178,6 @@ function register_account(nickname, userName, password, question, answer) {
         let httpResult = http.httpPost(url, pa, null, 5 * 1000, {"User-Agent": "application/json"});
         loge("result ->     " + httpResult);
         return JSON.parse(httpResult);
-        ;
     });
 }
 
@@ -198,14 +196,11 @@ function login_on() {
     v1.removeView(v2);
     v1.addView(v2);
 
-
     ui.layout("公共脚本", "intr.xml");
     ui.layout("我的信息", "myselfInfo.xml");
     //导入模块
     execScript(2, readResString('js/taskObject.js'));
-
     execScript(2, readResString('js/commObject.js'));
-
     execScript(2, readResString('js/myInfo.js'));
     myPopActivity = myForgetActivity =httpProgressActivity= null; //去掉已经不需要的对象
 
@@ -224,7 +219,7 @@ function login_on() {
     tl_param.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, -1);
     tl_param.height=-2;
     the_label.setLayoutParams(tl_param);
-    the_label.setPadding(0,5,0,5);//
+    the_label.setPadding(0,5,0,0);//
     the_label.setBackgroundColor(Color.parseColor('#CCCCCC')); //设置导航背景色
     the_label.setSelectedTabIndicatorHeight(0); //取消下划线
 
@@ -233,17 +228,16 @@ function login_on() {
         getResDrawable("commhot"),
         getResDrawable("myself")];
 
-
-
-
     //设置导航图片
     //let imagePara=new LinearLayout.LayoutParams(dp2px(60),dp2px(60));
     for (let i=0;i<the_label.getTabCount();i++){
-        the_label.getChildAt(0).getChildAt(i).getChildAt(0).setVisibility(0); //设置图片可见
-        the_label.getChildAt(0).getChildAt(i).getChildAt(0).setImageDrawable(bpArr[i]);  //
-        the_label.getChildAt(0).getChildAt(i).getChildAt(2).setTextColor(Color.parseColor("#528EF5"));//设置字体颜色
-        //tl.getChildAt(0).getChildAt(i).getChildAt(0).setLayoutParams(imagePara);  //设置图片大小
-        //tl.getChildAt(0).getChildAt(i).getChildAt(2).setVisibility(8); //设置文字不可见
+        let vComm=the_label.getChildAt(0).getChildAt(i);
+        vComm.getChildAt(0).setVisibility(0); //设置图片可见
+        vComm.getChildAt(0).setImageDrawable(bpArr[i]);  //
+        vComm.getChildAt(2).setTextColor(Color.parseColor("#528EF5"));//设置字体颜色
+        vComm.getChildAt(2).setTextSize(dp2px(4));//设置字体颜色
+        //vComm.getChildAt(0).setLayoutParams(imagePara);  //设置图片大小
+        //vComm.getChildAt(2).setVisibility(8); //设置文字不可见
     }
     //初始化设置
     bpArr[0].setTint(Color.parseColor("#FF3300"));//设置红色(默认项的颜色)
@@ -259,10 +253,6 @@ function login_on() {
             the_label.getChildAt(0).getChildAt(_tab.getPosition()).getChildAt(2).setTextColor(Color.parseColor("#528EF5"));
         }
     });
-
-
-
-
 
 }
 

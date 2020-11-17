@@ -1,97 +1,97 @@
 // 10.27
-
-
 let excluisiver = {};
 let findCloseBT, dingWei;
 let wait_Time = 7;  //特殊检测次数
-
+let tid=null;
 //过滤app自身特有事件
 excluisiver.FilterFun=new Function();
 
-//监测使用 次依赖于sim_Slide文件
-excluisiver.opposeUnexpected = function (opt) {
+//监测使用 对一些意外情况的处理   参数 fun 是一个方法 根据app自定
+excluisiver.opposeUnexpected = function (fun) {
 
+    excluisiver.FilterFun=fun||new Function();
     toastLog("进行环境监测");
+    if(tid==null){
+        tid=  thread.execAsync(function () {
+            let commBT;
+            //循环持续监测
+            while (true) {
 
-    thread.execAsync(function () {
-        var commBT;
-        //循环持续监测
-        while (true) {
-
-            if (text("以后再说").exist()) { //去除更新
-                sleep(500);
-                let tager = text("以后再说").getOneNodeInfo(10);
-                regularClick(tager, "以后再说");
-            }
-
-            if (textMatch(".*微信登录$").exist() && !idMatch(".*skip_btn").getOneNodeInfo(5000)) {
-                sleep(random(3300, 5100));
-                localClick(textMatch(".*微信登录.*").getOneNodeInfo(10));
-                wait_Time += 5;
-                sleep(random(1800, 2500));
-            }
-
-            if (textMatch("你的微信头像.*性别信息").exist()) {
-                if (commBT = text("同意").getOneNodeInfo(10), commBT) {
-                    commBT.click();
+                if (text("以后再说").exist()) { //去除更新
+                    sleep(500);
+                    let tager = text("以后再说").getOneNodeInfo(10);
+                    regularClick(tager, "以后再说");
                 }
 
-            }
-
-            if (bounds(0, 1550, 1080, 1920).clickable(true).text("安装").exist()) {
-                let closeBT = bounds(0, 1550, 1080, 1920).clickable().text("取消").getOneNodeInfo(10);
-                if (closeBT) {
-                    closeBT.click();
+                if (textMatch(".*微信登录$").exist() && !idMatch(".*skip_btn").getOneNodeInfo(5000)) {
+                    sleep(random(3300, 5100));
+                    localClick(textMatch(".*微信登录.*").getOneNodeInfo(10));
+                    wait_Time += 5;
+                    sleep(random(1800, 2500));
                 }
-            }
 
-            if (commBT = clickable(true).textMatch("等待WLAN").getOneNodeInfo(10), commBT) {
-                localClick(commBT);
-            }
+                if (textMatch("你的微信头像.*性别信息").exist()) {
+                    if (commBT = text("同意").getOneNodeInfo(10), commBT) {
+                        commBT.click();
+                    }
 
-            if (textMatch("^小飞象.*正在尝试开启.*").exist()) {
-                clickable().text("允许").getOneNodeInfo(100).click();
-            }
-
-            if (text("等待").exist()) {
-                let bt = text("等待").getOneNodeInfo(10);
-                if (bt) {
-                    bt.click();
                 }
-                sleep(1000);
+
+                if (bounds(0, oScreenWH.height*3/4, oScreenWH.width, oScreenWH.height).clickable(true).text("安装").exist()) {
+                    let closeBT = bounds(0, oScreenWH.height*3/4, oScreenWH.width, oScreenWH.height).clickable().text("取消").getOneNodeInfo(10);
+                    if (closeBT) {
+                        closeBT.click();
+                    }
+                }
+
+                if (commBT = clickable(true).textMatch("等待WLAN").getOneNodeInfo(10), commBT) {
+                    localClick(commBT);
+                }
+
+                if (textMatch("^小飞象.*正在尝试开启.*").exist()) {
+                    clickable().text("允许").getOneNodeInfo(100).click();
+                }
+
+                if (text("等待").exist()) {
+                    let bt = text("等待").getOneNodeInfo(10);
+                    if (bt) {
+                        bt.click();
+                    }
+                    sleep(1000);
+                }
+
+                if (textMatch("^准备下载.*应用$").exist()) {
+                    localClick(clickable().text("取消").getOneNodeInfo(10));
+                }
+
+                if (!dingWei && textMatch("^要允许.*卫星.*定位.*").exist()) {
+                    clickable().textMatch("拒绝").click();
+                    dingWei = false;
+                }
+
+                if (textMatch("^我知道了$|^知道了$|^下次再说$").exist()) {
+                    sleep(500);
+                    let tager = textMatch("^我知道了$|^知道了$|^下次再说$").getOneNodeInfo(10);
+                    regularClick(tager, tager.text());
+                }
+
+                if (text("忽略").exist()) {
+                    sleep(500);
+                    let tager = text("忽略").getOneNodeInfo(10);
+                    regularClick(tager, "忽略");
+                }
+
+                if (text("权限设置").exist()) {
+                    let power_App_Cancel = text("取消").getOneNodeInfo(10);
+                    regularClick(power_App_Cancel, "权限设置", 2000);
+                }
+
+                excluisiver.FilterFun();
+
+                sleep(100);
             }
-
-            if (textMatch("^准备下载.*应用$").exist()) {
-                localClick(clickable().text("取消").getOneNodeInfo(10));
-            }
-
-            if (!dingWei && textMatch("^要允许.*卫星.*定位.*").exist()) {
-                clickable().textMatch("拒绝").click();
-                dingWei = false;
-            }
-
-            if (textMatch("^我知道了$|^知道了$|^下次再说$").exist()) {
-                sleep(500);
-                let tager = textMatch("^我知道了$|^知道了$|^下次再说$").getOneNodeInfo(10);
-                regularClick(tager, tager.text());
-            }
-
-            if (text("忽略").exist()) {
-                sleep(500);
-                let tager = text("忽略").getOneNodeInfo(10);
-                regularClick(tager, "忽略");
-            }
-
-            if (text("权限设置").exist()) {
-                var power_App_Cancel = text("取消").getOneNodeInfo(10);
-                regularClick(power_App_Cancel, "权限设置", 2000);
-            }
-
-            excluisiver.FilterFun();
-
-            sleep(100);
-        }
-    })
+        });
+    }
 
     for (let i = 0; i < wait_Time; i++) {
         sleep(2000);
@@ -109,9 +109,9 @@ excluisiver.opposeUnexpected = function (opt) {
 function TryCloseGG(checkText) {
 
     var target;
-    var centerPos = [540, 960];//屏幕中心点
+    var centerPos = [oScreenWH.width/2, oScreenWH.height/2];//屏幕中心点
     var distance = 0; //距离
-    var arr = bounds(0, 150, 1080, 1900).clickable(true).getNodeInfo(100);
+    var arr = bounds(0, 150, oScreenWH.width, oScreenWH.height).clickable(true).getNodeInfo(100);
     if(!arr){return ;}
     arr.forEach(element => {
         if (element.boundsEx().width() > 30 && element.boundsEx().width() < 170) {
@@ -183,7 +183,7 @@ excluisiver.GGTVCloseFun = function (regularMark, gg_delay, class_name) {
                     sleep(600);
                     //直接寻找x
                      removeNodeFlag(0);
-                    let try_Close_Arr = bounds(0, 10, 1080, 250).getNodeInfo(10);
+                    let try_Close_Arr = bounds(0, 10, oScreenWH.width, oScreenWH.height*0.15).getNodeInfo(10);
                     if(try_Close_Arr){
 
                         let tryCloseArr=try_Close_Arr.filter(function (w) {
@@ -206,7 +206,7 @@ excluisiver.GGTVCloseFun = function (regularMark, gg_delay, class_name) {
             removeNodeFlag(0);
             sleep(random(1000, 3000) + gg_delay);
             var X_Click = false;
-            var _arr = bounds(0, 0, 1080, 250).getNodeInfo(10);
+            var _arr = bounds(0, 0, oScreenWH.width, oScreenWH.height*0.15).getNodeInfo(10);
             if(_arr){
                 var arr= _arr.filter(function (w) {
                     let ratio = w.boundsEx().width() / w.boundsEx().height();
@@ -224,7 +224,7 @@ excluisiver.GGTVCloseFun = function (regularMark, gg_delay, class_name) {
             if (!X_Click) {
                 logd("未能成功退出广告,尝试中..");
                 removeNodeFlag(0);
-                let _arrTry = bounds(0, 0, 1080, 1920).getNodeInfo(10);
+                let _arrTry = bounds(0, 0, oScreenWH.width, oScreenWH.height).getNodeInfo(10);
                 if(_arrTry){
 
                    var arrTry= _arrTry.filter(function (w) {

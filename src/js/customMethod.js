@@ -81,13 +81,13 @@ function PermissionCheck(permisstionJson){
 
 //获得屏幕的宽高
 function getScreenWidthHeight(){
-    let activity = ui.getActivity(); //获取当前的Activity
-    let dm = new android.util.DisplayMetrics();//获得显示度量
-    activity.getWindowManager().getDefaultDisplay().getMetrics(dm);//获取尺寸相关信息 没有这句代码w将为0
-    let w = dm.widthPixels;//获得屏幕宽度
-    let h=dm.heightPixels;
-    // let w=device.getScreenWidth();
-    // let h=device.getScreenHeight();
+    // let activity = ui.getActivity(); //获取当前的Activity
+    // let dm = new android.util.DisplayMetrics();//获得显示度量
+    // activity.getWindowManager().getDefaultDisplay().getMetrics(dm);//获取尺寸相关信息 没有这句代码w将为0
+    // let w = dm.widthPixels;//获得屏幕宽度
+    // let h=dm.heightPixels;
+     let w=device.getScreenWidth();
+     let h=device.getScreenHeight();
     return {width:w,height:h}
 }
 
@@ -166,10 +166,6 @@ function check_Version(uVersion){
     //     return  false;
     // }
 }
-
-
-
-
 
 
 
@@ -267,4 +263,15 @@ function closeApp(pkgName) {
 }
 
 
+//判断是否存在app 并打开app  返回值 false 不存在 true 存在
+//参数 包名  app名
+function openApp(pkgName,appName){
+    appName=appName||pkgName;
+    let commVar = utils.isAppExist(pkgName);
+    if (!commVar) {
+        toastLog(appName + "未安装!");
+        exit();
+    }
+    return  utils.openApp(pkgName);
+}
 
