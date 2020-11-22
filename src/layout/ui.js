@@ -261,7 +261,7 @@ function main2() {
 
 
     head_bar.setVisibility(8);//去掉头部布局  这些name可以通过节点获取
-    the_label.setVisibility(8);//去掉标签(多标签)
+    the_label.setVisibility(8);//去掉标签(多标签) 8 彻底隐藏不占位置 4隐藏占位置  0显示
     js_start_BT.setVisibility(4);//去掉开始按钮
 
     drawingEdit(); //一些输入框渲染

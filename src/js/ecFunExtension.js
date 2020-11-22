@@ -11,13 +11,6 @@ ImageWrapper.prototype.captureScreenEx = function (bounds) {
         var  img = this.captureFullScreen()
     }
      return  img;
-
-
-
-
-
-
-
 };
 
 //增加boundsEx()方法
@@ -43,6 +36,22 @@ S.prototype.exist=function (){
     }else{
         return false;
     }
-
-
 }
+
+
+S.prototype.getOneInfo=function (timeout){
+    let result=null,_time=timeout|0;
+    if(_time<=10){
+        result=this.getOneNodeInfo(_time)
+    }else{
+        let dateTime=new Date().getTime()+_time;
+        do {
+            result=this.getOneNodeInfo(10);
+            if(!result){break;}
+        }while (new Date().getTime()<dateTime)
+    }
+    return result;
+}
+
+
+

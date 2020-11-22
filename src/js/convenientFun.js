@@ -12,15 +12,13 @@
 * fun  方法 默认为 textMtch   clz  text id 都可以
 *
 * */
-
-
 regularClick = function (target, checkRegular, addTime, fun , upLimit, downLimit) {
     if(!fun){fun=textMatch;}
     if (!target) { toastLog("要点击的目标不存在"); return false; }
     addTime = addTime || 0;
-    var temp = checkFun(checkRegular);//记录页面变化用
+    let temp = checkFun(checkRegular);//记录页面变化用
     sleep(random(800, 1500))
-    var i = 0,tre=false;
+    let i = 0,tre=false;
     do {
         tre= target.click();
         sleep(3000 + addTime);
@@ -40,10 +38,10 @@ regularClick = function (target, checkRegular, addTime, fun , upLimit, downLimit
 //用于列举对象的 属性 和方法
 function ShowObjProperty( obj ) {
     // 用来保存所有的属性名称和值
-    var attributes = '' ;
-    var methods = ''
+    let attributes = '' ;
+    let methods = ''
     // 开始遍历
-    for ( var p in obj ){
+    for ( let p in obj ){
         // 方法
         if ( typeof( obj[p] ) === "function" ){
             methods += '方法：' + p + '\r\n'
@@ -56,4 +54,33 @@ function ShowObjProperty( obj ) {
     // 最后显示所有的属性
     logd("方法"+methods);
     logd("属性"+attributes ) ;
+}
+
+//滑动方法
+function rnd_moves() {
+    let qy = oScreenWH.height - random(300, 350)
+    let zx = oScreenWH.width / 2 - random(80, 130)
+    let zy = random(300, 350)
+    let time = random(100, 150)
+    let time1 = random(100, 150)
+    let times = random(1200, 1500)
+    rnd_Swipe(oScreenWH.width / 2, qy, zx, zy, time, time1, times)
+}
+
+
+//如果可以无节点点击则无节点 否则普通点击 无指针不成功则普通点击
+function localClickEx(node) {
+    if (!node) {
+        logd("无法点击:" + node);
+        return false;
+    }
+    let result = false;
+    if (node.clickable) {
+        result = node.clickEx();
+    }
+    if(!result){
+        result = node.click();
+    }
+    logd("点击结果:" + result);
+    return result;
 }

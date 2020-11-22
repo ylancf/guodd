@@ -234,6 +234,15 @@ function  localClick(_node){
 
 //关闭app  参数 包名
 function closeApp(pkgName) {
+
+    //代理模式的关闭
+    if(isAgentMode()){
+        logd("使用代理模式关闭");
+        let r = shell.stopApp(pkgName);
+        if(r){ return  r;}
+    }
+
+
     let intent = new Intent();
     intent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
     intent.setData(Uri.parse("package:" + pkgName));
