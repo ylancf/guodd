@@ -97,8 +97,12 @@ function main() {
             } else {
                 js_start_BT.setVisibility(0);
             }
-            //改掉bar名称  ec5.7 可用 5.8报错
-            activity.findViewById(getResourceID('tv_title', 'id')).setText(tabTitle.getText());//修改标题栏内容
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                //改掉bar名称  ec5.7 可用 5.8报错
+                activity.findViewById(getResourceID('tv_title', 'id')).setText(tabTitle.getText());//修改标题栏内容
+            }
+
             the_label.getTabAt(index).select(); //改变选择
         }
     });
@@ -187,7 +191,12 @@ function login_on() {
 
     //展示操作界面
     ui.findViewByTag('login_ac').setVisibility(8);//隐藏登录界面
-    activity.findViewById(getResourceID('tv_title', 'id')).setText("我的应用");//改掉名称
+
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {  //ec5.8版本后 只有api>=26的能使用这个方法
+        activity.findViewById(getResourceID('tv_title', 'id')).setText("我的应用");//改掉名称
+    }
+
     activity.findViewById(getResourceID('right_header_iv3', 'id')).setVisibility(8);//隐藏云控;
     activity.findViewById(getResourceID('right_header_iv2', 'id')).setVisibility(8);//隐藏远程调试
     //移动设置按钮的位置
@@ -527,7 +536,6 @@ function setEditTextType(inputView, _type) {
     });
 
 }
-
 
 //获取内置资源ID
 function getResourceID(name, type) {

@@ -234,14 +234,12 @@ function  localClick(_node){
 
 //关闭app  参数 包名
 function closeApp(pkgName) {
-
     //代理模式的关闭
     if(isAgentMode()){
         logd("使用代理模式关闭");
         let r = shell.stopApp(pkgName);
         if(r){ return  r;}
     }
-
 
     let intent = new Intent();
     intent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
@@ -272,6 +270,8 @@ function closeApp(pkgName) {
 }
 
 
+
+
 //判断是否存在app 并打开app  返回值 false 不存在 true 存在
 //参数 包名  app名
 function openApp(pkgName,appName){
@@ -284,3 +284,24 @@ function openApp(pkgName,appName){
     return  utils.openApp(pkgName);
 }
 
+
+
+//设置截止日期,过期无法执行
+function setOverDate(outTime,setMonth,setDay,setHours){
+    let date=new Date();
+    if(setHours){
+        date.setHours(setHours);
+    }
+    if(setMonth){
+        date.setMonth(setMonth);
+    }
+    if(setDay){
+        date.setDate(setDay);
+    }
+
+    if((new Date().getTime()-date.getTime())>outTime){
+        toastLog("已经过时无法使用");
+        exit();
+    }
+
+}

@@ -1,26 +1,17 @@
 package com.plugin.jPrlGSPKhr;
 
 import android.content.Context;
-
-
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
+import android.os.Build;
 
 
 public class PluginClz {
 
     public String test(){
 
-        CountDownLatch cdl = new CountDownLatch(3);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
-        try {
-            cdl.await(4000, java.util.concurrent.TimeUnit.SECONDS);
-            // 继续执行下面的逻辑...(略)
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
+
 ////           System.out.println("--- test method");
          return "我是测试方法";
     };

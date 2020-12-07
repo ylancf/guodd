@@ -111,14 +111,14 @@ function TryCloseGG(checkText) {
     var target;
     var centerPos = [oScreenWH.width/2, oScreenWH.height/2];//屏幕中心点
     var distance = 0; //距离
-    var arr = bounds(0, 150, oScreenWH.width, oScreenWH.height).clickable(true).getNodeInfo(100);
+    var arr = bounds(0, 150, oScreenWH.width, oScreenWH.height).clickable(true).getNodeInfo(0);
     if(!arr){return ;}
     arr.forEach(element => {
         if (element.boundsEx().width() > 30 && element.boundsEx().width() < 170) {
             let this_width = element.boundsEx().width()
             let this_height = element.boundsEx().height()
-            var pointX = this_width / 2;
-            var pointY = this_height / 2;
+            let pointX = this_width / 2;
+            let pointY = this_height / 2;
             let ratio = this_width / this_height;
             if (ratio < 1.1 && ratio > 0.9) {
                 //差距
@@ -137,7 +137,7 @@ function TryCloseGG(checkText) {
         } else {
             if (findCloseBT.depth == target.depth) {
                 sleep(random(400, 550));
-                localClick(target);
+                localClickEx(target);
                 sleep(200);
             } else {
                 findCloseBT = target;
@@ -160,13 +160,9 @@ excluisiver.GGTVCloseFun = function (regularMark, gg_delay, class_name) {
     let cdl = new java.util.concurrent.CountDownLatch(1); //倒数计数的锁 线程通信 当倒数到0时触发事件
 
     thread.execAsync(function () {
-
         toastLog("进入广告");
-
         sleep(10000);
-
         try {
-
             //寻找时间框
             for (let i = 0; i < 42; i++) {
                 var time = clzMatch("android.widget.TextView|android.view.View").bounds(10, 20, 300, 300).getOneNodeInfo(10);
@@ -195,8 +191,6 @@ excluisiver.GGTVCloseFun = function (regularMark, gg_delay, class_name) {
                             gg_delay = 0; //已经找到x 就不需要延迟了
                             break;
                         }
-
-
                     }
 
                 }
@@ -283,22 +277,20 @@ excluisiver.GGTVCloseFun = function (regularMark, gg_delay, class_name) {
 //图片处理  返回 false 或者 关闭控件对象
 function imgHandler(controlArr) {
     let img = image.captureScreenEx();
-    var clipArr = [];
+    let clipArr = [],w,clip, result = false;
     controlArr.forEach(element => {
-        var w = element.boundsEx();
-        var clip = image.clip(img, w.left, w.top, w.right, w.bottom);
+         w = element.boundsEx();
+         clip = image.clip(img, w.left, w.top, w.right, w.bottom);
         clipArr.push([clip,w.width(),w.height()]);
     });
     image.recycle(img);//回收
-    var result = false;
     //判断是否有关闭X
     for (let i = clipArr.length - 1; i >= 0; i--) {
-        if (clipArr[i] && CloseBinaryJudge(clipArr[i])) {
+        if (CloseBinaryJudge(clipArr[i])) {
             result = controlArr[i];
             break;
         }
     }
-
     return result;
 }
 
@@ -376,7 +368,6 @@ function CloseBinaryJudge(targetArr) {
                 break;
             }
         }
-
     //回收图片
     image.recycle(newclip);
     return result;

@@ -7,7 +7,7 @@ function myInfoActivity(){
         btn.setTextColor('#ff4080');
         btn.setPadding(10, 5, 10, 5);
         btn.setTypeface('monospace');
-        btn.setTextSize(17)
+        btn.setTextSize(17);
         //点击事件
         btn.onClick(function (view) {
             toTopEdit.clearFocus();  //使失去聚焦 触发事件
