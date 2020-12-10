@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              xsi:noNamespaceSchemaLocation="layout.xsd"
+              android:tag="advice_root"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center">
+
+    <CardView android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:tag="advice_layout"
+              android:clickable="true"
+              android:cardCornerRadius="10dp"
+              android:cardBackgroundColor="#FFFFFF"
+              android:layout_gravity="center">
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="vertical">
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:paddingLeft="10dp"
+                          android:paddingRight="10dp"
+                          android:paddingTop="10dp"
+                          android:orientation="vertical">
+
+                <TextView android:text="建议与反馈"
+                          android:tag="advice_title"
+                          android:textColor="#FF00CC"
+                          android:gravity="center"
+                          android:maxLines="1"
+                          android:layout_marginBottom="10dp"
+                          android:ellipsize="end"
+                          android:textSize="16dp"/>
+
+                <EditText android:layout_height="wrap_content"
+                          android:layout_width="match_parent"
+                          android:gravity="top"
+                          android:tag="advice_msg"
+                          android:maxLines="15"
+                          android:background="none"
+                          android:layout_marginBottom="5dp"
+                          android:textColor="#8080ff"/>
+            </LinearLayout>
+
+            <TextView android:layout_width="match_parent"
+                      android:layout_height="1dp"
+                      android:background="#55aaaaaa"/>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="40dp"
+                          android:orientation="horizontal">
+
+                <TextView android:text="取消"
+                          android:tag="advice_cancel"
+                          android:layout_width="wrap_parent"
+                          android:layout_height="match_parent"
+                          android:gravity="center"
+                          android:textColor="#667788"
+                          android:background="@drawable/notification_action_background"
+                          android:padding="0dp"/>
+                <TextView android:layout_width="1dp"
+                          android:layout_height="match_parent"
+                          android:background="#55aaaaaa"/>
+                <TextView android:text="确认"
+                          android:tag="advice_confirm"
+                          android:layout_width="wrap_parent"
+                          android:layout_height="match_parent"
+                          android:gravity="center"
+                          android:textColor="#007AFF"
+                          android:background="@drawable/notification_action_background"
+                          android:padding="0dp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </CardView>
+</LinearLayout>

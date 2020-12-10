@@ -53,6 +53,10 @@ let ProBarAct=(function (){
                 logd("finally执行成功")
                 ui.getHandler().post(function () {
                     logd("post执行成功");
+                    if(!hereThis.result){
+                        toast("检查是否有网络！");
+                        sleep(2000);
+                    }
                     hereThis.hide();
                 });
             }

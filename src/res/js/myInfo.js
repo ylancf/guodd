@@ -45,6 +45,22 @@ function myInfoActivity(){
         }
     });
 
+    ui.findViewByTag("ylan").setOnClickListener({
+        onClick: contactQQ
+    });
+    ui.findViewByTag("gx").setOnClickListener({
+        onClick:contactWX
+    });
+
+    let pop=null
+    ui.findViewByTag("adviceBT").setOnClickListener({
+        onClick:()=>{
+           if(!pop){pop= new  userAdvicePop()};
+            pop.show()
+        }
+    });
+
+
 }
 
 

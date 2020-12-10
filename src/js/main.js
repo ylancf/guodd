@@ -39,13 +39,17 @@ function main() {
     //得到要运行的脚本信息
     let list = [];
     let shareList = ui.getShareData("VarShareData");
+    if(shareList){
+       updateConfig("execList",JSON.stringify(shareList));
+    }else{
+        shareList=JSON.parse(readConfigString("execList"));
+    }
+    if(!shareList){toastLog("没有可执行的脚本和记录");exit();return ;}
     list = shareList.filter(function (x) {
         return x.done == true;
     });
 
-
    list= listSorting(list);//按时间排序
-
 
     list.forEach(function (target){
         addInfo = target.addInfo;   //默认为""字符

@@ -2,6 +2,8 @@ package com.plugin.jPrlGSPKhr;
 
 import android.content.Context;
 import android.os.Build;
+import android.text.method.ScrollingMovementMethod;
+import android.view.animation.AccelerateInterpolator;
 
 
 public class PluginClz {
@@ -9,6 +11,7 @@ public class PluginClz {
     public String test(){
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            new AccelerateInterpolator();
 
         }
 

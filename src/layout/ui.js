@@ -38,6 +38,10 @@ execScript(2, readResString('js/JsListView.js'));//导入JsListView模块
 execScript(2, readResString('js/SetUpPopwindow.js'));//导入SetUpPopwindow模块
 execScript(2, readResString("js/ProBarActivity.js"))
 execScript(2, readResString("js/forgetDrawing.js"))
+execScript(2, readResString("js/UserAdvicePopwindow.js"))
+execScript(2, readResString("js/localFun.js"))
+
+
 
 //execScript(2, readResString("js/forgetDrawing.js"))
 var myPopActivity, myForgetActivity;//注册界面
@@ -97,12 +101,10 @@ function main() {
             } else {
                 js_start_BT.setVisibility(0);
             }
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (Build.VERSION.SDK_INT >= 26) {
                 //改掉bar名称  ec5.7 可用 5.8报错
                 activity.findViewById(getResourceID('tv_title', 'id')).setText(tabTitle.getText());//修改标题栏内容
             }
-
             the_label.getTabAt(index).select(); //改变选择
         }
     });
@@ -192,11 +194,9 @@ function login_on() {
     //展示操作界面
     ui.findViewByTag('login_ac').setVisibility(8);//隐藏登录界面
 
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {  //ec5.8版本后 只有api>=26的能使用这个方法
+    if (Build.VERSION.SDK_INT >= 26) {  //ec5.8版本后 只有api>=26的能使用这个方法
         activity.findViewById(getResourceID('tv_title', 'id')).setText("我的应用");//改掉名称
     }
-
     activity.findViewById(getResourceID('right_header_iv3', 'id')).setVisibility(8);//隐藏云控;
     activity.findViewById(getResourceID('right_header_iv2', 'id')).setVisibility(8);//隐藏远程调试
     //移动设置按钮的位置
@@ -262,6 +262,8 @@ function login_on() {
             the_label.getChildAt(0).getChildAt(_tab.getPosition()).getChildAt(2).setTextColor(Color.parseColor("#528EF5"));
         }
     });
+
+
 
 }
 

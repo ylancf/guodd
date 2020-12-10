@@ -60,6 +60,7 @@ function rawInput(title, prefill) {
         .title(title)
         .inputText(prefill)
         .setButtonText('positive', '确定')
+        .setButtonText('negative', '取消')
         .show();
 }
 

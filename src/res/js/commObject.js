@@ -5,7 +5,6 @@ let popSetUp
 
 function commObject() {
 
-
     popSetUp = new PopSetUp(); //不能循环new  会出错
     popSetUp.on("hide", function () {
         logd("comm_items:" + comm_items);

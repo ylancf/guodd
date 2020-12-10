@@ -1,6 +1,5 @@
 
-
-
+//脚本设置界面
 let PopSetUp=function (){
 
     var pv = ui.parseView('setUpPopwindow.xml');
@@ -106,8 +105,6 @@ let PopSetUp=function (){
         ui.setEvent(cancel, 'click', function (view) {
             pw.dismiss();
         });
-
-
         ui.setEvent(confirm, 'click', function (view) {
             let _date=start_time.getText().toString()+"";
             let r_time = run_time.getText().toString()+"";

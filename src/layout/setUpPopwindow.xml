@@ -37,7 +37,7 @@
                               android:layout_height="wrap_content"
                               android:orientation="horizontal">
                     <TextView android:text="开始时间:"
-                              android:layout_width="0"
+                              android:layout_width="wrap_parent"
                               android:textColor="#C040FF"
                               android:layout_height="wrap_content"/>
                     <EditText
@@ -52,7 +52,7 @@
                               android:orientation="horizontal">
                     <TextView android:text="运行时长:"
                               android:textColor="#C040FF"
-                              android:layout_width="0"
+                              android:layout_width="wrap_parent"
                               android:layout_height="wrap_content"/>
                     <EditText
                             android:layout_height="wrap_content"
@@ -66,7 +66,7 @@
                               android:orientation="horizontal">
                     <TextView android:text="运行次数:"
                               android:textColor="#C040FF"
-                              android:layout_width="0"
+                              android:layout_width="wrap_parent"
                               android:layout_height="wrap_content"/>
                     <EditText
                             android:layout_height="wrap_content"
@@ -100,7 +100,7 @@
                                   android:orientation="horizontal">
                         <TextView android:text="附加信息:"
                                   android:textColor="#C040FF"
-                                  android:layout_width="0"
+                                  android:layout_width="wrap_parent"
                                   android:layout_height="wrap_content"/>
                         <EditText
                                 android:layout_height="wrap_content"
@@ -129,11 +129,9 @@
                           android:textColor="#667788"
                           android:background="@drawable/notification_action_background"
                           android:padding="0dp"/>
-
                 <TextView android:layout_width="1dp"
                           android:layout_height="match_parent"
                           android:background="#55aaaaaa"/>
-
                 <TextView android:text="确认"
                           android:tag="setUp_confirm"
                           android:layout_width="wrap_parent"
@@ -142,7 +140,6 @@
                           android:textColor="#007AFF"
                           android:background="@drawable/notification_action_background"
                           android:padding="0dp"/>
-
             </LinearLayout>
 
         </LinearLayout>
